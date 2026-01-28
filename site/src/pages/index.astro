@@ -8,7 +8,7 @@ import Badge from '../components/Badge.astro';
 <Layout title="Start" description="Sveriges communityhub för öppna data">
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">Open Data Hub SE</h1>
+      <h1 class="hero-title"><span class="hero-title-accent">Open Data</span> Hub <span class="hero-title-accent">SE</span></h1>
       <div class="hero-tags">
         <Badge label="GUIDES" />
         <Badge label="LABS" />
@@ -69,19 +69,45 @@ import Badge from '../components/Badge.astro';
     text-align: center;
     margin-bottom: var(--spacing-2xl);
     padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+    position: relative;
+    z-index: 1;
     background: none;
   }
-  .hero-title {
-    font-size: 3rem;
-    background: var(--gradient-accent);
+  /* Subtle hero glow, max 2 gradients */
+  .hero::before {
+  content: '';
+  position: absolute;
+  inset: -80px -40px -120px -40px;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 30%, rgba(31,111,235,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 30% 25%, rgba(88,166,255,0.12) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 45% at 70% 20%, rgba(15,32,39,0.22) 0%, transparent 60%);
+
+  filter: blur(12px);
+  opacity: 0.9;
+}
+
+  .hero > * {
+    position: relative;
+    z-index: 1;
+  }
+.hero-title {
+    color: var(--fg);
+    text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.hero-title-accent {
+    background: linear-gradient(90deg, #0969da 0%, #1f6feb 50%, #388bfd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: var(--spacing-md);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    text-shadow: 0 2px 32px #58a6ff44;
-  }
+    filter: none;
+}
   .hero-tagline {
     font-size: var(--font-size-xl);
     color: var(--accent1);
@@ -95,22 +121,49 @@ import Badge from '../components/Badge.astro';
     justify-content: center;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+  .btn, .btn.secondary {
+    min-width: 180px;
+    text-align: center;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 999px;
+    box-shadow: 0 2px 16px #58a6ff33;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.13s, filter 0.18s;
+  }
+  .btn:focus, .btn.secondary:focus {
+    outline: 2px solid var(--accent1);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px #58a6ff55;
+  }
+  .btn:hover, .btn.secondary:hover {
+    filter: brightness(1.08) saturate(1.1);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 32px #58a6ff44, 0 2px 16px #b388ff33;
   }
   .hero-stats {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-lg);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-sm);
-    color: var(--accent2);
+    gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
   }
   .stat {
-    background: var(--card2);
-    border-radius: var(--radius-xs);
-    padding: 2px 10px;
-    border: 1px solid var(--border);
-    box-shadow: 0 0 8px #58a6ff22;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--accent1);
+    background: rgba(22,27,34,0.85);
+    border-radius: 999px;
+    padding: 4px 16px;
+    border: 1.5px solid #58a6ff33;
+    box-shadow: 0 1px 8px #58a6ff11;
+    margin: 2px 4px;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    transition: background 0.18s, border 0.18s;
   }
 
 
@@ -127,19 +180,71 @@ import Badge from '../components/Badge.astro';
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    min-height: 180px;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-lg) var(--spacing-md);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+    box-shadow: 0 2px 8px #161b2233;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.18s, border-color 0.18s, transform 0.13s, filter 0.18s;
+  }
+  .card-home:hover {
+    border-color: var(--border);
+    box-shadow: 0 8px 32px #203a4333, 0 2px 16px #2c536422;
+    transform: translateY(-4px) scale(1.02);
+    filter: brightness(1.06);
+  }
+  .card-home .card-icon {
+    font-size: 2.2rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--accent3);
+    text-shadow: 0 0 8px #b388ff99;
+  }
+  .card-home .card-title {
+    margin-bottom: var(--spacing-xs);
+    color: var(--fg);
+    margin-top: 0;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.18;
+    text-shadow: none;
+    font-size: var(--font-size-lg);
+  }
+  .card-home .card-description {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--muted);
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    opacity: 0.97;
+  }
+  .card-home .badge {
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(88,166,255,0.10);
+    color: var(--accent1);
+    border: 1px solid #58a6ff33;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    box-shadow: 0 1px 4px #58a6ff11;
+    opacity: 0.8;
   }
   .card-label {
     font-family: var(--font-mono);
     font-size: var(--font-size-xs);
     color: var(--accent2);
     background: var(--card2);
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-sm);
     padding: 2px 8px;
     margin-bottom: var(--spacing-xs);
     letter-spacing: 0.08em;
@@ -170,7 +275,7 @@ import Badge from '../components/Badge.astro';
   }
   .featured-link:hover {
     border-color: var(--accent3);
-    background: var(--gradient-accent);
+    background: var(--gradient-milkyway);
     color: #fff;
     box-shadow: 0 0 16px #58a6ff44;
   }
@@ -180,7 +285,7 @@ import Badge from '../components/Badge.astro';
     padding: var(--spacing-xl) 0;
   }
   .latest-panel {
-    background: linear-gradient(120deg, var(--bg2) 60%, var(--card2) 100%);
+    background: linear-gradient(120deg, var(--bg-elevated) 60%, var(--card2) 100%);
     border-radius: var(--radius);
     box-shadow: 0 2px 16px #0d1117cc;
     padding: var(--spacing-lg);
@@ -202,7 +307,7 @@ import Badge from '../components/Badge.astro';
     font-size: var(--font-size-sm);
     color: var(--accent2);
     background: var(--card2);
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-sm);
     padding: 2px 8px;
     margin-right: var(--spacing-xs);
     letter-spacing: 0.08em;

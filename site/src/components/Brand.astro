@@ -16,9 +16,6 @@ import Badge from './Badge.astro';
   </span>
   <span class="brand-wordmark">
     Open Data Hub SE
-    <span class="brand-beta">
-      <Badge label="BETA" />
-    </span>
   </span>
 </div>
 <style>
@@ -54,15 +51,14 @@ import Badge from './Badge.astro';
   -webkit-text-fill-color: currentColor;
 }
 .brand:hover .brand-wordmark {
-  background: var(--gradient-accent);
+  background: var(--gradient-milkyway);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.brand-beta {
-  display: inline-block;
-  margin-left: 0.5rem;
-}
+ .brand-wordmark {
+   gap: 0.2em;
+ }
 @media (max-width: 600px) {
   .brand-beta {
     display: none;

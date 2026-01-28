@@ -25,10 +25,9 @@ const { title, description, iconName, href } = Astro.props;
 <style>
   .card {
     display: block;
-    padding: var(--spacing-lg);
+    padding: var(--card-padding);
     border: 1px solid rgba(88,166,255,0.13);
     border-radius: var(--radius);
-    background: rgba(36,44,60,0.55);
     background: linear-gradient(120deg, rgba(36,44,60,0.55) 60%, rgba(9,105,218,0.09) 100%);
     box-shadow: 0 2px 16px #1f6feb22;
     text-decoration: none;
@@ -36,6 +35,10 @@ const { title, description, iconName, href } = Astro.props;
     -webkit-backdrop-filter: blur(8px);
     transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, filter 0.2s;
     position: relative;
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: #eaf6ff;
   }
   @supports not (backdrop-filter: blur(8px)) {
     .card {
@@ -55,16 +58,20 @@ const { title, description, iconName, href } = Astro.props;
     text-shadow: 0 0 8px #b388ff99;
   }
   .card-title {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     color: var(--accent1);
     margin-top: 0;
-    font-weight: 700;
-    letter-spacing: 0.01em;
+    font-weight: var(--heading-weight);
+    letter-spacing: var(--heading-spacing);
+    line-height: var(--line-height-heading);
     text-shadow: 0 0 8px #58a6ff22;
   }
   .card-description {
     margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--muted);
+    font-size: var(--font-size-base);
+    color: #d6e7ff;
+    line-height: var(--line-height-base);
+    font-weight: 400;
+    letter-spacing: 0.01em;
   }
 </style>

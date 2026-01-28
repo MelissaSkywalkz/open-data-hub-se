@@ -20,30 +20,26 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          cache-dependency-path: site/package-lock.json
 
       - name: Install dependencies
         run: npm ci
-
-
 
       - name: Build Astro site
         run: npm run build
 
       - name: Diagnostics: list site/dist
-        run: ls -la dist
+        run: ls -la site/dist
+        working-directory: ../
 
       - name: Diagnostics: check index.html
-        run: test -f dist/index.html
+        run: test -f site/dist/index.html
+        working-directory: ../
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
-
-      - name: Configure git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          path: site/dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

@@ -25,8 +25,20 @@ jobs:
         run: npm ci
 
 
+
       - name: Build Astro site
         run: npm run build
+
+      - name: Diagnostics: list site/dist
+        run: ls -la dist
+
+      - name: Diagnostics: check index.html
+        run: test -f dist/index.html
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
       - name: Configure git user
         run: |

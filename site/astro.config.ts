@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://MelissaSkywalkz.github.io/open-data-hub-se/',
-  base: '/open-data-hub-se/',
+  site: 'https://melissaskywalkz.github.io',
+  base: '/open-data-hub-se',
+  outDir: 'dist', // default, but explicit for clarity
 });

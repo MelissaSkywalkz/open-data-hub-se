@@ -1,60 +1,76 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+import Icon from '../components/Icon.astro';
+import Badge from '../components/Badge.astro';
 ---
 
 <Layout title="Start" description="Sveriges communityhub för öppna data">
   <section class="hero">
     <div class="hero-content">
       <h1 class="hero-title">Open Data Hub SE</h1>
-      <p class="hero-subtitle">Sveriges communityhub för öppna data</p>
-      <p class="hero-description">
-        Lär dig om öppna data, bygg projekt med verklig data, och jobba tillsammans med andra utvecklare och dataintresserade.
-      </p>
+      <div class="hero-tags">
+        <Badge label="GUIDES" />
+        <Badge label="LABS" />
+        <Badge label="COMMUNITY" />
+      </div>
+      <p class="hero-tagline">Sveriges communityhub för öppna data</p>
+      <div class="glow-line"></div>
+      <div class="hero-actions">
+        <a href="/guides/" class="btn">Utforska guider</a>
+        <a href="/community/" class="btn secondary">Gå till communityn</a>
+      </div>
+      <div class="hero-stats">
+        <span class="stat">Guider: 3</span>
+        <span class="stat">Resurser: 1</span>
+        <span class="stat">Labs: 1</span>
+        <span class="stat">Diskussioner: på GitHub</span>
+      </div>
     </div>
   </section>
 
+  <div class="glow-line"></div>
   <section class="cards-section">
     <div class="cards-grid">
-      <Card
-        title="Lär dig"
-        description="Utforska guider, tutorials och resurser för att komma igång med öppna data."
-        icon="📚"
-        href="/guides/"
-      />
-      <Card
-        title="Bygg"
-        description="Hitta datasets, tänk igenom idéer och implementera projekt i Labs."
-        icon="🔨"
-        href="/labs/"
-      />
-      <Card
-        title="Fråga & Dela"
-        description="Ställ frågor, dela kunskap och samarbeta med communityn."
-        icon="💬"
-        href="/community/"
-      />
+      <a href="/guides/" class="card card-home">
+        <div class="card-icon"><Icon name="book" size={32} /></div>
+        <h3 class="card-title">Lär dig</h3>
+        <Badge label="GUIDES" />
+        <p class="card-description">Utforska guider, tutorials och resurser för att komma igång med öppna data.</p>
+      </a>
+      <a href="/labs/" class="card card-home">
+        <div class="card-icon"><Icon name="code" size={32} /></div>
+        <h3 class="card-title">Bygg</h3>
+        <Badge label="LABS" />
+        <p class="card-description">Hitta datasets, tänk igenom idéer och implementera projekt i Labs.</p>
+      </a>
+      <a href="/community/" class="card card-home">
+        <div class="card-icon"><Icon name="chat" size={32} /></div>
+        <h3 class="card-title">Fråga & Dela</h3>
+        <Badge label="COMMUNITY" />
+        <p class="card-description">Ställ frågor, dela kunskap och samarbeta med communityn.</p>
+      </a>
     </div>
   </section>
 
-  <section class="featured-section">
-    <h2>Utforska</h2>
-    <div class="featured-links">
-      <a href="/guides/" class="featured-link">Alla guider →</a>
-      <a href="/resources/" class="featured-link">Resurser →</a>
-      <a href="/rewards/" class="featured-link">Rewards program →</a>
-      <a href="/about/" class="featured-link">Om oss →</a>
+  <section class="latest-section">
+    <h2>Senaste aktivitet</h2>
+    <div class="latest-panel">
+      <div class="latest-row"><Icon name="book" size={20} /> <span class="latest-label">Guide:</span> "DCAT-AP-SE – minsta obligatoriska fält" publicerad</div>
+      <div class="latest-row"><Icon name="code" size={20} /> <span class="latest-label">Lab:</span> JSON Checker / Beautifier tillagd</div>
+      <div class="latest-row"><Icon name="chat" size={20} /> <span class="latest-label">Diskussion:</span> "Hur hittar jag rätt metadata?" på GitHub</div>
     </div>
   </section>
 </Layout>
 
 <style>
+
   .hero {
     text-align: center;
     margin-bottom: var(--spacing-2xl);
-    padding: var(--spacing-2xl) 0;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+    background: none;
   }
-
   .hero-title {
     font-size: 3rem;
     background: var(--gradient-accent);
@@ -62,66 +78,158 @@ import Card from '../components/Card.astro';
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: var(--spacing-md);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 32px #58a6ff44;
   }
-
-  .hero-subtitle {
+  .hero-tagline {
     font-size: var(--font-size-xl);
-    color: var(--color-text);
+    color: var(--accent1);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-shadow: 0 0 8px #58a6ff44;
+  }
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
   }
-
-  .hero-description {
-    font-size: var(--font-size-base);
-    color: var(--color-text-secondary);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--accent2);
+    margin-bottom: var(--spacing-lg);
   }
+  .stat {
+    background: var(--card2);
+    border-radius: var(--radius-xs);
+    padding: 2px 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 8px #58a6ff22;
+  }
+
 
   .cards-section {
     margin-bottom: var(--spacing-2xl);
   }
-
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
   }
-
-  .featured-section {
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--spacing-xl);
+  .card-home {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--spacing-sm);
+  }
+  .card-label {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    color: var(--accent2);
+    background: var(--card2);
+    border-radius: var(--radius-xs);
+    padding: 2px 8px;
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    box-shadow: 0 0 8px #58a6ff22;
   }
 
+
+  .featured-section {
+    border-top: 1px solid var(--border);
+    padding-top: var(--spacing-xl);
+  }
   .featured-links {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
   }
-
   .featured-link {
     display: inline-block;
     padding: var(--spacing-md);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--accent1);
     border-radius: var(--radius-md);
-    color: var(--color-accent);
+    color: var(--accent1);
     text-decoration: none;
+    background: var(--card2);
+    font-weight: 600;
     transition: all 0.2s;
   }
-
   .featured-link:hover {
-    border-color: var(--color-accent);
-    background-color: var(--color-bg-secondary);
+    border-color: var(--accent3);
+    background: var(--gradient-accent);
+    color: #fff;
+    box-shadow: 0 0 16px #58a6ff44;
+  }
+
+  .latest-section {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl) 0;
+  }
+  .latest-panel {
+    background: linear-gradient(120deg, var(--bg2) 60%, var(--card2) 100%);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 16px #0d1117cc;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    border: 1px solid var(--border);
+  }
+  .latest-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--fg);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+  }
+  .latest-label {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--accent2);
+    background: var(--card2);
+    border-radius: var(--radius-xs);
+    padding: 2px 8px;
+    margin-right: var(--spacing-xs);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    box-shadow: 0 0 8px #58a6ff22;
   }
 
   @media (max-width: 768px) {
     .hero-title {
       font-size: 2rem;
     }
-
-    .hero-subtitle {
+    .hero-tagline {
       font-size: var(--font-size-lg);
+    }
+    .hero-actions {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+    .hero-stats {
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+    .latest-panel {
+      padding: var(--spacing-md);
     }
   }
 </style>

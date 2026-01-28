@@ -1,0 +1,71 @@
+---
+import Badge from './Badge.astro';
+---
+<div class="brand">
+  <span class="brand-icon">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Main planet -->
+      <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="2" fill="none" />
+      <!-- Orbit ring -->
+      <ellipse cx="10" cy="10" rx="9" ry="4.5" stroke="currentColor" stroke-width="1" fill="none" />
+      <!-- Data points -->
+      <circle cx="6.5" cy="8" r="1" fill="currentColor" />
+      <circle cx="13.5" cy="11.5" r="1" fill="currentColor" />
+      <circle cx="10" cy="14" r="1" fill="currentColor" />
+    </svg>
+  </span>
+  <span class="brand-wordmark">
+    Open Data Hub SE
+    <span class="brand-beta">
+      <Badge label="BETA" />
+    </span>
+  </span>
+</div>
+<style>
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 700;
+  font-size: 1.18rem;
+  letter-spacing: 0.01em;
+}
+.brand-icon {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 20px;
+  margin-right: 2px;
+  transition: filter 0.18s;
+}
+.brand-icon svg {
+  display: block;
+  filter: drop-shadow(0 0 6px #58a6ff44);
+  transition: filter 0.18s;
+}
+.brand:hover .brand-icon svg {
+  filter: drop-shadow(0 0 12px #58a6ff99);
+}
+.brand-wordmark {
+  font-weight: 800;
+  background: none;
+  transition: background 0.18s, -webkit-background-clip 0.18s;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: currentColor;
+}
+.brand:hover .brand-wordmark {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.brand-beta {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+@media (max-width: 600px) {
+  .brand-beta {
+    display: none;
+  }
+}
+</style>

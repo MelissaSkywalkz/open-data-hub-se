@@ -15,40 +15,112 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title ? `${title} | Open Data Hub SE` : 'Open Data Hub SE'}</title>
-    {description && <meta name="description" content={description} />}
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-
-      .container {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: var(--spacing-xl) var(--spacing-lg);
-        width: 100%;
-      }
-
-      footer {
-        border-top: 1px solid var(--color-border);
-        background-color: var(--color-bg-secondary);
-        margin-top: var(--spacing-2xl);
-        padding: var(--spacing-xl) var(--spacing-lg);
-        text-align: center;
-        font-size: var(--font-size-sm);
-        color: var(--color-text-secondary);
-      }
-    </style>
+    <title>Open Data Hub SE</title>
+    <meta name="description" content="Sveriges communityhub för öppna data, guider, resurser och samarbete." />
+    <meta name="theme-color" content="#161b22" />
+    <link rel="icon" type="image/svg+xml" href="/open-data-hub-se/favicon.svg" />
+    <meta property="og:title" content="Open Data Hub SE" />
+    <meta property="og:description" content="Sveriges communityhub för öppna data, guider, resurser och samarbete." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://MelissaSkywalkz.github.io/open-data-hub-se/" />
+    <meta property="og:image" content="https://MelissaSkywalkz.github.io/open-data-hub-se/favicon.svg" />
+    <!-- All CSS moved below -->
   </head>
   <body>
     <Navigation />
     <main class="container">
       <slot />
     </main>
-    <footer>
-      <p>&copy; 2026 Open Data Hub SE. Gjort med ❤️ för öppna data i Sverige.</p>
+    <footer class="footer-glass">
+      <div class="footer-inner">
+        <div class="footer-brand">Open Data Hub SE</div>
+        <div class="footer-links">
+          <a href="https://github.com/MelissaSkywalkz/open-data-hub-se" target="_blank">GitHub</a>
+          <a href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions" target="_blank">Community</a>
+        </div>
+        <div class="footer-meta">&copy; 2026 – communitydriven kunskapsbank för öppna data i Sverige.</div>
+      </div>
+      <div class="footer-glow-line"></div>
     </footer>
   </body>
 </html>
+<style>
+    .footer-glass {
+      border-top: none;
+      background: rgba(22,27,34,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      margin-top: var(--spacing-2xl);
+      padding: var(--spacing-lg) 0 var(--spacing-md) 0;
+      box-shadow: 0 -2px 32px #1f6feb22;
+      position: relative;
+    }
+    .footer-inner {
+      max-width: 540px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      color: var(--accent1);
+      margin-bottom: 2px;
+      text-shadow: 0 0 8px #58a6ff44;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2px;
+    }
+    .footer-links a {
+      color: var(--accent2);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.98rem;
+      letter-spacing: 0.01em;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(36,44,60,0.18);
+      border: 1px solid rgba(88,166,255,0.10);
+      box-shadow: 0 1px 8px #1f6feb11;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .footer-links a:hover {
+      color: var(--accent3);
+      background: var(--gradient-accent);
+      box-shadow: 0 0 12px #58a6ff44;
+    }
+    .footer-meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 2px;
+    }
+    .footer-glow-line {
+      width: 100%;
+      height: 2px;
+      background: var(--gradient-glow);
+      opacity: 0.7;
+      margin-top: var(--spacing-md);
+      box-shadow: 0 0 12px #1f6feb22;
+    }
+    @media (max-width: 600px) {
+      .footer-inner {
+        max-width: 98vw;
+        gap: 0.3rem;
+      }
+      .footer-links {
+        gap: 0.7rem;
+      }
+      .footer-brand {
+        font-size: 1rem;
+      }
+      .footer-meta {
+        font-size: 0.85rem;
+      }
+    }
+  </style>

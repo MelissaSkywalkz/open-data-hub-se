@@ -2,31 +2,37 @@
   {
     "id": "first-steps",
     "name": "First Steps",
-    "description": "Första bidraget till communityn."
+    "description": "Första bidraget till communityn.",
+    "criteria": "Gör ditt första inlägg, guide, issue eller bidrag."
   },
   {
     "id": "helpful",
     "name": "Helpful",
-    "description": "Hjälpt någon i Discussions eller Issues."
+    "description": "Hjälpt någon i Discussions eller Issues.",
+    "criteria": "Svarat på en fråga eller hjälpt någon annan."
   },
   {
     "id": "metadata-hero",
     "name": "Metadata Hero",
-    "description": "Förbättrat metadata i en guide eller resurs."
+    "description": "Förbättrat metadata i en guide eller resurs.",
+    "criteria": "Bidragit med förbättrad metadata eller hjälpt till med DCAT-AP-SE."
   },
   {
     "id": "lab-builder",
     "name": "Lab Builder",
-    "description": "Skapat eller bidragit till ett lab-projekt."
+    "description": "Skapat eller bidragit till ett lab-projekt.",
+    "criteria": "Startat eller utvecklat ett labb/projekt."
   },
   {
     "id": "bug-hunter",
     "name": "Bug Hunter",
-    "description": "Rapporterat en bugg eller förbättring."
+    "description": "Rapporterat en bugg eller förbättring.",
+    "criteria": "Rapporterat en bugg eller förbättringsförslag via Issues."
   },
   {
     "id": "community-beacon",
     "name": "Community Beacon",
-    "description": "Sprider positiv stämning och hjälper andra."
+    "description": "Sprider positiv stämning och hjälper andra.",
+    "criteria": "Bidrar till en välkomnande och hjälpsam community."
   }
 ]

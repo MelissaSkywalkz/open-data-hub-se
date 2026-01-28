@@ -1,20 +1,21 @@
 ---
-import { Image } from 'astro:assets';
+
+import Icon from './Icon.astro';
 
 export interface Props {
   title: string;
   description: string;
-  icon?: string;
+  iconName?: 'data' | 'code' | 'chat' | 'book';
   href?: string;
 }
 
-const { title, description, icon, href } = Astro.props;
+const { title, description, iconName, href } = Astro.props;
 ---
 
 <a href={href} class="card">
-  {icon && (
+  {iconName && (
     <div class="card-icon">
-      {icon}
+      <Icon name={iconName} size={32} />
     </div>
   )}
   <h3 class="card-title">{title}</h3>
@@ -25,33 +26,45 @@ const { title, description, icon, href } = Astro.props;
   .card {
     display: block;
     padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg);
-    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(88,166,255,0.13);
+    border-radius: var(--radius);
+    background: rgba(36,44,60,0.55);
+    background: linear-gradient(120deg, rgba(36,44,60,0.55) 60%, rgba(9,105,218,0.09) 100%);
+    box-shadow: 0 2px 16px #1f6feb22;
     text-decoration: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s, filter 0.2s;
+    position: relative;
   }
-
+  @supports not (backdrop-filter: blur(8px)) {
+    .card {
+      background: linear-gradient(120deg, #222a36 60%, #222a36 100%);
+    }
+  }
   .card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 3px 12px rgba(9, 105, 218, 0.15);
-    transform: translateY(-2px);
+    border-color: #388bfdcc;
+    box-shadow: 0 4px 32px #58a6ff44, 0 2px 16px #b388ff33;
+    transform: translateY(-6px) scale(1.025);
+    filter: brightness(1.09);
   }
-
   .card-icon {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: var(--spacing-md);
+    color: var(--accent3);
+    text-shadow: 0 0 8px #b388ff99;
   }
-
   .card-title {
     margin-bottom: var(--spacing-md);
-    color: var(--color-text);
+    color: var(--accent1);
     margin-top: 0;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-shadow: 0 0 8px #58a6ff22;
   }
-
   .card-description {
     margin: 0;
     font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
+    color: var(--muted);
   }
 </style>

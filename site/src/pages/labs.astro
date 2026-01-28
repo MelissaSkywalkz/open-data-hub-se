@@ -8,10 +8,25 @@ import Layout from '../layouts/Layout.astro';
     Här kan du hitta olika projekt och labs där du kan experimentera med öppna data.
   </p>
 
+
   <div class="labs-content">
     <div class="lab-item">
-      <h3>🔬 Lab Ideas</h3>
-      <p>Här samlar vi idéer på projekt och analyser som kan göras med öppna data.</p>
+      <h3>🔬 JSON Checker / Beautifier</h3>
+      <p>Klistra in din JSON nedan och klicka på "Validera & formatera" för att se om den är giltig och få den snyggt formaterad.</p>
+      <textarea id="json-input" class="json-textarea" rows="8" placeholder="Klistra in JSON här..."></textarea>
+      <button id="json-validate-btn" class="json-btn">Validera & formatera</button>
+      <div id="json-result" class="json-result"></div>
+
+      <div class="json-mistakes">
+        <h4>Vanliga misstag</h4>
+        <ul>
+          <li>Extra kommatecken (trailing comma)</li>
+          <li>Felaktiga eller saknade citationstecken</li>
+          <li>Blandade enkla och dubbla citationstecken</li>
+          <li>Glömda klamrar eller hakparenteser</li>
+          <li>Kommentarer (tillåts ej i JSON)</li>
+        </ul>
+      </div>
     </div>
 
     <div class="lab-item">
@@ -39,6 +54,7 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     transition: all 0.2s;
+    background: var(--color-bg);
   }
 
   .lab-item:hover {
@@ -49,4 +65,84 @@ import Layout from '../layouts/Layout.astro';
   .lab-item h3 {
     margin-top: 0;
   }
+
+  .json-textarea {
+    width: 100%;
+    font-family: monospace;
+    font-size: 1rem;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    resize: vertical;
+  }
+
+  .json-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--gradient-accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: var(--spacing-md);
+    transition: background 0.2s;
+  }
+
+  .json-btn:hover {
+    background: var(--color-accent);
+  }
+
+  .json-result {
+    font-family: monospace;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    min-height: 2rem;
+  }
+
+  .json-result.error {
+    color: #b20000;
+    background: #fff0f0;
+    border-color: #b20000;
+  }
+
+  .json-mistakes {
+    margin-top: var(--spacing-lg);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+  }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('json-input');
+  const btn = document.getElementById('json-validate-btn');
+  const result = document.getElementById('json-result');
+
+  btn.addEventListener('click', function () {
+    let value = input.value.trim();
+    if (!value) {
+      result.textContent = 'Klistra in JSON ovan.';
+      result.className = 'json-result error';
+      return;
+    }
+    try {
+      const parsed = JSON.parse(value);
+      const pretty = JSON.stringify(parsed, null, 2);
+      result.textContent = pretty;
+      result.className = 'json-result';
+    } catch (e) {
+      result.textContent = 'Ogiltig JSON! ' + e.message;
+      result.className = 'json-result error';
+    }
+  });
+});
+</script>

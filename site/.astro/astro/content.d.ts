@@ -148,9 +148,37 @@ declare module 'astro:content' {
   collection: "guides";
   data: InferEntrySchema<"guides">
 } & { render(): Render[".md"] };
+"dcat-ap-se-obligatoriska-falt.md": {
+	id: "dcat-ap-se-obligatoriska-falt.md";
+  slug: "dcat-ap-se-obligatoriska-falt";
+  body: string;
+  collection: "guides";
+  data: InferEntrySchema<"guides">
+} & { render(): Render[".md"] };
+"entryscape-dataportal-mental-modell.md": {
+	id: "entryscape-dataportal-mental-modell.md";
+  slug: "entryscape-dataportal-mental-modell";
+  body: string;
+  collection: "guides";
+  data: InferEntrySchema<"guides">
+} & { render(): Render[".md"] };
 "getting-started.md": {
 	id: "getting-started.md";
   slug: "getting-started";
+  body: string;
+  collection: "guides";
+  data: InferEntrySchema<"guides">
+} & { render(): Render[".md"] };
+"kom-igang-med-oppna-data.md": {
+	id: "kom-igang-med-oppna-data.md";
+  slug: "kom-igang-med-oppna-data";
+  body: string;
+  collection: "guides";
+  data: InferEntrySchema<"guides">
+} & { render(): Render[".md"] };
+"metadata-checklista-dcat-ap-se-light.md": {
+	id: "metadata-checklista-dcat-ap-se-light.md";
+  slug: "metadata-checklista-dcat-ap-se-light";
   body: string;
   collection: "guides";
   data: InferEntrySchema<"guides">

@@ -1,0 +1,8 @@
+---
+export interface Props {
+  label: string;
+  style?: string;
+}
+const { label, style } = Astro.props;
+---
+<span class="badge" style={style}>{label}</span>

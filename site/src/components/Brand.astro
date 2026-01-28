@@ -3,62 +3,103 @@ import Badge from './Badge.astro';
 ---
 <div class="brand">
   <span class="brand-icon">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Main planet -->
-      <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="2" fill="none" />
-      <!-- Orbit ring -->
-      <ellipse cx="10" cy="10" rx="9" ry="4.5" stroke="currentColor" stroke-width="1" fill="none" />
-      <!-- Data points -->
-      <circle cx="6.5" cy="8" r="1" fill="currentColor" />
-      <circle cx="13.5" cy="11.5" r="1" fill="currentColor" />
-      <circle cx="10" cy="14" r="1" fill="currentColor" />
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        >
+        <!-- Core planet -->
+        <circle
+            cx="10"
+            cy="10"
+            r="6.5"
+            stroke="currentColor"
+            stroke-width="1.8"
+        />
+
+        <!-- Orbit -->
+        <ellipse
+            cx="10"
+            cy="10"
+            rx="8.5"
+            ry="4.2"
+            stroke="currentColor"
+            stroke-width="1"
+            opacity="0.6"
+            transform="rotate(-20 10 10)"
+        />
+
+        <!-- Data nodes -->
+        <circle cx="6.2" cy="7.4" r="0.9" fill="currentColor" />
+        <circle cx="13.6" cy="10.6" r="0.9" fill="currentColor" />
+        <circle cx="9.4" cy="13.8" r="0.7" fill="currentColor" opacity="0.8" />
     </svg>
   </span>
-  <span class="brand-wordmark">
-    Open Data Hub SE
-  </span>
+  <span class="brand-wordmark" aria-label="Open Data Hub SE">
+    <span class="wm-accent">Open Data</span>
+    <span class="wm-core">Hub</span>
+    <span class="wm-accent">SE</span>
+</span>
 </div>
 <style>
 .brand {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  font-weight: 700;
+  font-family: var(--font-display, inherit);
+  font-weight: 800;
   font-size: 1.18rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
+
 .brand-icon {
   display: flex;
   align-items: center;
   height: 20px;
   width: 20px;
   margin-right: 2px;
-  transition: filter 0.18s;
 }
+
 .brand-icon svg {
   display: block;
-  filter: drop-shadow(0 0 6px #58a6ff44);
-  transition: filter 0.18s;
+  color: var(--fg);
+  transition: filter 0.18s, color 0.18s;
+  filter:
+    drop-shadow(0 0 6px rgba(88,166,255,0.7))
+    drop-shadow(0 0 14px rgba(31,111,235,0.7));
 }
-.brand:hover .brand-icon svg {
-  filter: drop-shadow(0 0 12px #58a6ff99);
-}
+
+/* Wordmark = "Open Data" + "Hub" + "SE" */
 .brand-wordmark {
-  font-weight: 800;
-  background: none;
-  transition: background 0.18s, -webkit-background-clip 0.18s;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: currentColor;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.38rem;
+  line-height: 1;
 }
-.brand:hover .brand-wordmark {
-  background: var(--gradient-milkyway);
+
+/* Baseline text */
+.brand-wordmark,
+.brand-wordmark span {
+  -webkit-text-fill-color: unset;
+}
+
+/* Open Data + SE: blå gradient, men fortfarande “proffsigt” */
+.brand-wordmark .wm-accent {
+  background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
- .brand-wordmark {
-   gap: 0.2em;
- }
+
+/* Hub: ren vit */
+.brand-wordmark .wm-core {
+  color: var(--fg);
+  text-shadow: 0 10px 40px rgba(31,111,235,0.12);
+}
+
 @media (max-width: 600px) {
   .brand-beta {
     display: none;

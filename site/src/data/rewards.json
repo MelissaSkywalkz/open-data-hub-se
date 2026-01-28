@@ -1,0 +1,32 @@
+[
+  {
+    "id": "first-steps",
+    "name": "First Steps",
+    "description": "Första bidraget till communityn."
+  },
+  {
+    "id": "helpful",
+    "name": "Helpful",
+    "description": "Hjälpt någon i Discussions eller Issues."
+  },
+  {
+    "id": "metadata-hero",
+    "name": "Metadata Hero",
+    "description": "Förbättrat metadata i en guide eller resurs."
+  },
+  {
+    "id": "lab-builder",
+    "name": "Lab Builder",
+    "description": "Skapat eller bidragit till ett lab-projekt."
+  },
+  {
+    "id": "bug-hunter",
+    "name": "Bug Hunter",
+    "description": "Rapporterat en bugg eller förbättring."
+  },
+  {
+    "id": "community-beacon",
+    "name": "Community Beacon",
+    "description": "Sprider positiv stämning och hjälper andra."
+  }
+]

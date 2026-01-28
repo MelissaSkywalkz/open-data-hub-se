@@ -1,0 +1,54 @@
+---
+import Navigation from '../components/Navigation.astro';
+import '../styles/globals.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title ? `${title} | Open Data Hub SE` : 'Open Data Hub SE'}</title>
+    {description && <meta name="description" content={description} />}
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: var(--spacing-xl) var(--spacing-lg);
+        width: 100%;
+      }
+
+      footer {
+        border-top: 1px solid var(--color-border);
+        background-color: var(--color-bg-secondary);
+        margin-top: var(--spacing-2xl);
+        padding: var(--spacing-xl) var(--spacing-lg);
+        text-align: center;
+        font-size: var(--font-size-sm);
+        color: var(--color-text-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <Navigation />
+    <main class="container">
+      <slot />
+    </main>
+    <footer>
+      <p>&copy; 2026 Open Data Hub SE. Gjort med ❤️ för öppna data i Sverige.</p>
+    </footer>
+  </body>
+</html>

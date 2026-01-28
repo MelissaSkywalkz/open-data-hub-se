@@ -1,0 +1,19 @@
+{
+  "name": "open-data-hub-se",
+  "version": "1.0.0",
+  "description": "Sveriges communityhub för öppna data",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

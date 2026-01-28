@@ -1,0 +1,95 @@
+---
+export interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const currentPath = new URL(Astro.request.url).pathname;
+---
+
+<header class="header">
+  <nav class="nav">
+    <div class="nav-brand">
+      <a href="/" class="logo">🌐 Open Data Hub SE</a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>Start</a></li>
+      <li><a href="/guides/" class:list={['nav-link', { active: currentPath.startsWith('/guides') }]}>Guider</a></li>
+      <li><a href="/resources/" class:list={['nav-link', { active: currentPath === '/resources/' }]}>Resurser</a></li>
+      <li><a href="/labs/" class:list={['nav-link', { active: currentPath === '/labs/' }]}>Labs</a></li>
+      <li><a href="/community/" class:list={['nav-link', { active: currentPath === '/community/' }]}>Community</a></li>
+      <li><a href="/rewards/" class:list={['nav-link', { active: currentPath === '/rewards/' }]}>Rewards</a></li>
+      <li><a href="/about/" class:list={['nav-link', { active: currentPath === '/about/' }]}>Om</a></li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .header {
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    sticky: top 0;
+    z-index: 100;
+  }
+
+  .nav {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-brand {
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .logo:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-link.active {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .nav {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .nav-menu {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

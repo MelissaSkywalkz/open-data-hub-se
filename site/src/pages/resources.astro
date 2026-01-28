@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Resurser" description="Resurser och länksamlingar för öppna data">
+  <h1>Resurser</h1>
+  <p>
+    Här samlar vi användbara resurser för att arbeta med öppna data i Sverige.
+  </p>
+
+  <div class="resources-grid">
+    <div class="resource-card">
+      <h3>Datakällor</h3>
+      <ul>
+        <li><a href="https://www.dataportal.se">dataportal.se</a> - Sveriges motsvarighet till data.gov</li>
+        <li><a href="https://www.scb.se">SCB Statistiska Centralbyrån</a> - Officiell statistik</li>
+        <li><a href="https://opendata.stockholm.se">Stockholm Open Data</a> - Stockholms kommun</li>
+      </ul>
+    </div>
+
+    <div class="resource-card">
+      <h3>Community & Forum</h3>
+      <ul>
+        <li><a href="https://github.com">GitHub</a> - Kod och collaboration</li>
+        <li><a href="https://www.opendata.se">Open Data Sweden</a> - Community site</li>
+      </ul>
+    </div>
+
+    <div class="resource-card">
+      <h3>Verktyg & Libraries</h3>
+      <ul>
+        <li><a href="https://jupyter.org">Jupyter</a> - Interaktiv datanalys</li>
+        <li><a href="https://www.python.org">Python</a> - Populärt för data science</li>
+        <li><a href="https://r-project.org">R</a> - Statistik och visualisering</li>
+      </ul>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .resource-card {
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-secondary);
+  }
+
+  .resource-card h3 {
+    margin-top: 0;
+  }
+
+  .resource-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .resource-card li {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .resource-card a {
+    color: var(--color-accent);
+  }
+</style>

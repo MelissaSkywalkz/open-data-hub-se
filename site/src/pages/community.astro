@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Community" description="Community och forum för öppna data">
+  <h1>Community</h1>
+  <p>
+    Gå med i vår community! Ställ frågor, dela dina erfarenheter och samarbeta med andra.
+  </p>
+
+  <div class="community-section">
+    <div class="community-card">
+      <h3>💬 GitHub Discussions</h3>
+      <p>
+        Ställ frågor, dela idéer och diskutera öppna data tillsammans med communityn.
+      </p>
+      <a href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions" class="cta-button">
+        Gå till Discussions
+      </a>
+    </div>
+
+    <div class="community-card">
+      <h3>🤝 Bidra</h3>
+      <p>
+        Hjälp till att bygga och förbättra Open Data Hub SE. Se vad vi arbetar på och hur du kan bidra.
+      </p>
+      <a href="https://github.com/MelissaSkywalkz/open-data-hub-se" class="cta-button">
+        Besök GitHub
+      </a>
+    </div>
+
+    <div class="community-card">
+      <h3>📢 Dela projekt</h3>
+      <p>
+        Byggt något med öppna data? Vi vill höra om det! Dela dina projekt och få feedback.
+      </p>
+      <a href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions" class="cta-button">
+        Dela projekt
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .community-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .community-card {
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .community-card h3 {
+    margin-top: 0;
+  }
+
+  .community-card p {
+    flex: 1;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s;
+    margin-top: var(--spacing-md);
+    text-align: center;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+  }
+</style>

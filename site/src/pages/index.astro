@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+---
+
+<Layout title="Start" description="Sveriges communityhub för öppna data">
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Open Data Hub SE</h1>
+      <p class="hero-subtitle">Sveriges communityhub för öppna data</p>
+      <p class="hero-description">
+        Lär dig om öppna data, bygg projekt med verklig data, och jobba tillsammans med andra utvecklare och dataintresserade.
+      </p>
+    </div>
+  </section>
+
+  <section class="cards-section">
+    <div class="cards-grid">
+      <Card
+        title="Lär dig"
+        description="Utforska guider, tutorials och resurser för att komma igång med öppna data."
+        icon="📚"
+        href="/guides/"
+      />
+      <Card
+        title="Bygg"
+        description="Hitta datasets, tänk igenom idéer och implementera projekt i Labs."
+        icon="🔨"
+        href="/labs/"
+      />
+      <Card
+        title="Fråga & Dela"
+        description="Ställ frågor, dela kunskap och samarbeta med communityn."
+        icon="💬"
+        href="/community/"
+      />
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <h2>Utforska</h2>
+    <div class="featured-links">
+      <a href="/guides/" class="featured-link">Alla guider →</a>
+      <a href="/resources/" class="featured-link">Resurser →</a>
+      <a href="/rewards/" class="featured-link">Rewards program →</a>
+      <a href="/about/" class="featured-link">Om oss →</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cards-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .featured-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-xl);
+  }
+
+  .featured-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .featured-link {
+    display: inline-block;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .featured-link:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-bg-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: var(--font-size-lg);
+    }
+  }
+</style>

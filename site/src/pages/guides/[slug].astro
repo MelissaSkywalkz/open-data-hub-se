@@ -1,0 +1,127 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide },
+  }));
+}
+
+interface Props {
+  guide: {
+    data: {
+      title: string;
+      description: string;
+      author?: string;
+      publishedAt?: Date;
+      tags?: string[];
+    };
+    slug: string;
+    render: () => Promise<{ Content: any }>;
+  };
+}
+
+const { guide } = Astro.props;
+const { Content } = await guide.render();
+---
+
+<Layout title={guide.data.title} description={guide.data.description}>
+  <article class="guide-article">
+    <header class="article-header">
+      <h1>{guide.data.title}</h1>
+      <p class="article-description">{guide.data.description}</p>
+      <div class="article-meta">
+        {guide.data.author && (
+          <span>Av {guide.data.author}</span>
+        )}
+        {guide.data.publishedAt && (
+          <span>
+            {new Date(guide.data.publishedAt).toLocaleDateString('sv-SE')}
+          </span>
+        )}
+      </div>
+    </header>
+
+    {guide.data.tags && guide.data.tags.length > 0 && (
+      <div class="article-tags">
+        {guide.data.tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    <div class="article-content">
+      <Content />
+    </div>
+
+    <footer class="article-footer">
+      <a href="/guides/" class="back-link">← Tillbaka till guider</a>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .guide-article {
+    max-width: 800px;
+  }
+
+  .article-header {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .article-header h1 {
+    margin-top: 0;
+  }
+
+  .article-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+  }
+
+  .article-meta {
+    display: flex;
+    gap: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .article-content {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .article-footer {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .back-link {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>

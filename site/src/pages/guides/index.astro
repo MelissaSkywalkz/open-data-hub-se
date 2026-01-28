@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const guides = await getCollection('guides');
+const sortedGuides = guides.sort((a, b) => {
+  const dateA = a.data.publishedAt || new Date(0);
+  const dateB = b.data.publishedAt || new Date(0);
+  return dateB.getTime() - dateA.getTime();
+});
+---
+
+<Layout title="Guider" description="Guider och tutorials för öppna data">
+  <h1>Guider</h1>
+  <p>
+    Lär dig mer om öppna data genom våra guider och tutorials.
+  </p>
+
+  <div class="guides-grid">
+    {sortedGuides.map((guide) => (
+      <a href={`/guides/${guide.slug}/`} class="guide-card">
+        <h3>{guide.data.title}</h3>
+        <p class="guide-description">{guide.data.description}</p>
+        {guide.data.author && (
+          <p class="guide-meta">Av {guide.data.author}</p>
+        )}
+        {guide.data.tags && guide.data.tags.length > 0 && (
+          <div class="guide-tags">
+            {guide.data.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </a>
+    ))}
+  </div>
+
+  {sortedGuides.length === 0 && (
+    <div class="empty-state">
+      <p>Inga guider ännu. Kom tillbaka snart!</p>
+    </div>
+  )}
+</Layout>
+
+<style>
+  .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .guide-card {
+    display: block;
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .guide-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 3px 12px rgba(9, 105, 218, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .guide-card h3 {
+    margin-top: 0;
+    color: var(--color-text);
+  }
+
+  .guide-description {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .guide-meta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .guide-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-text-secondary);
+  }
+</style>

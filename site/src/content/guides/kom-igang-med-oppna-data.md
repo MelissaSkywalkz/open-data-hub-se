@@ -1,7 +1,7 @@
 ---
 title: Kom igång med öppna data i Sverige
 description: Praktisk introduktion till öppna data, steg för steg.
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [introduktion, öppna data, sverige]
 ---

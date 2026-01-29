@@ -1,4 +1,4 @@
-# Så bidrar du till Open Data Hub SE
+# Så bidrar du till Open Data Orbit
 
 Vi välkomnar bidrag från alla! Du kan bidra genom att:
 

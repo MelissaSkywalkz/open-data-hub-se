@@ -1,7 +1,7 @@
 ---
 title: DCAT-AP-SE – minsta obligatoriska fält (för människor)
 description: Praktisk checklista för metadatafält i DCAT-AP-SE.
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [dcat-ap-se, metadata, öppna data]
 ---

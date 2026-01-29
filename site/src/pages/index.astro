@@ -5,14 +5,13 @@ import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
 ---
 
-<Layout title="Start" description="Sveriges communityhub för öppna data">
+<Layout title="Start" description="Guider, labs och community för öppna data">
   <section class="hero">
     <div class="hero-content">
       <h1 class="hero-title">
         <span class="hero-title-accent">Open Data</span>
-        <span class="hero-title-core">Hub</span>
-        <span class="hero-title-accent">SE</span>
-    </h1>
+        <span class="hero-title-core">Orbit</span>
+      </h1>
       <div class="hero-tags">
         <Badge label="GUIDES" />
         <Badge label="LABS" />
@@ -21,14 +20,12 @@ import Badge from '../components/Badge.astro';
       <p class="hero-tagline">Guider, labs och community för öppna data.</p>
       <div class="glow-line"></div>
       <div class="hero-actions">
-        <a href="/guides/" class="btn">Utforska guider</a>
-        <a href="/community/" class="btn secondary">Gå till communityn</a>
+        <a href="/guides/" class="btn">Launch Guides</a>
+        <a href="/community/" class="btn secondary">Enter Orbit</a>
       </div>
       <div class="hero-stats">
-        <span class="stat">Guider: 3</span>
-        <span class="stat">Resurser: 1</span>
-        <span class="stat">Labs: 1</span>
-        <span class="stat">Diskussioner: på GitHub</span>
+        <span class="stat">Status: In Orbit</span>
+        <span class="stat">Mission: Open Data</span>
       </div>
     </div>
   </section>
@@ -58,11 +55,11 @@ import Badge from '../components/Badge.astro';
   </section>
 
   <section class="latest-section">
-    <h2>Senaste aktivitet</h2>
+    <h2>Mission Log</h2>
     <div class="latest-panel">
-      <div class="latest-row"><Icon name="book" size={20} /> <span class="latest-label">Guide:</span> "DCAT-AP-SE – minsta obligatoriska fält" publicerad</div>
-      <div class="latest-row"><Icon name="code" size={20} /> <span class="latest-label">Lab:</span> JSON Checker / Beautifier tillagd</div>
-      <div class="latest-row"><Icon name="chat" size={20} /> <span class="latest-label">Diskussion:</span> "Hur hittar jag rätt metadata?" på GitHub</div>
+      <div class="latest-row"><Icon name="book" size={20} /> <span class="latest-label">UPLINK:</span> DCAT-AP-SE – minimum required fields</div>
+      <div class="latest-row"><Icon name="code" size={20} /> <span class="latest-label">DEPLOY:</span> JSON Checker / Beautifier added</div>
+      <div class="latest-row"><Icon name="chat" size={20} /> <span class="latest-label">COMMS:</span> “How do I find the right metadata?” (GitHub)</div>
     </div>
   </section>
 </Layout>
@@ -96,54 +93,36 @@ import Badge from '../components/Badge.astro';
   z-index: 1;
 }
 
-.hero-title {
+.hero-title{
   font-family: var(--font-display);
   font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--fg);
-  --hub-glow: rgba(31,111,235,0.18);
   text-shadow:
-    0 12px 40px rgba(31, 111, 235, 0.25),
+    0 12px 40px rgba(31,111,235,0.25),
     0 2px 12px rgba(0,0,0,0.6);
 }
 
-.hero-title-accent {
-  background: linear-gradient(
-    90deg,
-    #1f6feb 0%,
-    #58a6ff 45%,
-    #1f6feb 100%
-  );
+.hero-title-accent{
+  background: linear-gradient(90deg, #1f6feb 0%, #58a6ff 45%, #1f6feb 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: 0 10px 40px rgba(31,111,235,0.10);
 }
 
-.hero-title-core {
-  position: relative;
-  color: #ffffff;
+/* Orbit: near-white, premium (inte kritvit) */
+.hero-title-core{
+  color: rgba(230,237,243,0.94);
   text-shadow:
-    0 0 0.5px rgba(255,255,255,0.65),
-    0 0 18px rgba(88,166,255,0.20),
-    0 18px 55px rgba(31,111,235,0.22);
+    0 0 0.5px rgba(255,255,255,0.55),
+    0 0 18px rgba(88,166,255,0.18),
+    0 18px 55px rgba(31,111,235,0.20);
 }
 
-.hero-title-core::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(88,166,255,0.10), transparent 70%);
-  filter: blur(10px);
-  z-index: -1;
-}
-
-.hero-tagline {
-  font-size: var(--font-size-xl);
-  color: rgba(230, 237, 243, 0.92); /* nära vitt */
-  margin: var(--spacing-lg);
-  font-weight: 500;
-  letter-spacing: 0.01em;
+/* Tagline vit/off-white (som du ville) */
+.hero-tagline{
+  color: rgba(230,237,243,0.92);
   text-shadow: 0 10px 40px rgba(31,111,235,0.12);
 }
 

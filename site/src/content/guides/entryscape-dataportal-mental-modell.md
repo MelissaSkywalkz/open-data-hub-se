@@ -1,7 +1,7 @@
 ---
 title: Entryscape och dataportal.se – mental modell och vanliga fallgropar
 description: Praktisk guide till hur Entryscape och dataportal.se fungerar.
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [entryscape, dataportal, metadata]
 ---

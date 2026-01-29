@@ -1,7 +1,7 @@
 ---
 title: Datakällor i Sverige
 description: Översikt över viktiga datakällor för öppna data i Sverige
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [datakällor, resurser, sverige]
 ---

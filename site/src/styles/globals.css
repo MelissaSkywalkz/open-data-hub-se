@@ -1,8 +1,3 @@
-/* =========================================================
-   Open Data Hub SE — Global styles (GitHub-dark + MilkyWay)
-   Replace entire file: site/src/styles/globals.css
-   ========================================================= */
-
 /* ---------- Tokens ---------- */
 :root {
   /* Base */
@@ -228,9 +223,17 @@ pre code { background: none; border: 0; padding: 0; }
   filter: brightness(1.06);
   border-color: rgba(88,166,255,0.40);
 }
-.btn.secondary {
-  background: rgba(13,17,23,0.25);
+
+.btn.secondary{
+  background: rgba(22,27,34,0.55);
+  border: 1px solid rgba(88,166,255,0.25);
+  color: rgba(230,237,243,0.92);
 }
+.btn.secondary:hover{
+  border-color: rgba(88,166,255,0.40);
+  background: rgba(22,27,34,0.72);
+}
+
 
 /* Focus (a11y + dev-friendly) */
 .btn:focus, .btn.secondary:focus {

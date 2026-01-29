@@ -1,6 +1,6 @@
 # Uppförandekod
 
-Vi vill att Open Data Hub SE ska vara en välkomnande, vänlig och trygg plats för alla.
+Vi vill att Open Data Orbit ska vara en välkomnande, vänlig och trygg plats för alla.
 
 - Var hjälpsam och respektfull mot andra
 - Ingen diskriminering, trakasserier eller personangrepp

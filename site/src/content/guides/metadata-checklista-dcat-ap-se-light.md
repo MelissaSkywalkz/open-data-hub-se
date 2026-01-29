@@ -1,7 +1,7 @@
 ---
 title: Metadata-checklista (DCAT-AP-SE light)
 description: Praktisk checklista för metadata enligt DCAT-AP-SE.
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [metadata, dcat-ap-se, checklista]
 ---

@@ -1,8 +1,8 @@
-# Open Data Hub SE - Copilot Instructions
+# Open Data Orbit - Copilot Instructions
 
 ## Project Overview
 
-**Open Data Hub SE** is a static site built with [Astro](https://astro.build) deployed to GitHub Pages. It serves as a Swedish community hub for learning about, building with, and sharing open data.
+**Open Data Orbit** is a static site built with [Astro](https://astro.build) deployed to GitHub Pages. It serves as a Swedish community hub for learning about, building with, and sharing open data.
 
 **Key Technologies**: Astro, TypeScript, Markdown/MDX, CSS (no external UI frameworks)
 **Location**: `/site` directory
@@ -83,7 +83,7 @@ Example guide structure:
 ---
 title: Getting Started
 description: Introduction to open data
-author: Open Data Hub
+author: Open Data Orbit
 publishedAt: 2026-01-28
 tags: [intro, basics]
 ---
@@ -93,7 +93,7 @@ tags: [intro, basics]
 
 ### 5. **Navigation Component**
 `Navigation.astro` provides consistent header across all pages:
-- Displays logo "🌐 Open Data Hub SE"
+- Displays logo "Open Data Orbit"
 - Highlights active page using `Astro.request.url` path matching
 - Responsive design (flex layout, adapts to mobile)
 

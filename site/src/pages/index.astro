@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
 import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
----
 
+const base = import.meta.env.BASE_URL;
+---
 <Layout title="Start" description="Allt du behöver för Öppna Data i omlopp">
   <section class="hero">
     <div class="hero-content">
@@ -18,8 +18,8 @@ import Badge from '../components/Badge.astro';
       <p class="hero-tagline">Allt du behöver för Öppna Data i omlopp</p>
       <div class="glow-line"></div>
       <div class="hero-actions">
-        <a href="/guides/" class="btn cta">Launch Guides</a>
-        <a href="/community/" class="btn secondary cta">Enter Orbit</a>
+          <a href={`${base}guides/`} class="btn cta">Launch Guides</a>
+          <a href={`${base}community/`} class="btn secondary cta">Enter Orbit</a>
       </div>
       <div class="hero-stats">
         <span class="stat">STATUS: IN ORBIT</span>
@@ -32,7 +32,7 @@ import Badge from '../components/Badge.astro';
 <div class="glow-line"></div>
 <section class="cards-section">
   <div class="cards-grid">
-    <a href="/guides/" class="card card-home">
+    <a href={`${base}guides/`} class="card card-home">
       <div class="card-icon"><Icon name="book" size={32} /></div>
 
       <div class="card-meta">
@@ -44,11 +44,11 @@ import Badge from '../components/Badge.astro';
       <p class="card-description">Utforska guider och resurser för att komma igång med öppna data.</p>
     </a>
 
-    <a href="/labs/" class="card card-home">
+    <a href={`${base}labs/`} class="card card-home">
       <div class="card-icon"><Icon name="code" size={32} /></div>
 
       <div class="card-meta">
-        <Badge label="ACCESS TERMINAL" variant="terminal" icon="terminal" />
+          <Badge label="ACCESS TERMINAL" variant="terminal" icon="terminal" />
         <span class="card-route">Labs</span>
       </div>
 
@@ -56,11 +56,11 @@ import Badge from '../components/Badge.astro';
       <p class="card-description">Testa verktyg, bygg prototyper och lansera idéer i Labs.</p>
     </a>
 
-    <a href="/community/" class="card card-home">
+    <a href={`${base}community/`} class="card card-home">
       <div class="card-icon"><Icon name="chat" size={32} /></div>
 
       <div class="card-meta">
-        <Badge label="EXPLORE THE ORBIT" variant="comms" icon="antenna" />
+          <Badge label="EXPLORE THE ORBIT" variant="comms" icon="antenna" />
         <span class="card-route">Community</span>
       </div>
 
@@ -151,7 +151,6 @@ import Badge from '../components/Badge.astro';
 }
 
 .stat {
-    font-family: var(--font-mono);
   display: inline-block;
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
@@ -320,7 +319,6 @@ import Badge from '../components/Badge.astro';
 }
 
 .latest-label {
-    font-family: var(--font-mono);
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
   color: var(--accent3);

@@ -68,7 +68,7 @@ html, body { font-family: var(--font-sans); }
 /* ---------- Reset ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html {
-  font-family: var(--font-family);
+  font-family: var(--font-sans);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   background: var(--bg);
@@ -190,12 +190,17 @@ p, ul, ol {
 a {
   color: var(--accent3);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color 0.18s, border-color 0.18s;
+  transition: color 0.18s;
 }
 a:hover {
   color: var(--fg);
-  border-color: rgba(88,166,255,0.35);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(88,166,255,0.55);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
 /* ---------- Code ---------- */

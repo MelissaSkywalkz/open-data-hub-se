@@ -1,7 +1,6 @@
----
 import Layout from '../layouts/Layout.astro';
 import Badge from '../components/Badge.astro';
-
+const base = import.meta.env.BASE_URL;
 const DISCUSSIONS_URL = "https://github.com/MelissaSkywalkz/open-data-orbit/discussions";
 ---
 
@@ -46,8 +45,8 @@ const DISCUSSIONS_URL = "https://github.com/MelissaSkywalkz/open-data-orbit/disc
       </p>
 
       <div class="error-actions">
-        <a href="/" class="btn cta">Return to Base</a>
-        <a href="/guides/" class="btn secondary cta">Launch Guides</a>
+        <a href={base} class="btn cta">Return to Base</a>
+        <a href={`${base}guides/`} class="btn secondary cta">Launch Guides</a>
         <a href={DISCUSSIONS_URL} target="_blank" rel="noopener" class="btn secondary cta">
           Report missing trajectory ↗
         </a>

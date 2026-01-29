@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Badge from '../components/Badge.astro';
+const base = import.meta.env.BASE_URL;
 
 const sections = [
   {
@@ -129,7 +130,7 @@ const sections = [
         >
           Send a Signal
         </a>
-        <a class="btn secondary cta" href="/community/">
+        <a class="btn secondary cta" href={`${base}community/`}>
           Explore the Orbit
         </a>
       </div>

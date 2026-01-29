@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Badge from '../../components/Badge.astro';
 import { getCollection } from 'astro:content';
+const base = import.meta.env.BASE_URL;
 
 export async function getStaticPaths() {
   const guides = await getCollection('guides');
@@ -48,7 +49,7 @@ const fmtDate = (d?: Date | string) => {
           <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
         </div>
 
-        <a class="back-pill" href="/guides/">
+        <a class="back-pill" href={`${base}guides/`}>
           ← Back to Guides
         </a>
       </div>
@@ -91,8 +92,8 @@ const fmtDate = (d?: Date | string) => {
     </section>
 
     <footer class="briefing-footer">
-      <a href="/guides/" class="btn secondary cta">Back to Guides</a>
-      <a href="/community/" class="btn cta">Enter Comms</a>
+      <a href={`${base}guides/`} class="btn secondary cta">Back to Guides</a>
+      <a href={`${base}community/`} class="btn cta">Enter Comms</a>
     </footer>
   </article>
 </Layout>

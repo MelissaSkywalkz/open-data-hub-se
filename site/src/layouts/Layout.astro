@@ -12,6 +12,7 @@ const {
   description = 'Sveriges communityhub för öppna data, guider, resurser och samarbete.',
 } = Astro.props;
 
+const base = import.meta.env.BASE_URL;
 const baseUrl = 'https://melissaskywalkz.github.io/open-data-orbit';
 const canonical = new URL(Astro.url.pathname, baseUrl).toString();
 const ogImage = `${baseUrl}/favicon.svg`;
@@ -28,13 +29,13 @@ const ogImage = `${baseUrl}/favicon.svg`;
     <link rel="canonical" href={canonical} />
 
     <meta name="theme-color" content="#0d1117" />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <meta property="og:image" content={`${base}favicon.svg`} />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
@@ -72,12 +73,12 @@ const ogImage = `${baseUrl}/favicon.svg`;
 
         <nav class="footer-col" aria-label="Site">
           <h3 class="footer-title">Orbit Directory</h3>
-          <a href="/guides/" class="footer-link">Guides</a>
-          <a href="/resources/" class="footer-link">Resources</a>
-          <a href="/labs/" class="footer-link">Labs</a>
-          <a href="/community/" class="footer-link">Community</a>
-          <a href="/rewards/" class="footer-link">Rewards</a>
-          <a href="/about/" class="footer-link">About</a>
+          <a href={`${base}guides/`} class="footer-link">Guides</a>
+          <a href={`${base}resources/`} class="footer-link">Resources</a>
+          <a href={`${base}labs/`} class="footer-link">Labs</a>
+          <a href={`${base}community/`} class="footer-link">Community</a>
+          <a href={`${base}rewards/`} class="footer-link">Rewards</a>
+          <a href={`${base}about/`} class="footer-link">About</a>
         </nav>
 
         <div class="footer-col">
@@ -93,7 +94,7 @@ const ogImage = `${baseUrl}/favicon.svg`;
             <a class="btn cta footer-btn" href="https://github.com/MelissaSkywalkz/open-data-orbit" target="_blank" rel="noopener">
               Contribute
             </a>
-            <a class="btn secondary cta footer-btn" href="/community/">
+            <a class="btn secondary cta footer-btn" href={`${base}community/`}>
               Enter Comms
             </a>
           </div>

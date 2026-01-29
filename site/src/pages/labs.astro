@@ -4,12 +4,12 @@ import Badge from '../components/Badge.astro';
 const base = import.meta.env.BASE_URL;
 ---
 
-<Layout title="Terminal" description="Experiment, verktyg och prototyper i omlopp">
+<Layout title="Labs" description="Experiment, verktyg och prototyper i omlopp">
   <header class="terminal-hero">
     <p class="terminal-kicker">LABS / TERMINAL</p>
     <h1 class="terminal-title">Access Terminal</h1>
     <p class="terminal-subtitle">
-      Experimentera med verktyg, prototyper och utilities för öppna data.
+      Experiment, utilities och prototyper för öppna data. Byggt för speed: klistra in → kör → exportera.
     </p>
 
     <div class="terminal-chips">
@@ -19,72 +19,114 @@ const base = import.meta.env.BASE_URL;
     </div>
   </header>
 
-  <section class="labs-grid">
-    <!-- JSON Terminal -->
-    <article class="module module-terminal">
-      <div class="module-head">
-        <div class="module-title">
-          <span class="module-icon">⌁</span>
-          <h2>JSON Terminal</h2>
+  <!-- Wide Terminal (full focus) -->
+  <section class="terminal-wide" aria-label="Data Terminal">
+    <article class="terminal-card">
+      <div class="card-head">
+        <div class="card-title">
+          <span class="card-icon" aria-hidden="true">⌁</span>
+          <div>
+            <h2 class="card-h">Data Terminal</h2>
+            <p class="card-sub mono">JSON · CSV · GeoJSON · DCAT · Schema</p>
+          </div>
         </div>
 
-        <div class="module-meta">
+        <div class="card-meta">
           <Badge label="UTILITY" variant="terminal" icon="terminal" />
-          <span class="module-route">/labs</span>
+          <span class="card-route">/labs</span>
         </div>
       </div>
 
-      <p class="module-desc">
-        Klistra in JSON och kör <span class="mono">VALIDATE + FORMAT</span> för att
-        verifiera och beautify utan drama.
+      <p class="card-desc">
+        En kraftfull “paste &amp; process”-terminal för öppna data. Validera, konvertera, sanity-checka metadata och exportera resultat.
       </p>
 
-      <div class="terminal-panel">
+      <div class="terminal-panel" data-terminal>
         <div class="terminal-bar">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="terminal-label mono">open-data-orbit://terminal/json</span>
+          <span class="terminal-label mono">open-data-orbit://terminal/data</span>
+          <span id="pill" class="status-pill mono" aria-live="polite">IDLE</span>
         </div>
 
-        <label class="sr-only" for="json-input">JSON input</label>
-        <textarea
-          id="json-input"
-          class="json-textarea mono"
-          rows="10"
-          placeholder="{&#10;  &quot;mission&quot;: &quot;open data&quot;,&#10;  &quot;status&quot;: &quot;in orbit&quot;&#10;}"
-          spellcheck="false"
-        ></textarea>
-
-        <div class="terminal-actions">
-          <button id="json-validate-btn" class="btn cta terminal-btn">
-            Validate &amp; Format
-          </button>
-          <button id="json-copy-btn" class="btn secondary terminal-btn" type="button">
-            Copy Output
-          </button>
-          <span id="json-hint" class="terminal-hint mono" aria-live="polite"></span>
+        <div class="terminal-tabs" role="tablist" aria-label="Terminal tools">
+          <button class="tab active mono" data-tab="json" role="tab" aria-selected="true">JSON</button>
+          <button class="tab mono" data-tab="csv" role="tab" aria-selected="false">CSV ⇄ JSON</button>
+          <button class="tab mono" data-tab="geo" role="tab" aria-selected="false">GEOJSON</button>
+          <button class="tab mono" data-tab="dcat" role="tab" aria-selected="false">DCAT</button>
+          <button class="tab mono" data-tab="schema" role="tab" aria-selected="false">SCHEMA</button>
         </div>
 
-        <div id="json-result" class="json-result mono" aria-live="polite"></div>
+        <div class="terminal-split">
+          <div class="pane">
+            <div class="pane-head">
+              <span class="pane-label mono">INPUT</span>
+              <div class="pane-actions">
+                <button class="btn ghost terminal-btn" id="clearIn" type="button">Clear</button>
+                <button class="btn ghost terminal-btn" id="loadExample" type="button">Example</button>
+              </div>
+            </div>
+
+            <label class="sr-only" for="input">Input</label>
+            <textarea
+              id="input"
+              class="terminal-textarea mono"
+              rows="14"
+              spellcheck="false"
+              placeholder="{&#10;  &quot;mission&quot;: &quot;open data&quot;,&#10;  &quot;status&quot;: &quot;in orbit&quot;&#10;}"
+            ></textarea>
+
+            <div class="terminal-actions">
+              <div class="btn-row">
+                <button class="btn cta terminal-btn" id="run" type="button">Run</button>
+                <button class="btn secondary terminal-btn" id="copyOut" type="button">Copy Output</button>
+                <button class="btn secondary terminal-btn" id="downloadOut" type="button">Download</button>
+                <button class="btn ghost terminal-btn" id="swap" type="button" title="Swap input/output">Swap</button>
+              </div>
+
+              <div class="tool-row mono" id="toolRow"></div>
+
+              <span class="terminal-hint mono" id="hint" aria-live="polite">
+                TIP: Ctrl/Cmd + Enter to run · Output can be downloaded
+              </span>
+            </div>
+          </div>
+
+          <div class="pane">
+            <div class="pane-head">
+              <span class="pane-label mono">OUTPUT</span>
+              <div class="pane-actions">
+                <button class="btn ghost terminal-btn" id="clearOut" type="button">Clear</button>
+              </div>
+            </div>
+
+            <pre id="output" class="terminal-output mono" aria-live="polite"></pre>
+          </div>
+        </div>
       </div>
 
       <details class="terminal-notes">
-        <summary class="mono">Common errors</summary>
+        <summary class="mono">Common errors &amp; tips</summary>
         <ul>
-          <li>Trailing comma (extra kommatecken)</li>
-          <li>Fel eller saknade citationstecken</li>
-          <li>Blandade enkla/dubbla citationstecken</li>
-          <li>Glömda klamrar / hakparenteser</li>
-          <li>Kommentarer (tillåts inte i JSON)</li>
+          <li>JSON tillåter inte kommentarer och trailing commas</li>
+          <li>CSV export kräver array av objekt (eller konvertera först)</li>
+          <li>GeoJSON kräver <span class="mono">type</span> och ofta <span class="mono">features</span></li>
+          <li>DCAT checken är “hardcore-ish” men inte full RDF/SHACL</li>
+          <li>Schema-läget är “light schema” men fångar 80% av praktiska fel</li>
         </ul>
       </details>
     </article>
+  </section>
 
-    <!-- Coming modules -->
+  <!-- Other modules below -->
+  <section class="labs-grid" aria-label="Labs modules">
     <article class="module">
       <div class="module-head">
         <div class="module-title">
-          <span class="module-icon">⟡</span>
-          <h2>Data Visualizations</h2>
+          <span class="module-icon" aria-hidden="true">⟡</span>
+          <div>
+            <h2 class="module-h">Data Visualizations</h2>
+            <p class="module-sub mono">Dashboards · Maps · Charts</p>
+          </div>
         </div>
         <div class="module-meta">
           <Badge label="IN ORBIT" variant="orbit" icon="orbit" />
@@ -104,8 +146,11 @@ const base = import.meta.env.BASE_URL;
     <article class="module">
       <div class="module-head">
         <div class="module-title">
-          <span class="module-icon">✶</span>
-          <h2>Project Showcase</h2>
+          <span class="module-icon" aria-hidden="true">✶</span>
+          <div>
+            <h2 class="module-h">Project Showcase</h2>
+            <p class="module-sub mono">Crew builds · Share &amp; learn</p>
+          </div>
         </div>
         <div class="module-meta">
           <Badge label="COMMS" variant="comms" icon="antenna" />
@@ -121,14 +166,43 @@ const base = import.meta.env.BASE_URL;
         STATUS: <span class="ok">OPEN</span> · Submit via GitHub Discussions
       </div>
     </article>
+
+    <article class="module">
+      <div class="module-head">
+        <div class="module-title">
+          <span class="module-icon" aria-hidden="true">✷</span>
+          <div>
+            <h2 class="module-h">DCAT Explorer</h2>
+            <p class="module-sub mono">Validator · Hints · Checklist</p>
+          </div>
+        </div>
+        <div class="module-meta">
+          <Badge label="PLANNED" variant="orbit" icon="orbit" />
+          <span class="module-route">/labs/dcat</span>
+        </div>
+      </div>
+
+      <p class="module-desc">
+        Nästa nivå: upload/klistra in DCAT (JSON-LD) och få en mänsklig rapport med förbättringsförslag.
+      </p>
+
+      <div class="module-status mono">
+        STATUS: <span class="ok">IN ORBIT</span> · Built into Terminal above
+      </div>
+    </article>
   </section>
+
+  <footer class="labs-footer">
+    <a class="btn secondary" href={`${base}guides/`}>Read Guides</a>
+    <a class="btn" href={`${base}community/`}>Enter Comms</a>
+  </footer>
 </Layout>
 
 <style>
-/* ---------- Hero ---------- */
+/* ---------------- Hero ---------------- */
 .terminal-hero{
   text-align:center;
-  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  padding: var(--spacing-2xl) 0 var(--spacing-lg);
 }
 .terminal-kicker{
   font-family: var(--font-mono);
@@ -136,18 +210,19 @@ const base = import.meta.env.BASE_URL;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(88,166,255,0.80);
-  margin-bottom: 10px;
+  margin: 0 0 10px;
 }
 .terminal-title{
-  margin-top: 0;
+  margin: 0 0 8px;
   font-family: var(--font-display);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-shadow: 0 18px 70px rgba(88,166,255,0.16);
 }
 .terminal-subtitle{
-  max-width: 62ch;
+  max-width: 70ch;
   margin: 0 auto var(--spacing-md);
   color: rgba(230,237,243,0.72);
+  line-height: 1.75;
 }
 .terminal-chips{
   display:flex;
@@ -156,27 +231,25 @@ const base = import.meta.env.BASE_URL;
   gap: 10px;
 }
 
-/* ---------- Grid ---------- */
-.labs-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-lg);
+/* ---------------- Wide section ---------------- */
+.terminal-wide{
   margin-top: var(--spacing-xl);
 }
-
-/* ---------- Modules (cards) ---------- */
-.module{
+.terminal-card{
   position:relative;
   overflow:hidden;
-  border-radius: var(--radius);
+  border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(22,27,34,0.72);
-  box-shadow: var(--shadow);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.72);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.28);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: var(--spacing-lg);
 }
-.module::before{
+.terminal-card::before{
   content:"";
   position:absolute;
   inset:0;
@@ -189,58 +262,66 @@ const base = import.meta.env.BASE_URL;
   );
   opacity: .85;
 }
-.module > *{ position:relative; z-index:1; }
+.terminal-card > *{ position:relative; z-index:1; }
 
-.module-head{
+/* ---------------- Card head ---------------- */
+.card-head{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
   gap: 12px;
   margin-bottom: 10px;
 }
-.module-title{
+.card-title{
   display:flex;
   align-items:center;
-  gap: 10px;
+  gap: 12px;
 }
-.module-title h2{
-  margin:0;
-  font-size: 1.15rem;
-}
-.module-icon{
-  width: 34px;
-  height: 34px;
+.card-icon{
+  width: 40px;
+  height: 40px;
   display:grid;
   place-items:center;
-  border-radius: 10px;
+  border-radius: 14px;
   border: 1px solid rgba(88,166,255,0.18);
-  background: rgba(13,17,23,0.25);
+  background: rgba(13,17,23,0.22);
   color: rgba(88,166,255,0.92);
   box-shadow: 0 0 22px rgba(31,111,235,0.14);
 }
-.module-meta{
+.card-h{
+  margin:0;
+  font-size: 1.35rem;
+  letter-spacing: 0.01em;
+}
+.card-sub{
+  margin: 4px 0 0;
+  color: rgba(230,237,243,0.60);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.card-meta{
   display:flex;
   flex-direction:column;
   align-items:flex-end;
   gap: 6px;
 }
-.module-route{
+.card-route{
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: rgba(230,237,243,0.55);
 }
-
-.module-desc{
+.card-desc{
   margin: 0 0 var(--spacing-md) 0;
-  color: rgba(230,237,243,0.72);
+  color: rgba(230,237,243,0.74);
+  line-height: 1.8;
 }
-/* .mono now in globals.css */
 
-/* ---------- Terminal Panel ---------- */
+/* ---------------- Terminal panel ---------------- */
 .terminal-panel{
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid rgba(88,166,255,0.18);
   background: rgba(13,17,23,0.40);
   overflow:hidden;
@@ -248,7 +329,6 @@ const base = import.meta.env.BASE_URL;
   position:relative;
 }
 .terminal-panel::after{
-  /* scanline-ish */
   content:"";
   position:absolute;
   inset:0;
@@ -280,23 +360,116 @@ const base = import.meta.env.BASE_URL;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.status-pill{
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.35);
+  color: rgba(230,237,243,0.65);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.status-pill.ok{ border-color: rgba(88,166,255,0.22); color: rgba(88,166,255,0.95); }
+.status-pill.err{ border-color: rgba(255, 90, 90, 0.28); color: rgba(255,180,180,0.95); }
+
+/* Tabs */
+.terminal-tabs{
+  display:flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(22,27,34,0.35);
+  flex-wrap: wrap;
+}
+.tab{
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.18);
+  color: rgba(230,237,243,0.72);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.tab:hover{ filter: brightness(1.06); border-color: rgba(88,166,255,0.24); transform: translateY(-1px); }
+.tab.active{
+  border-color: rgba(88,166,255,0.30);
+  color: rgba(88,166,255,0.95);
+  background: rgba(13,17,23,0.28);
 }
 
-.json-textarea{
+/* Split */
+.terminal-split{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+.pane{ min-width: 0; }
+@media (max-width: 980px){
+  .terminal-split{ grid-template-columns: 1fr; }
+}
+
+.pane-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(22,27,34,0.18);
+}
+.pane-label{
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+}
+.pane-actions{
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Textarea & output */
+.terminal-textarea{
   width:100%;
   border: 0;
   outline: none;
-  padding: 14px 14px;
+  padding: 14px;
   background: transparent;
   color: rgba(230,237,243,0.90);
   resize: vertical;
-  min-height: 160px;
-  line-height: 1.55;
+  min-height: 240px;
+  line-height: 1.6;
 }
-.json-textarea::placeholder{
-  color: rgba(230,237,243,0.35);
+.terminal-textarea::placeholder{ color: rgba(230,237,243,0.35); }
+.terminal-textarea:focus{ box-shadow: inset 0 0 0 1px rgba(88,166,255,0.20); }
+
+.terminal-output{
+  padding: 14px;
+  min-height: 240px;
+  white-space: pre;
+  overflow:auto;
+  color: rgba(230,237,243,0.86);
+}
+.terminal-output.ok{
+  outline: 1px solid rgba(88,166,255,0.22);
+  box-shadow: inset 0 0 0 1px rgba(31,111,235,0.12);
+}
+.terminal-output.error{
+  color: rgba(255,180,180,0.95);
+  background: rgba(120, 20, 20, 0.10);
+  outline: 1px solid rgba(255, 90, 90, 0.28);
 }
 
+/* Actions */
 .terminal-actions{
   display:flex;
   align-items:center;
@@ -306,34 +479,43 @@ const base = import.meta.env.BASE_URL;
   border-top: 1px solid rgba(255,255,255,0.06);
   background: rgba(22,27,34,0.35);
 }
-.terminal-btn{
-  padding: 0.75rem 1.05rem;
+.btn-row{ display:flex; gap: 10px; flex-wrap: wrap; }
+.tool-row{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: auto;
+  align-items: center;
+  color: rgba(230,237,243,0.60);
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
 }
+.tool-row label{
+  display:inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.18);
+}
+.tool-row input{ transform: translateY(1px); accent-color: rgba(88,166,255,0.95); }
+
 .terminal-hint{
+  width: 100%;
   color: rgba(230,237,243,0.55);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.json-result{
-  padding: 14px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  min-height: 56px;
-  white-space: pre-wrap;
-  color: rgba(230,237,243,0.86);
-}
-.json-result.ok{
-  outline: 1px solid rgba(88,166,255,0.22);
-  box-shadow: inset 0 0 0 1px rgba(31,111,235,0.12);
-}
-.json-result.error{
-  color: rgba(255,180,180,0.95);
-  background: rgba(120, 20, 20, 0.10);
-  outline: 1px solid rgba(255, 90, 90, 0.28);
+.btn.ghost{
+  background: rgba(13,17,23,0.18);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* Details */
+/* Notes */
 .terminal-notes{
   margin-top: var(--spacing-md);
   border: 1px solid rgba(255,255,255,0.08);
@@ -346,10 +528,110 @@ const base = import.meta.env.BASE_URL;
   color: rgba(88,166,255,0.85);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  list-style: none;
 }
+.terminal-notes summary::-webkit-details-marker{ display:none; }
+.terminal-notes summary::after{ content: "▾"; float: right; opacity: .7; }
+.terminal-notes[open] summary::after{ content:"▴"; }
 .terminal-notes ul{
   margin: 10px 0 0 18px;
   color: rgba(230,237,243,0.70);
+  line-height: 1.75;
+}
+
+/* ---------------- Grid (other modules) ---------------- */
+.labs-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+/* Cards */
+.module{
+  position:relative;
+  overflow:hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(22,27,34,0.72);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: var(--spacing-lg);
+  transition: transform 180ms ease, border-color 180ms ease, filter 180ms ease;
+}
+.module:hover{
+  transform: translateY(-2px);
+  border-color: rgba(88,166,255,0.18);
+  filter: brightness(1.02);
+}
+.module::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .85;
+}
+.module > *{ position:relative; z-index:1; }
+
+.module-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.module-title{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+.module-h{
+  margin:0;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+}
+.module-sub{
+  margin: 4px 0 0;
+  color: rgba(230,237,243,0.58);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.module-icon{
+  width: 36px;
+  height: 36px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  border: 1px solid rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.25);
+  color: rgba(88,166,255,0.92);
+  box-shadow: 0 0 22px rgba(31,111,235,0.14);
+}
+.module-meta{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap: 6px;
+}
+.module-route{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.55);
+}
+.module-desc{
+  margin: 0 0 var(--spacing-md) 0;
+  color: rgba(230,237,243,0.74);
+  line-height: 1.8;
 }
 .module-status{
   color: rgba(230,237,243,0.70);
@@ -359,6 +641,17 @@ const base = import.meta.env.BASE_URL;
 }
 .ok{ color: rgba(88,166,255,0.95); }
 
+/* Footer */
+.labs-footer{
+  display:flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-2xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+/* SR */
 .sr-only{
   position:absolute;
   width:1px;height:1px;
@@ -369,46 +662,730 @@ const base = import.meta.env.BASE_URL;
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const input = document.getElementById('json-input');
-  const btn = document.getElementById('json-validate-btn');
-  const copyBtn = document.getElementById('json-copy-btn');
-  const result = document.getElementById('json-result');
-  const hint = document.getElementById('json-hint');
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
 
-  const setHint = (txt) => { if (hint) hint.textContent = txt || ''; };
+  const runBtn = document.getElementById('run');
+  const copyBtn = document.getElementById('copyOut');
+  const swapBtn = document.getElementById('swap');
+  const dlBtn = document.getElementById('downloadOut');
+  const clearInBtn = document.getElementById('clearIn');
+  const clearOutBtn = document.getElementById('clearOut');
+  const exBtn = document.getElementById('loadExample');
 
-  btn.addEventListener('click', function () {
-    const value = input.value.trim();
-    if (!value) {
-      result.textContent = 'Paste JSON to begin.';
-      result.className = 'json-result mono error';
+  const hint = document.getElementById('hint');
+  const pill = document.getElementById('pill');
+  const toolRow = document.getElementById('toolRow');
+
+  let mode = 'json';
+
+  const setHint = (t) => hint && (hint.textContent = t || '');
+  const setPill = (state) => {
+    if (!pill) return;
+    pill.className = 'status-pill mono';
+    pill.textContent = state;
+    if (state === 'OK') pill.classList.add('ok');
+    if (state === 'WARN') pill.classList.add('ok');
+    if (state === 'ERROR') pill.classList.add('err');
+  };
+  const setOut = (txt, cls) => {
+    output.textContent = txt || '';
+    output.className = `terminal-output mono ${cls || ''}`.trim();
+  };
+
+  const tryJson = (txt) => JSON.parse(txt);
+
+  const downloadText = (text, filename, mime) => {
+    const blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'output.txt';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+  };
+
+  const detectDelimiter = (text) => {
+    const line = (text.split(/\r?\n/).find(l => l.trim().length) || '');
+    const candidates = [',',';','\t'];
+    let best = ',', bestCount = -1;
+    for (const c of candidates){
+      const n = line.split(c).length;
+      if (n > bestCount){ bestCount = n; best = c; }
+    }
+    return best;
+  };
+
+  const csvToJson = (csv, delimiter, trim=true) => {
+    const lines = csv.split(/\r?\n/).filter(l => l.trim().length);
+    if (!lines.length) return [];
+    const sep = delimiter || detectDelimiter(csv);
+    const headers = lines[0].split(sep).map(h => trim ? h.trim() : h);
+    return lines.slice(1).map(line => {
+      const cells = line.split(sep);
+      const obj = {};
+      headers.forEach((h, i) => {
+        const key = h || `col_${i+1}`;
+        const val = (cells[i] ?? '');
+        obj[key] = trim ? val.trim() : val;
+      });
+      return obj;
+    });
+  };
+
+  const jsonToCsv = (arr, delimiter) => {
+    if (!Array.isArray(arr)) throw new Error('JSON must be an array of objects for CSV export.');
+    const sep = delimiter || ',';
+    const keys = Array.from(new Set(arr.flatMap(o => (o && typeof o === 'object') ? Object.keys(o) : [])));
+    const esc = (v) => {
+      const s = v == null ? '' : String(v);
+      const needs = s.includes('"') || s.includes('\n') || s.includes('\r') || s.includes(sep);
+      const t = s.replaceAll('"', '""');
+      return needs ? `"${t}"` : t;
+    };
+    const rows = [];
+    rows.push(keys.map(esc).join(sep));
+    for (const o of arr){
+      rows.push(keys.map(k => esc(o?.[k])).join(sep));
+    }
+    return rows.join('\n');
+  };
+
+  const bboxFromCoords = (coords, acc) => {
+    if (!Array.isArray(coords)) return acc;
+    if (coords.length === 2 && typeof coords[0] === 'number' && typeof coords[1] === 'number'){
+      const x = coords[0], y = coords[1];
+      acc.minX = Math.min(acc.minX, x);
+      acc.minY = Math.min(acc.minY, y);
+      acc.maxX = Math.max(acc.maxX, x);
+      acc.maxY = Math.max(acc.maxY, y);
+      return acc;
+    }
+    coords.forEach(c => bboxFromCoords(c, acc));
+    return acc;
+  };
+
+  const geoSummary = (geo) => {
+    if (!geo || typeof geo !== 'object') throw new Error('Not an object.');
+    const type = geo.type;
+    if (!type) throw new Error('Missing "type" – not GeoJSON?');
+
+    const out = { type };
+
+    if (type === 'FeatureCollection'){
+      if (!Array.isArray(geo.features)) throw new Error('FeatureCollection requires "features" array.');
+      out.features = geo.features.length;
+
+      const types = new Map();
+      let bboxAcc = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+
+      geo.features.forEach(f => {
+        const t = f?.geometry?.type || 'None';
+        types.set(t, (types.get(t)||0) + 1);
+
+        const coords = f?.geometry?.coordinates;
+        if (coords) bboxAcc = bboxFromCoords(coords, bboxAcc);
+      });
+
+      out.geometryTypes = Object.fromEntries(types);
+      if (isFinite(bboxAcc.minX)) out.bbox = [bboxAcc.minX, bboxAcc.minY, bboxAcc.maxX, bboxAcc.maxY];
+      return out;
+    }
+
+    if (type === 'Feature'){
+      out.geometryType = geo.geometry?.type || 'None';
+      return out;
+    }
+
+    if ('coordinates' in geo) out.hasCoordinates = true;
+    return out;
+  };
+
+  // ---------- Schema (light) ----------
+  const inferType = (v) => {
+    if (v === null) return 'null';
+    if (Array.isArray(v)) return 'array';
+    return typeof v;
+  };
+
+  const buildSchemaFromArray = (arr) => {
+    const keys = new Map();
+    arr.forEach(o => {
+      if (!o || typeof o !== 'object' || Array.isArray(o)) return;
+      Object.entries(o).forEach(([k, v]) => {
+        if (!keys.has(k)) keys.set(k, new Set());
+        keys.get(k).add(inferType(v));
+      });
+    });
+    return {
+      schemaVersion: 'orbit-light-1',
+      type: 'array',
+      items: {
+        type: 'object',
+        required: [],
+        properties: Object.fromEntries([...keys.entries()].map(([k, set]) => [k, { types: [...set] }]))
+      }
+    };
+  };
+
+  const validateArrayAgainstSchema = (arr, schema) => {
+    const issues = [];
+    if (!schema || typeof schema !== 'object') throw new Error('Schema must be an object.');
+    if (schema.type !== 'array') issues.push('Schema: type should be "array".');
+
+    const props = schema?.items?.properties || {};
+    const required = schema?.items?.required || [];
+
+    arr.forEach((o, idx) => {
+      if (!o || typeof o !== 'object' || Array.isArray(o)) {
+        issues.push(`Row ${idx}: not an object`);
+        return;
+      }
+      required.forEach((k) => {
+        if (!(k in o)) issues.push(`Row ${idx}: missing required "${k}"`);
+      });
+
+      Object.entries(props).forEach(([k, rule]) => {
+        if (!(k in o)) return;
+        const t = inferType(o[k]);
+        const allowed = rule?.types || (rule?.type ? [rule.type] : null);
+        if (allowed && !allowed.includes(t)) {
+          issues.push(`Row ${idx}: "${k}" is ${t}, expected ${allowed.join(' | ')}`);
+        }
+      });
+    });
+
+    return issues;
+  };
+
+  // ---------- DCAT “hardcore-ish” ----------
+  const pick = (obj, paths) => {
+    for (const p of paths){
+      const parts = p.split('.');
+      let cur = obj;
+      let ok = true;
+      for (const part of parts){
+        if (!cur || typeof cur !== 'object' || !(part in cur)) { ok = false; break; }
+        cur = cur[part];
+      }
+      if (ok) return cur;
+    }
+    return undefined;
+  };
+
+  const normalizeToArray = (v) => Array.isArray(v) ? v : (v == null ? [] : [v]);
+  const looksLikeUrl = (u) => typeof u === 'string' && /^https?:\/\/\S+/i.test(u);
+
+  const dcatHardcore = (obj) => {
+    const errors = [];
+    const warnings = [];
+    const hints = [];
+
+    const dataset = obj;
+    const title = pick(dataset, ['dct:title', 'title', 'Titel', 'titel']);
+    const desc  = pick(dataset, ['dct:description', 'description', 'Beskrivning', 'beskrivning']);
+    const publisher = pick(dataset, ['dct:publisher', 'publisher', 'Utgivare', 'utgivare']);
+    const contact = pick(dataset, ['dcat:contactPoint', 'contactPoint', 'Kontaktpunkt', 'kontaktpunkt', 'contact']);
+    const dist = pick(dataset, ['dcat:distribution', 'distribution', 'Distribution', 'distributioner']);
+
+    const datasetLicense = pick(dataset, ['dct:license', 'license', 'Licens', 'licens']);
+    const datasetFormat  = pick(dataset, ['dct:format', 'format', 'Format']);
+
+    if (!title) errors.push('Missing dataset title (dct:title).');
+    if (!desc) errors.push('Missing dataset description (dct:description).');
+    if (!publisher) errors.push('Missing publisher (dct:publisher).');
+
+    if (!contact) warnings.push('Missing contactPoint (dcat:contactPoint). Strongly recommended.');
+    else {
+      const email = pick(contact, ['email', 'mailto', 'mbox', 'hasEmail']);
+      if (email && typeof email === 'string' && email.includes('@') && !email.startsWith('mailto:')) {
+        hints.push('Contact email: consider using mailto: in JSON-LD representations (optional).');
+      }
+    }
+
+    if (datasetLicense) hints.push('License seems placed on Dataset. In DCAT, license typically belongs on Distribution.');
+    if (datasetFormat) hints.push('Format seems placed on Dataset. In DCAT, format belongs on Distribution.');
+
+    const dists = normalizeToArray(dist);
+    if (!dists.length) errors.push('Missing distribution(s) (dcat:distribution). Add at least one distribution.');
+    else {
+      dists.forEach((d, i) => {
+        const license = pick(d, ['dct:license', 'license', 'Licens', 'licens']);
+        const access  = pick(d, ['dcat:accessURL', 'accessURL', 'accessUrl', 'url', 'URL']);
+        const dl      = pick(d, ['dcat:downloadURL', 'downloadURL', 'downloadUrl']);
+        const format  = pick(d, ['dct:format', 'format', 'Format']);
+        const media   = pick(d, ['dcat:mediaType', 'mediaType', 'mediatype']);
+
+        if (!license) warnings.push(`Distribution[${i}]: Missing license (dct:license).`);
+        if (!format && !media) warnings.push(`Distribution[${i}]: Missing format (dct:format) or mediaType.`);
+        if (!access && !dl) errors.push(`Distribution[${i}]: Missing accessURL/downloadURL.`);
+
+        if (access && !looksLikeUrl(access)) warnings.push(`Distribution[${i}]: accessURL doesn't look like a URL.`);
+        if (dl && !looksLikeUrl(dl)) warnings.push(`Distribution[${i}]: downloadURL doesn't look like a URL.`);
+      });
+    }
+
+    const asString = JSON.stringify(obj).toLowerCase();
+    const dcatSignals = ['dcat:', 'dct:', 'distribution', 'publisher', 'contactpoint', 'license', 'accessurl', 'downloadurl'];
+    const signalCount = dcatSignals.filter(s => asString.includes(s)).length;
+    if (signalCount < 2) warnings.push('Input does not look very DCAT-like. Are you pasting the right JSON/JSON-LD?');
+
+    return { errors, warnings, hints };
+  };
+
+  // ---------- JSON helpers ----------
+  const sortKeysDeep = (x) => {
+    if (Array.isArray(x)) return x.map(sortKeysDeep);
+    if (x && typeof x === 'object'){
+      return Object.keys(x).sort().reduce((acc, k) => {
+        acc[k] = sortKeysDeep(x[k]);
+        return acc;
+      }, {});
+    }
+    return x;
+  };
+
+  const extractKeysDeep = (x, prefix='', out=new Set()) => {
+    if (Array.isArray(x)){
+      x.forEach((v, i) => extractKeysDeep(v, `${prefix}[${i}]`, out));
+      return out;
+    }
+    if (x && typeof x === 'object'){
+      Object.keys(x).forEach(k => {
+        const p = prefix ? `${prefix}.${k}` : k;
+        out.add(p);
+        extractKeysDeep(x[k], p, out);
+      });
+    }
+    return out;
+  };
+
+  const getByPath = (obj, path) => {
+    const parts = path
+      .replace(/\[(\d+)\]/g, '.$1')
+      .split('.')
+      .filter(Boolean);
+
+    let cur = obj;
+    for (const p of parts){
+      if (cur == null) return undefined;
+      cur = cur[p];
+    }
+    return cur;
+  };
+
+  // ---------- UI: tool row ----------
+  const renderToolRow = () => {
+    toolRow.innerHTML = '';
+
+    const addToggle = (label, id, checked=false) => {
+      const wrap = document.createElement('label');
+      wrap.className = 'mono';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.id = id;
+      cb.checked = checked;
+      const sp = document.createElement('span');
+      sp.textContent = label;
+      wrap.appendChild(cb);
+      wrap.appendChild(sp);
+      toolRow.appendChild(wrap);
+      return cb;
+    };
+
+    const addInput = (label, id, placeholder='') => {
+      const wrap = document.createElement('label');
+      wrap.className = 'mono';
+      wrap.style.padding = '4px 10px';
+      wrap.style.borderRadius = '999px';
+      wrap.style.border = '1px solid rgba(255,255,255,0.08)';
+      wrap.style.background = 'rgba(13,17,23,0.18)';
+      wrap.style.display = 'inline-flex';
+      wrap.style.gap = '8px';
+      wrap.style.alignItems = 'center';
+
+      const sp = document.createElement('span');
+      sp.textContent = label;
+
+      const inp = document.createElement('input');
+      inp.id = id;
+      inp.placeholder = placeholder;
+      inp.className = 'mono';
+      inp.style.width = '160px';
+      inp.style.background = 'transparent';
+      inp.style.border = '0';
+      inp.style.outline = 'none';
+      inp.style.color = 'rgba(230,237,243,0.82)';
+
+      wrap.appendChild(sp);
+      wrap.appendChild(inp);
+      toolRow.appendChild(wrap);
+      return inp;
+    };
+
+    if (mode === 'json'){
+      addToggle('SORT KEYS', 'optSort', true);
+      addToggle('MINIFY', 'optMinify', false);
+      addToggle('KEY LIST', 'optKeys', false);
+      addInput('PATH', 'optPath', 'a.b[0].c');
+    }
+
+    if (mode === 'csv'){
+      addToggle('DELIM AUTO', 'optAutoDelim', true);
+      addToggle('USE ";"', 'optSemi', false);
+      addToggle('TRIM', 'optTrim', true);
+    }
+
+    if (mode === 'geo'){
+      toolRow.appendChild(document.createTextNode('VALIDATE + SUMMARY + BBOX'));
+    }
+
+    if (mode === 'dcat'){
+      addToggle('STRICT', 'optStrict', true);
+      toolRow.appendChild(document.createTextNode(' HARDCORE-ISH REPORT'));
+    }
+
+    if (mode === 'schema'){
+      addToggle('GEN SCHEMA', 'optGenSchema', true);
+      addToggle('VALIDATE', 'optValidate', true);
+      addInput('REQ (comma)', 'optReq', 'id,name');
+    }
+  };
+
+  const setMode = (next) => {
+    mode = next;
+
+    document.querySelectorAll('.tab').forEach(b => {
+      const active = b.getAttribute('data-tab') === mode;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+
+    setOut('', '');
+    setPill('IDLE');
+
+    if (mode === 'json'){
+      input.placeholder = '{\n  "mission": "open data",\n  "status": "in orbit"\n}';
+      setHint('JSON tools: validate, format, minify, sort, key list, path lookup');
+    }
+    if (mode === 'csv'){
+      input.placeholder = 'name,year\norbit,2026\nopen-data,2025';
+      setHint('Paste CSV or JSON. Run converts automatically. Download exports in current output format.');
+    }
+    if (mode === 'geo'){
+      input.placeholder = '{\n  "type": "FeatureCollection",\n  "features": []\n}';
+      setHint('GeoJSON: validate basics, summary, geometry stats + bbox.');
+    }
+    if (mode === 'dcat'){
+      input.placeholder =
+`{
+  "dct:title": "Dataset title",
+  "dct:description": "What it is + why it matters.",
+  "dct:publisher": { "name": "Org" },
+  "dcat:contactPoint": { "email": "data@org.se" },
+  "dcat:distribution": [
+    {
+      "dct:license": "CC BY 4.0",
+      "dcat:accessURL": "https://example.org/data",
+      "dct:format": "CSV"
+    }
+  ]
+}`;
+      setHint('DCAT: hardcore-ish dataset+distribution checks + human hints (not full SHACL).');
+    }
+    if (mode === 'schema'){
+      input.placeholder =
+`[
+  { "id": 1, "name": "A", "active": true },
+  { "id": 2, "name": "B", "active": false }
+]`;
+      setHint('Schema: generate light schema from array-of-objects and validate data against it.');
+    }
+
+    renderToolRow();
+  };
+
+  // ---------- Examples ----------
+  const examples = {
+    json: `{
+  "mission": "open data",
+  "status": "in orbit",
+  "payload": { "a": { "b": [ { "c": 123 } ] } }
+}`,
+    csv: `id;name;active
+1;Orbit;true
+2;Open Data;false`,
+    geo: `{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Point A" },
+      "geometry": { "type": "Point", "coordinates": [18.0686, 59.3293] }
+    }
+  ]
+}`,
+    dcat: `{
+  "dct:title": "Befolkningsstatistik per kommun 2025",
+  "dct:description": "Statistik över folkbokförd befolkning per kommun. Används för analys, planering och transparens.",
+  "dct:publisher": { "name": "Statistiska centralbyrån" },
+  "dcat:contactPoint": { "email": "data@scb.se" },
+  "dcat:distribution": [
+    {
+      "dct:license": "CC BY 4.0",
+      "dcat:accessURL": "https://www.scb.se/data/befolkning-2025",
+      "dcat:downloadURL": "https://www.scb.se/data/befolkning-2025.csv",
+      "dct:format": "CSV"
+    }
+  ]
+}`,
+    schema: `[
+  { "id": 1, "name": "Orbit", "active": true },
+  { "id": 2, "name": "Data", "active": false }
+]`
+  };
+
+  // ---------- Run ----------
+  const run = () => {
+    const val = (input.value || '').trim();
+    if (!val){
+      setOut('Paste input to begin.', 'error');
       setHint('NO INPUT');
+      setPill('ERROR');
       return;
     }
+
     try {
-      const parsed = JSON.parse(value);
-      const pretty = JSON.stringify(parsed, null, 2);
-      result.textContent = pretty;
-      result.className = 'json-result mono ok';
-      setHint('VALID JSON');
-    } catch (e) {
-      result.textContent = 'Invalid JSON: ' + e.message;
-      result.className = 'json-result mono error';
+      // JSON
+      if (mode === 'json'){
+        const obj = tryJson(val);
+        const sort = document.getElementById('optSort')?.checked;
+        const minify = document.getElementById('optMinify')?.checked;
+        const keyList = document.getElementById('optKeys')?.checked;
+        const path = document.getElementById('optPath')?.value?.trim();
+
+        const outObj = sort ? sortKeysDeep(obj) : obj;
+
+        let txt = minify ? JSON.stringify(outObj) : JSON.stringify(outObj, null, 2);
+
+        const report = {};
+        if (path){
+          report.path = path;
+          report.value = getByPath(outObj, path);
+        }
+        if (keyList){
+          report.keys = Array.from(extractKeysDeep(outObj)).sort();
+        }
+
+        if (path || keyList){
+          txt = JSON.stringify({ output: outObj, report }, null, 2);
+        }
+
+        setOut(txt, 'ok');
+        setHint(minify ? 'MINIFIED JSON' : 'VALID JSON');
+        setPill('OK');
+        return;
+      }
+
+      // CSV
+      if (mode === 'csv'){
+        const auto = document.getElementById('optAutoDelim')?.checked;
+        const useSemi = document.getElementById('optSemi')?.checked;
+        const trim = document.getElementById('optTrim')?.checked;
+        const delim = useSemi ? ';' : (auto ? null : ',');
+
+        if (val.startsWith('[') || val.startsWith('{')){
+          const obj = tryJson(val);
+          const arr = Array.isArray(obj) ? obj : [obj];
+          const csv = jsonToCsv(arr, useSemi ? ';' : ',');
+          setOut(csv, 'ok');
+          setHint('JSON → CSV');
+          setPill('OK');
+        } else {
+          const arr = csvToJson(val, delim, trim);
+          setOut(JSON.stringify(arr, null, 2), 'ok');
+          setHint('CSV → JSON');
+          setPill('OK');
+        }
+        return;
+      }
+
+      // GEO
+      if (mode === 'geo'){
+        const obj = tryJson(val);
+        const sum = geoSummary(obj);
+        const pretty = JSON.stringify({ summary: sum, geojson: obj }, null, 2);
+        setOut(pretty, 'ok');
+        setHint('GEOJSON OK');
+        setPill('OK');
+        return;
+      }
+
+      // DCAT
+      if (mode === 'dcat'){
+        const obj = tryJson(val);
+        const strict = document.getElementById('optStrict')?.checked;
+
+        const rep = dcatHardcore(obj);
+        const score = Math.max(0, 100 - rep.errors.length * 25 - rep.warnings.length * (strict ? 12 : 8));
+
+        const report = {
+          result: rep.errors.length ? 'FAIL' : (rep.warnings.length ? 'WARN' : 'PASS'),
+          score,
+          errors: rep.errors,
+          warnings: rep.warnings,
+          hints: rep.hints,
+          note: 'Hardcore-ish check. Not full RDF/SHACL validation.'
+        };
+
+        setOut(JSON.stringify(report, null, 2), report.result === 'PASS' ? 'ok' : 'error');
+        setHint(report.result);
+        setPill(report.result === 'PASS' ? 'OK' : (report.result === 'WARN' ? 'WARN' : 'ERROR'));
+        return;
+      }
+
+      // SCHEMA
+      if (mode === 'schema'){
+        const obj = tryJson(val);
+        const arr = Array.isArray(obj) ? obj : null;
+        if (!arr) throw new Error('Schema mode expects a JSON array of objects.');
+
+        const gen = document.getElementById('optGenSchema')?.checked;
+        const validate = document.getElementById('optValidate')?.checked;
+        const reqRaw = document.getElementById('optReq')?.value || '';
+        const required = reqRaw.split(',').map(s => s.trim()).filter(Boolean);
+
+        const schema = gen ? buildSchemaFromArray(arr) : null;
+        if (schema && required.length) schema.items.required = required;
+
+        let issues = [];
+        if (validate){
+          // if not generating, attempt to validate against inferred schema anyway
+          const schemaToUse = schema || buildSchemaFromArray(arr);
+          if (required.length) schemaToUse.items.required = required;
+          issues = validateArrayAgainstSchema(arr, schemaToUse);
+          const report = {
+            result: issues.length ? 'FAIL' : 'PASS',
+            issues,
+            schema: schemaToUse
+          };
+          setOut(JSON.stringify(report, null, 2), issues.length ? 'error' : 'ok');
+          setHint(report.result);
+          setPill(issues.length ? 'ERROR' : 'OK');
+          return;
+        } else {
+          if (!schema) throw new Error('Nothing to do: enable GEN SCHEMA or VALIDATE.');
+          setOut(JSON.stringify(schema, null, 2), 'ok');
+          setHint('SCHEMA GENERATED');
+          setPill('OK');
+          return;
+        }
+      }
+
+    } catch (e){
+      setOut('Error: ' + (e?.message || 'Unknown error'), 'error');
       setHint('ERROR');
+      setPill('ERROR');
     }
+  };
+
+  // ---------- Download ----------
+  const downloadCurrent = () => {
+    const text = (output.textContent || '').trim();
+    if (!text){
+      setHint('NOTHING TO DOWNLOAD');
+      return;
+    }
+
+    const safeMode = (mode || 'output').toLowerCase();
+    const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+    let ext = 'txt';
+    let mime = 'text/plain;charset=utf-8';
+
+    if (safeMode === 'json' || safeMode === 'geo' || safeMode === 'dcat' || safeMode === 'schema'){
+      ext = 'json';
+      mime = 'application/json;charset=utf-8';
+    }
+    if (safeMode === 'csv'){
+      // output might be CSV or JSON depending on direction; sniff:
+      if (text.startsWith('{') || text.startsWith('[')){
+        ext = 'json';
+        mime = 'application/json;charset=utf-8';
+      } else {
+        ext = 'csv';
+        mime = 'text/csv;charset=utf-8';
+      }
+    }
+
+    downloadText(text, `orbit-${safeMode}-${ts}.${ext}`, mime);
+    setHint('DOWNLOADED');
+    setTimeout(() => setHint('TIP: Ctrl/Cmd + Enter to run · Output can be downloaded'), 1200);
+  };
+
+  // ---------- Tabs ----------
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => setMode(btn.getAttribute('data-tab')));
   });
 
-  copyBtn.addEventListener('click', async function(){
-    const txt = result.textContent || '';
+  // ---------- Buttons ----------
+  runBtn?.addEventListener('click', run);
+
+  copyBtn?.addEventListener('click', async () => {
+    const txt = output.textContent || '';
     if (!txt.trim()) { setHint('NOTHING TO COPY'); return; }
-    try{
+    try {
       await navigator.clipboard.writeText(txt);
       setHint('COPIED');
-      setTimeout(()=>setHint(''), 1200);
-    }catch{
+      setTimeout(() => setHint('TIP: Ctrl/Cmd + Enter to run · Output can be downloaded'), 1200);
+    } catch {
       setHint('COPY FAILED');
     }
   });
+
+  swapBtn?.addEventListener('click', () => {
+    const a = input.value;
+    input.value = output.textContent || '';
+    setOut(a, '');
+    setHint('SWAPPED');
+    setTimeout(() => setHint('TIP: Ctrl/Cmd + Enter to run · Output can be downloaded'), 1200);
+  });
+
+  dlBtn?.addEventListener('click', downloadCurrent);
+
+  clearInBtn?.addEventListener('click', () => {
+    input.value = '';
+    setHint('INPUT CLEARED');
+    setPill('IDLE');
+  });
+
+  clearOutBtn?.addEventListener('click', () => {
+    setOut('', '');
+    setHint('OUTPUT CLEARED');
+    setPill('IDLE');
+  });
+
+  exBtn?.addEventListener('click', () => {
+    input.value = examples[mode] || examples.json;
+    setHint('EXAMPLE LOADED');
+    setPill('IDLE');
+  });
+
+  // Hotkey: Ctrl/Cmd + Enter
+  input?.addEventListener('keydown', (e) => {
+    const isMac = navigator.platform.toUpperCase().includes('MAC');
+    const combo = isMac ? e.metaKey : e.ctrlKey;
+    if (combo && e.key === 'Enter') {
+      e.preventDefault();
+      run();
+    }
+  });
+
+  // Init
+  renderToolRow();
+  setPill('IDLE');
+  setMode('json');
 });
 </script>

@@ -1,5 +1,7 @@
+---
 import Layout from '../layouts/Layout.astro';
 import Badge from '../components/Badge.astro';
+
 const base = import.meta.env.BASE_URL;
 const DISCUSSIONS_URL = "https://github.com/MelissaSkywalkz/open-data-orbit/discussions";
 ---
@@ -17,18 +19,13 @@ const DISCUSSIONS_URL = "https://github.com/MelissaSkywalkz/open-data-orbit/disc
 
         <div class="satellite">
           <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Body -->
             <rect x="26" y="26" width="12" height="12" rx="3" stroke="currentColor" stroke-width="2"/>
-            <!-- Panels -->
             <rect x="8" y="28" width="14" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
             <rect x="42" y="28" width="14" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
-            <!-- Antenna -->
             <path d="M32 14v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             <circle cx="32" cy="12" r="2" fill="currentColor"/>
-            <!-- Connection struts -->
             <path d="M22 32h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             <path d="M38 32h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <!-- Tiny details -->
             <circle cx="30" cy="30" r="1.2" fill="currentColor"/>
             <circle cx="34" cy="34" r="1.2" fill="currentColor"/>
           </svg>

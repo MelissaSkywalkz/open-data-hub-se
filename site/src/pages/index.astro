@@ -4,98 +4,181 @@ import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
 
 const base = import.meta.env.BASE_URL;
+
+const quickActions = [
+  { title: "JSON Terminal", desc: "Validera & beautify JSON direkt i webben.", href: `${base}labs/`, icon: "code", tag: "LAB" },
+  { title: "Access Terminal", desc: "Alla experiment och utilities i Labs.", href: `${base}labs/`, icon: "terminal", tag: "LAB" },
+  { title: "Resources", desc: "Standarder, källor och portaler samlade.", href: `${base}resources/`, icon: "beacon", tag: "ARCHIVE" },
+  { title: "Discussions", desc: "Ställ frågor och dela lösningar med crew.", href: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions", icon: "chat", tag: "COMMS" },
+];
+
+const startHere = [
+  { title: "Kom igång med öppna data", desc: "Vad är öppna data och hur hittar man rätt dataset?", href: `${base}guides/`, icon: "book" },
+  { title: "Metadata som funkar", desc: "DCAT-AP-SE, minimum fields och vanliga fallgropar.", href: `${base}guides/metadata/`, icon: "tag" },
+  { title: "Publicera & dela", desc: "Hur du går från fil → API → katalog.", href: `${base}guides/publish/`, icon: "rocket" },
+];
+
+const forYou = [
+  { title: "För utvecklare", desc: "API:er, formats, interoperabilitet, OpenLayers/Origo.", href: `${base}guides/dev/`, icon: "code" },
+  { title: "För dataägare", desc: "Licenser, kvalitet, metadata och publiceringsflöden.", href: `${base}guides/data-owners/`, icon: "shield" },
+  { title: "För analys & GIS", desc: "Gridsets, reprojektion, tile-caches och praktiska tips.", href: `${base}guides/gis/`, icon: "layers" },
+];
+
+const activity = [
+  { type: "UPLINK", date: "2026-02-01", text: "DCAT-AP-SE – minimum required fields", icon: "book" },
+  { type: "DEPLOY", date: "2026-01-28", text: "JSON Checker / Beautifier added", icon: "code" },
+  { type: "COMMS",  date: "2026-01-26", text: "“How do I find the right metadata?” (GitHub)", icon: "chat" },
+];
 ---
-<Layout title="Start" description="Allt du behöver för Öppna Data i omlopp">
+
+<Layout title="Start" description="Sveriges communityhub för öppna data, guider, resurser och samarbete.">
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        <span class="hero-title-accent">Open Data</span>
-        <span class="hero-title-core">Orbit</span>
-      </h1>
-      <Badge label="GUIDES" variant="orbit" icon="orbit" />
-      <Badge label="LABS" variant="terminal" icon="terminal" />
-      <Badge label="COMMUNITY" variant="comms" icon="antenna" />
-      <p class="hero-tagline">Allt du behöver för Öppna Data i omlopp</p>
-      <div class="glow-line"></div>
-      <div class="hero-actions">
-          <a href={`${base}guides/`} class="btn cta">Launch Guides</a>
-          <a href={`${base}community/`} class="btn secondary cta">Enter Orbit</a>
+    <div class="hero-inner">
+      <div class="hero-top">
+        <h1 class="hero-title">
+          <span class="hero-title-accent">Open Data</span>
+          <span class="hero-title-core">Orbit</span>
+        </h1>
+
+        <div class="hero-badges">
+          <Badge label="GUIDES" variant="orbit" icon="orbit" />
+          <Badge label="LABS" variant="terminal" icon="terminal" />
+          <Badge label="COMMUNITY" variant="comms" icon="antenna" />
+        </div>
+
+        <p class="hero-tagline">Guider, verktyg och community för öppna data i Sverige.</p>
+        <p class="hero-subtagline">
+          Bygg bättre metadata, hitta rätt standarder och få saker att fungera i verkligheten —
+          från första dataset till produktion.
+        </p>
+
+        <div class="hero-actions">
+          <a href={`${base}guides/`} class="btn cta">Start here</a>
+          <a href={`${base}community/`} class="btn secondary cta">Join the community</a>
+        </div>
+
+        <div class="hero-stats" aria-label="Mission status">
+          <span class="stat">STATUS: IN ORBIT</span>
+          <span class="stat">FOCUS: OPEN DATA</span>
+          <span class="stat">GOAL: INTEROPERABILITY</span>
+        </div>
       </div>
-      <div class="hero-stats">
-        <span class="stat">STATUS: IN ORBIT</span>
-        <span class="stat">MISSION: OPEN DATA</span>
-        <span class="stat">OBJECTIVE: TRANSPARENCY</span>
+
+      <!-- Quick actions panel -->
+      <div class="hero-panel card">
+        <div class="panel-head">
+          <div class="panel-title">
+            <span class="panel-kicker">MISSION CONTROL</span>
+            <h2 class="panel-h2">Quick actions</h2>
+          </div>
+          <p class="panel-desc">Saker du ofta vill göra direkt — utan att leta runt.</p>
+        </div>
+
+        <div class="panel-grid">
+          {quickActions.map((a) => (
+            <a class="quick" href={a.href}>
+              <div class="quick-ico"><Icon name={a.icon} size={20} /></div>
+              <div class="quick-body">
+                <div class="quick-top">
+                  <span class="quick-title">{a.title}</span>
+                  <span class="quick-tag">{a.tag}</span>
+                </div>
+                <span class="quick-desc">{a.desc}</span>
+              </div>
+              <span class="quick-arrow" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
-<div class="glow-line"></div>
-<section class="cards-section">
-  <div class="cards-grid">
-    <a href={`${base}guides/`} class="card card-home">
-      <div class="card-icon"><Icon name="book" size={32} /></div>
+  <div class="glow-line"></div>
 
-      <div class="card-meta">
-        <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
-        <span class="card-route">Guides</span>
+  <!-- MAIN GRID -->
+  <section class="home-grid">
+    <!-- Start here -->
+    <div class="home-card card">
+      <div class="home-card-head">
+        <span class="kicker">STARTA HÄR</span>
+        <h2 class="home-h2">Tre snabba spår</h2>
+        <p class="home-sub">Om du bara gör tre saker idag: börja här.</p>
       </div>
 
-      <h3 class="card-title">Lär dig</h3>
-      <p class="card-description">Utforska guider och resurser för att komma igång med öppna data.</p>
-    </a>
+      <div class="list">
+        {startHere.map((i) => (
+          <a class="row" href={i.href}>
+            <span class="row-ico"><Icon name={i.icon} size={18} /></span>
+            <span class="row-main">
+              <span class="row-title">{i.title}</span>
+              <span class="row-desc">{i.desc}</span>
+            </span>
+            <span class="row-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
 
-    <a href={`${base}labs/`} class="card card-home">
-      <div class="card-icon"><Icon name="code" size={32} /></div>
-
-      <div class="card-meta">
-          <Badge label="ACCESS TERMINAL" variant="terminal" icon="terminal" />
-        <span class="card-route">Labs</span>
+    <!-- For you -->
+    <div class="home-card card">
+      <div class="home-card-head">
+        <span class="kicker">FÖR DIG SOM…</span>
+        <h2 class="home-h2">Välj din ingång</h2>
+        <p class="home-sub">Guides som är skrivna för din roll — inte generiska listor.</p>
       </div>
 
-      <h3 class="card-title">Bygg</h3>
-      <p class="card-description">Testa verktyg, bygg prototyper och lansera idéer i Labs.</p>
-    </a>
-
-    <a href={`${base}community/`} class="card card-home">
-      <div class="card-icon"><Icon name="chat" size={32} /></div>
-
-      <div class="card-meta">
-          <Badge label="EXPLORE THE ORBIT" variant="comms" icon="antenna" />
-        <span class="card-route">Community</span>
+      <div class="pill-grid">
+        {forYou.map((x) => (
+          <a class="pill" href={x.href}>
+            <span class="pill-ico"><Icon name={x.icon} size={18} /></span>
+            <span class="pill-title">{x.title}</span>
+            <span class="pill-desc">{x.desc}</span>
+          </a>
+        ))}
       </div>
+    </div>
+  </section>
 
-      <h3 class="card-title">Fråga &amp; Dela</h3>
-      <p class="card-description">Ställ frågor, dela kunskap och koppla upp dig med communityn.</p>
-    </a>
-  </div>
-</section>
+  <!-- Activity feed -->
+  <section class="activity">
+    <div class="activity-head">
+      <h2 class="activity-title">Mission Log</h2>
+      <p class="activity-sub">Senaste uplinks, deploys och comms.</p>
+    </div>
 
-
-  <section class="latest-section">
-    <h2>Mission Log</h2>
-    <div class="latest-panel">
-      <div class="latest-row"><Icon name="book" size={20} /> <span class="latest-label">UPLINK:</span> DCAT-AP-SE – minimum required fields</div>
-      <div class="latest-row"><Icon name="code" size={20} /> <span class="latest-label">DEPLOY:</span> JSON Checker / Beautifier added</div>
-      <div class="latest-row"><Icon name="chat" size={20} /> <span class="latest-label">COMMS:</span> “How do I find the right metadata?” (GitHub)</div>
+    <div class="activity-panel card">
+      {activity.map((r) => (
+        <div class="activity-row">
+          <span class={`dot dot-${r.type.toLowerCase()}`} aria-hidden="true"></span>
+          <Icon name={r.icon} size={18} />
+          <span class="chip">{r.type}</span>
+          <span class="date">{r.date}</span>
+          <span class="text">{r.text}</span>
+        </div>
+      ))}
     </div>
   </section>
 </Layout>
 
 <style>
-.hero {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
+/* ---------- HERO ---------- */
+.hero{
   padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
-  position: relative;
-  z-index: 1;
-  overflow: hidden; /* ok nu när vi maskar */
+}
+
+.hero-inner{
+  display:grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--spacing-xl);
+  align-items: start;
 }
 
 .hero-title{
+  margin: 0 0 10px 0;
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: var(--fg);
+  font-weight: 900;
+  letter-spacing: 0.05em;
   text-shadow:
     0 12px 40px rgba(31,111,235,0.25),
     0 2px 12px rgba(0,0,0,0.6);
@@ -106,10 +189,8 @@ const base = import.meta.env.BASE_URL;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 10px 40px rgba(31,111,235,0.10);
 }
 
-/* Orbit: near-white, premium (inte kritvit) */
 .hero-title-core{
   color: rgba(230,237,243,0.94);
   text-shadow:
@@ -118,234 +199,366 @@ const base = import.meta.env.BASE_URL;
     0 18px 55px rgba(31,111,235,0.20);
 }
 
-/* Tagline vit/off-white (som du ville) */
-.hero-tagline{
-  margin: var(--spacing-md);
-  color: rgba(230,237,243,0.92);
-  text-shadow: 0 10px 40px rgba(31,111,235,0.12);
-}
-
-.hero-actions {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
-  flex-wrap: wrap;
-}
-
-/* Låt globals.css äga .btn-look, vi bara förstärker storlek här */
-.btn, .btn.secondary {
-  min-width: 180px;
-  text-align: center;
-  font-size: var(--font-size-lg);
-  padding: var(--spacing-md) var(--spacing-xl);
-}
-
-/* Stats: “chip” look */
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
-}
-
-.stat {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  color: var(--accent3);
-  background: rgba(13,17,23,0.35);
-  border-radius: 999px;
-  padding: 5px 14px;
-  border: 1px solid rgba(88,166,255,0.22);
-  margin: 2px 4px;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-}
-
-/* Cards section: INGEN egen bakgrund – låt body göra jobbet */
-.cards-section {
-  margin-bottom: var(--spacing-2xl);
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-2xl);
-}
-
-/* Home cards: glass + proffsigt */
-.card-home {
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: var(--spacing-xs);
-
-  /* Låt .card i globals göra det mesta, men vi vill ha lite extra gradient */
-  background: rgba(22,27,34,0.72);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: var(--spacing-lg) var(--spacing-md);
-  border-radius: var(--radius);
-  transition: transform 0.15s, border-color 0.18s, box-shadow 0.18s, filter 0.18s;
-}
-
-.card-home::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    120deg,
-    rgba(31,111,235,0.08) 0%,
-    rgba(13,17,23,0.00) 55%,
-    rgba(88,166,255,0.06) 100%
-  );
-  opacity: 0.9;
-}
-
-.card-home > * {
-  position: relative;
-  z-index: 1;
-}
-
-.card-home:hover {
-  border-color: rgba(88,166,255,0.30);
-  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
-  transform: translateY(-4px);
-  filter: brightness(1.03);
-}
-
-.card-home .card-icon {
-  margin-bottom: var(--spacing-xs);
-  color: var(--accent3);
-  text-shadow: 0 0 10px rgba(88,166,255,0.25);
-}
-
-.card-home .card-title {
-  margin-bottom: var(--spacing-xs);
-  color: var(--fg);
-  margin-top: 0;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  line-height: 1.18;
-  text-shadow: none;
-  font-size: var(--font-size-lg);
-}
-
-.card-home .card-description {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  opacity: 0.98;
-}
-
-.card-home .badge {
-  margin-bottom: var(--spacing-xs);
-  border-radius: 999px;
-}
-
-.card-meta {
-  display: flex;
-  align-items: center;
+.hero-badges{
+  display:flex;
+  justify-content:flex-start;
   gap: 10px;
-  margin-bottom: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin: 10px 0 10px 0;
 }
 
-.card-route {
+.hero-tagline{
+  margin: 12px 0 6px 0;
+  color: rgba(230,237,243,0.90);
+  font-size: 1.08rem;
+}
+
+.hero-subtagline{
+  margin: 0 0 var(--spacing-md) 0;
+  color: rgba(230,237,243,0.70);
+  line-height: 1.7;
+  max-width: 70ch;
+}
+
+.hero-actions{
+  display:flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
+.hero-stats{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-lg);
+}
+
+.stat{
+  display:inline-block;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(230, 237, 243, 0.65);
-}
-
-/* Om din Badge-komponent redan har .badge */
-.card-home .badge {
+  font-size: 0.82rem;
+  color: rgba(88,166,255,0.85);
+  background: rgba(13,17,23,0.28);
+  border: 1px solid rgba(88,166,255,0.18);
   border-radius: 999px;
-  padding: 3px 10px;
+  padding: 6px 12px;
+  letter-spacing: 0.06em;
   font-weight: 800;
-  letter-spacing: 0.10em;
+}
+
+/* Right panel */
+.hero-panel{
+  padding: var(--spacing-lg);
+}
+
+.panel-head{
+  margin-bottom: var(--spacing-md);
+}
+
+.panel-kicker{
+  font-family: var(--font-mono);
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
   text-transform: uppercase;
+  color: rgba(88,166,255,0.80);
 }
 
-/* Lite extra hover-känsla på meta utan att ändra cards */
-.card-home:hover .card-route {
-  color: rgba(230, 237, 243, 0.78);
+.panel-h2{
+  margin: 8px 0 6px 0;
+  font-size: 1.35rem;
 }
 
-/* Latest */
-.latest-section {
-  margin-top: var(--spacing-2xl);
+.panel-desc{
+  margin: 0;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.6;
+}
+
+.panel-grid{
+  display:grid;
+  gap: 10px;
+}
+
+.quick{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(13,17,23,0.18);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+  color: rgba(230,237,243,0.85);
+}
+.quick:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.20);
+  filter: brightness(1.05);
+}
+
+.quick-ico{
+  width: 34px;
+  height: 34px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  color: rgba(88,166,255,0.90);
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+  flex: 0 0 auto;
+}
+
+.quick-body{ flex: 1; }
+.quick-top{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.quick-title{
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: rgba(230,237,243,0.92);
+}
+.quick-tag{
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.quick-desc{
+  display:block;
+  margin-top: 4px;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.55;
+}
+.quick-arrow{
+  color: rgba(88,166,255,0.70);
+  font-weight: 900;
+}
+
+/* ---------- MAIN GRID ---------- */
+.home-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
   padding: var(--spacing-xl) 0;
 }
 
-/* Gör den till “proffs glass card” med din gradientkänsla */
-.latest-panel {
-  border-radius: var(--radius);
+.home-card{
   padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-
-  background:
-    radial-gradient(ellipse 70% 90% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 90% at 80% 20%, rgba(44,83,100,0.18) 0%, transparent 55%),
-    rgba(22,27,34,0.75);
-
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 55px rgba(0,0,0,0.40);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
-.latest-row {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  color: var(--fg);
-  font-size: var(--font-size-base);
-}
-
-.latest-label {
+.kicker{
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  color: var(--accent3);
-  background: rgba(13,17,23,0.35);
-  border-radius: 999px;
-  padding: 3px 10px;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-  border: 1px solid rgba(88,166,255,0.18);
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.80);
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .hero-title { font-size: 2rem; }
-  .hero-tagline { font-size: var(--font-size-lg); }
+.home-h2{
+  margin: 10px 0 6px 0;
+  font-size: 1.35rem;
+}
 
-  .hero-actions {
+.home-sub{
+  margin: 0 0 var(--spacing-md) 0;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.6;
+}
+
+.list{
+  display:grid;
+  gap: 10px;
+}
+
+.row{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(13,17,23,0.18);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+}
+.row:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.20);
+  filter: brightness(1.05);
+}
+.row-ico{
+  width: 32px;
+  height: 32px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  color: rgba(88,166,255,0.90);
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+}
+.row-main{ flex: 1; }
+.row-title{
+  display:block;
+  font-weight: 900;
+  color: rgba(230,237,243,0.92);
+}
+.row-desc{
+  display:block;
+  margin-top: 4px;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.55;
+}
+.row-arrow{
+  color: rgba(88,166,255,0.70);
+  font-weight: 900;
+}
+
+/* Role pills */
+.pill-grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.pill{
+  padding: 14px 14px;
+  border-radius: 16px;
+  background: rgba(13,17,23,0.18);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+  position: relative;
+}
+.pill:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.20);
+  filter: brightness(1.05);
+}
+
+.pill-ico{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  color: rgba(88,166,255,0.90);
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+  margin-bottom: 10px;
+}
+
+.pill-title{
+  display:block;
+  font-weight: 900;
+  color: rgba(230,237,243,0.92);
+  margin-bottom: 4px;
+}
+.pill-desc{
+  display:block;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.6;
+}
+
+/* ---------- ACTIVITY ---------- */
+.activity{
+  padding: var(--spacing-xl) 0;
+}
+
+.activity-head{
+  display:flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.activity-title{ margin: 0; }
+.activity-sub{
+  margin: 0;
+  color: rgba(230,237,243,0.62);
+}
+
+.activity-panel{
+  padding: var(--spacing-lg);
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-row{
+  display:grid;
+  grid-template-columns: 10px 22px auto auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(88,166,255,0.22);
+}
+.dot-uplink{ background: rgba(88,166,255,0.90); }
+.dot-deploy{ background: rgba(31,111,235,0.92); }
+.dot-comms{  background: rgba(179,136,255,0.85); }
+
+.chip{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+  background: rgba(13,17,23,0.30);
+  border: 1px solid rgba(88,166,255,0.14);
+  border-radius: 999px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.date{
+  font-family: var(--font-mono);
+  font-size: 0.80rem;
+  color: rgba(230,237,243,0.62);
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+}
+
+.text{
+  color: rgba(230,237,243,0.82);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 980px){
+  .hero-inner{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px){
+  .hero-actions{
     flex-direction: column;
-    gap: var(--spacing-md);
   }
 
-  .hero-stats {
-    flex-direction: column;
-    gap: var(--spacing-xs);
+  .home-grid{
+    grid-template-columns: 1fr;
   }
 
-  .cards-grid { grid-template-columns: 1fr; }
-  .latest-panel { padding: var(--spacing-md); }
+  .activity-row{
+    grid-template-columns: 10px 22px 1fr;
+    grid-template-rows: auto auto auto;
+    align-items: start;
+  }
+  .chip{ grid-column: 3; }
+  .date{ grid-column: 3; }
+  .text{ grid-column: 3; }
 }
 </style>

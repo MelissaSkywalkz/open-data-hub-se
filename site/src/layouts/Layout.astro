@@ -54,57 +54,50 @@ const ogImage = `${baseUrl}/favicon.svg`;
     <main class="container">
       <slot />
     </main>
-    <footer class="footer">
-      <div class="footer-inner container">
-        <div class="footer-col footer-brand">
-          <div class="footer-mark">
-            <span class="footer-dot" aria-hidden="true"></span>
-            <span class="footer-name">Open Data Orbit</span>
+    <footer class="site-footer">
+      <div class="site-footer__bar"></div>
+
+      <div class="site-footer__inner container">
+        <div class="site-footer__left">
+          <div class="site-footer__brand">
+            <span class="site-footer__dot" aria-hidden="true"></span>
+            <span class="site-footer__name">Open Data Orbit</span>
+            <span class="site-footer__pill">BETA</span>
           </div>
-          <p class="footer-tagline">
-            Communitydriven kunskapsbank för öppna data i Sverige — i omlopp.
+
+          <p class="site-footer__tagline">
+            Communitydriven kunskapsbank för öppna data i Sverige.
           </p>
-
-          <div class="footer-telemetry">
-            <span class="telemetry-pill"><span class="k">STATUS</span><span class="v">IN ORBIT</span></span>
-            <span class="telemetry-pill"><span class="k">YEAR</span><span class="v">2026</span></span>
-          </div>
         </div>
 
-        <nav class="footer-col" aria-label="Site">
-          <h3 class="footer-title">Orbit Directory</h3>
-          <a href={`${base}guides/`} class="footer-link">Guides</a>
-          <a href={`${base}resources/`} class="footer-link">Resources</a>
-          <a href={`${base}labs/`} class="footer-link">Labs</a>
-          <a href={`${base}community/`} class="footer-link">Community</a>
-          <a href={`${base}rewards/`} class="footer-link">Rewards</a>
-          <a href={`${base}about/`} class="footer-link">About</a>
-        </nav>
-
-        <div class="footer-col">
-          <h3 class="footer-title">Mission Control</h3>
-          <a class="footer-link" href="https://github.com/MelissaSkywalkz/open-data-orbit" target="_blank" rel="noopener">
-            GitHub Repository ↗
-          </a>
-          <a class="footer-link" href="https://github.com/MelissaSkywalkz/open-data-orbit/discussions" target="_blank" rel="noopener">
-            Discussions / Comms ↗
-          </a>
-
-          <div class="footer-cta">
-            <a class="btn cta footer-btn" href="https://github.com/MelissaSkywalkz/open-data-orbit" target="_blank" rel="noopener">
-              Contribute
+        <div class="site-footer__right">
+          <div class="site-footer__meta">
+            <a
+              class="site-footer__ext"
+              href="https://github.com/MelissaSkywalkz/open-data-orbit"
+              target="_blank"
+              rel="noopener"
+            >
+              GitHub
             </a>
-            <a class="btn secondary cta footer-btn" href={`${base}community/`}>
-              Enter Comms
+            <span class="site-footer__sep">•</span>
+            <a
+              class="site-footer__ext"
+              href="https://github.com/MelissaSkywalkz/open-data-orbit/discussions"
+              target="_blank"
+              rel="noopener"
+            >
+              Discussions
             </a>
           </div>
-        </div>
-      </div>
 
-      <div class="footer-bottom">
-        <div class="container footer-bottom-inner">
-          <span class="footer-muted">© 2026 Open Data Orbit</span>
-          <span class="footer-muted">Built with Astro • Deployed on GitHub Pages</span>
+          <div class="site-footer__fine">
+            <span>© 2026</span>
+            <span class="site-footer__sep">•</span>
+            <span>Built with Astro</span>
+            <span class="site-footer__sep">•</span>
+            <span>GitHub Pages</span>
+          </div>
         </div>
       </div>
     </footer>

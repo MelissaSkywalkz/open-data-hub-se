@@ -4,39 +4,59 @@ import rewards from '../data/rewards.json';
 import Badge from '../components/Badge.astro';
 const base = import.meta.env.BASE_URL;
 
-/** Enkel mapping baserat på id/name (du kan justera när du vill) */
-const pickVariant = (badge: any) => {
+const CONTRIBUTING_URL =
+  "https://github.com/MelissaSkywalkz/open-data-orbit/blob/main/CONTRIBUTING.md";
+
+/** Enkel mapping för badge-stil (kan byggas ut senare) */
+const pickVariant = (badge) => {
   const s = `${badge?.id ?? ''} ${badge?.name ?? ''}`.toLowerCase();
-  if (s.includes('launch') || s.includes('ready') || s.includes('guide')) return { variant: 'launch', icon: 'rocket' };
-  if (s.includes('lab') || s.includes('terminal') || s.includes('build')) return { variant: 'terminal', icon: 'terminal' };
-  if (s.includes('comms') || s.includes('community') || s.includes('help')) return { variant: 'comms', icon: 'antenna' };
-  if (s.includes('star') || s.includes('legend') || s.includes('elite')) return { variant: 'star', icon: 'star' };
+  if (s.includes('lab')) return { variant: 'terminal', icon: 'terminal' };
+  if (s.includes('community') || s.includes('help')) return { variant: 'comms', icon: 'antenna' };
+  if (s.includes('metadata')) return { variant: 'orbit', icon: 'orbit' };
+  if (s.includes('bug')) return { variant: 'launch', icon: 'rocket' };
   return { variant: 'orbit', icon: 'orbit' };
 };
 ---
 
-<Layout title="Rewards" description="Badges och incitament för contributions">
+<Layout title="Rewards" description="Badges och erkännande för contributions i Open Data Orbit">
+  <!-- Hero -->
   <section class="rewards-hero">
     <h1 class="rewards-title">Mission Rewards</h1>
     <p class="rewards-lead">
-      I Open Data Orbit kan du låsa upp badges för att bidra, hjälpa andra och hålla missionen i omlopp.
+      Rewards är ett sätt att synliggöra contributions i Open Data Orbit – att hjälpa andra,
+      förbättra innehåll och bidra till ett öppnare dataekosystem i Sverige.
     </p>
 
     <div class="rewards-chips">
-      <Badge label="MISSION LOG" variant="orbit" icon="orbit" />
-      <Badge label="BADGES" variant="star" icon="star" />
-      <Badge label="MANUAL AWARDS (MVP)" variant="terminal" icon="terminal" />
+      <Badge label="STATUS: MVP" variant="terminal" icon="terminal" />
+      <Badge label="AWARDS: MANUAL" variant="orbit" icon="orbit" />
+      <Badge label="TRACK: DISCUSSIONS + PR" variant="comms" icon="antenna" />
     </div>
   </section>
 
+  <!-- Info -->
   <section class="rewards-info card reward-info">
-    <h2>Hur funkar rewards?</h2>
+    <h2>Hur fungerar rewards?</h2>
     <p>
-      I MVP-versionen delas badges ut <strong>manuellt av moderatorer</strong> baserat på dina insatser.
-      Läs mer om hur du kan bidra i <a href={`${base}CONTRIBUTING.md`} target="_blank">CONTRIBUTING.md</a>.
+      I nuvarande version delas badges ut <strong>manuellt</strong> av moderatorer.
+      Fokus ligger på kvalitet, hjälpsamhet och faktiska bidrag – inte mängd.
+    </p>
+
+    <ul class="rewards-bullets">
+      <li>Hjälpsamma svar i GitHub Discussions</li>
+      <li>Förbättringar av guider, resurser eller text</li>
+      <li>Buggrapporter med tydliga exempel eller reproducerbara steg</li>
+      <li>Bidrag till Labs, exempel eller prototyper</li>
+    </ul>
+
+    <p class="muted">
+      Vill du bidra? Läs riktlinjerna i
+      <a href={CONTRIBUTING_URL} target="_blank" rel="noopener">CONTRIBUTING.md</a>
+      eller delta i communityn.
     </p>
   </section>
 
+  <!-- Badges -->
   <section class="badges-grid">
     {rewards.map((b) => {
       const meta = pickVariant(b);
@@ -49,7 +69,7 @@ const pickVariant = (badge: any) => {
           <p class="reward-desc">{b.description}</p>
 
           <div class="reward-criteria">
-            <span class="criteria-label">HOW TO UNLOCK</span>
+            <span class="criteria-label">SIGNAL TO EARN</span>
             <p class="criteria-text">{b.criteria}</p>
           </div>
         </article>
@@ -59,10 +79,9 @@ const pickVariant = (badge: any) => {
 </Layout>
 
 <style>
+/* Hero */
 .rewards-hero{
-  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
-  text-align: left;
-  position: relative;
+  padding: var(--spacing-2xl) 0 var(--spacing-xl);
 }
 
 .rewards-title{
@@ -73,18 +92,19 @@ const pickVariant = (badge: any) => {
 }
 
 .rewards-lead{
-  max-width: 68ch;
+  max-width: 70ch;
   color: rgba(230,237,243,0.80);
   margin-bottom: var(--spacing-lg);
+  line-height: 1.75;
 }
 
 .rewards-chips{
   display:flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: var(--spacing-md);
 }
 
+/* Info */
 .reward-info{
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
@@ -94,10 +114,24 @@ const pickVariant = (badge: any) => {
     rgba(22,27,34,0.72);
   border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 20px 55px rgba(0,0,0,0.40);
 }
 
+.rewards-bullets{
+  margin: var(--spacing-md) 0;
+  padding-left: 1.2em;
+}
+
+.rewards-bullets li{
+  margin-bottom: 8px;
+  color: rgba(230,237,243,0.78);
+}
+
+.muted{
+  color: rgba(230,237,243,0.60);
+}
+
+/* Grid */
 .badges-grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -111,10 +145,8 @@ const pickVariant = (badge: any) => {
   background: rgba(22,27,34,0.70);
   border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
-  margin: var(--spacing)
 }
 
 .reward-card::before{
@@ -138,7 +170,7 @@ const pickVariant = (badge: any) => {
 }
 
 .reward-desc{
-  margin: 0 0 var(--spacing-lg) 0;
+  margin: 0 0 var(--spacing-lg);
   color: rgba(230,237,243,0.78);
   line-height: 1.7;
 }
@@ -162,9 +194,5 @@ const pickVariant = (badge: any) => {
   margin: 0;
   color: rgba(230,237,243,0.74);
   line-height: 1.7;
-}
-
-@media (max-width: 768px){
-  .rewards-hero{ padding-top: var(--spacing-xl); }
 }
 </style>

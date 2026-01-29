@@ -1,28 +1,87 @@
 ---
 title: Kom igång med öppna data
-description: En introduktionsguide för att komma igång med öppna data i Sverige
+description: En introduktionsguide för dig som vill börja arbeta med öppna data i Sverige.
 author: Open Data Orbit
 publishedAt: 2026-01-28
-tags: [introduktion, grundläggande, för-nybörjare]
+updatedAt: 2026-01-28
+status: stable
+level: intro
+tags:
+  - introduktion
+  - öppna data
+  - nybörjare
+  - sverige
 ---
 
-# Kom igång med öppna data
+## Vad är öppna data?
 
-Öppna data är information som är fritt tillgänglig för vem som helst att använda, modifiera och dela.
+Öppna data är information som är fritt tillgänglig för alla att:
+- använda
+- vidareutnyttja
+- dela vidare
+
+Ofta publiceras öppna data av offentliga organisationer som myndigheter, kommuner och regioner.
+
+---
 
 ## Varför öppna data?
 
-- **Transparens**: Vet vad som händer i samhället
-- **Innovation**: Bygga nya tjänster och analysera världen
-- **Demokrati**: Medborgare kan förstå och påverka beslut
+Öppna data används av allt från journalister och forskare till utvecklare och privatpersoner.
+
+Några vanliga drivkrafter är:
+
+- **Transparens**  
+  Göra det möjligt att förstå vad som händer i samhället
+
+- **Innovation**  
+  Skapa nya tjänster, visualiseringar och analyser
+
+- **Demokrati**  
+  Ge medborgare bättre underlag för insyn och påverkan
+
+---
 
 ## Första stegen
 
-1. **Hitta en datakälla** - Börja på [dataportal.se](https://www.dataportal.se)
-2. **Ladda ner data** - Oftast i CSV eller JSON format
-3. **Utforska** - Använd Excel, Python eller annat verktyg
-4. **Dela resultaten** - Visa vad du hittat!
+Att komma igång behöver inte vara svårt. Ett enkelt arbetsflöde kan se ut så här:
+
+1. **Hitta en datakälla**  
+   Börja på Sveriges nationella portal:  
+   https://www.dataportal.se
+
+2. **Ladda ner eller nå data**  
+   Data finns ofta i format som:
+   - CSV
+   - JSON
+   - GeoJSON
+
+3. **Utforska datan**  
+   Använd det verktyg du är bekväm med, till exempel:
+   - Excel eller Google Sheets
+   - Python eller R
+   - GIS-verktyg
+
+4. **Dela dina resultat**  
+   Visualisera, analysera eller berätta vad du upptäckt.
+
+---
+
+## Bra att veta
+
+- Öppna data har alltid en **licens** – läs den
+- Metadata är minst lika viktig som själva datan
+- Kvaliteten varierar mellan olika datakällor
+- All data är inte maskinläsbar från början
+
+---
 
 ## Nästa steg
 
-Läs mer i vår [guide om datakällor](./data-sources/) eller gå med i [communityn](https://github.com/MelissaSkywalkz/open-data-orbit/discussions).
+- Läs guiden om **datakällor i Sverige**
+- Lär dig grunderna i **metadata och DCAT-AP-SE**
+- Gå med i communityt och ställ frågor
+
+👉 [Guide: Datakällor i Sverige](./data-sources/)  
+👉 [Open Data Orbit – Community](https://github.com/MelissaSkywalkz/open-data-orbit/discussions)
+
+Alla börjar någonstans – det viktigaste är att komma igång.

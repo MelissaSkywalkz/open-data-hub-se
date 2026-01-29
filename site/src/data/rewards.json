@@ -1,38 +1,38 @@
 [
   {
     "id": "first-steps",
-    "name": "First Steps",
-    "description": "Första bidraget till communityn.",
-    "criteria": "Gör ditt första inlägg, guide, issue eller bidrag."
+    "name": "First Signal",
+    "description": "Första bidraget i omlopp.",
+    "criteria": "Skapa ditt första inlägg i Discussions, öppna en issue eller gör en liten förbättring (PR)."
   },
   {
     "id": "helpful",
-    "name": "Helpful",
-    "description": "Hjälpt någon i Discussions eller Issues.",
-    "criteria": "Svarat på en fråga eller hjälpt någon annan."
+    "name": "Helpful Crew",
+    "description": "Hjälpt någon vidare med ett svar eller en lösning.",
+    "criteria": "Svara på en fråga i Discussions/Issues med en tydlig väg framåt, länk eller exempel."
   },
   {
     "id": "metadata-hero",
     "name": "Metadata Hero",
-    "description": "Förbättrat metadata i en guide eller resurs.",
-    "criteria": "Bidragit med förbättrad metadata eller hjälpt till med DCAT-AP-SE."
+    "description": "Lyft kvaliteten i metadata och struktur.",
+    "criteria": "Förbättra en guide eller resurs med DCAT-AP-SE-fält, begrepp eller en tydlig checklista."
   },
   {
     "id": "lab-builder",
     "name": "Lab Builder",
-    "description": "Skapat eller bidragit till ett lab-projekt.",
-    "criteria": "Startat eller utvecklat ett labb/projekt."
+    "description": "Byggt eller förbättrat ett verktyg i Labs.",
+    "criteria": "Bidra med en ny funktion, förbättrad UX eller en ny utility/prototyp i Labs."
   },
   {
     "id": "bug-hunter",
     "name": "Bug Hunter",
-    "description": "Rapporterat en bugg eller förbättring.",
-    "criteria": "Rapporterat en bugg eller förbättringsförslag via Issues."
+    "description": "Hittat och rapporterat ett problem som går att åtgärda.",
+    "criteria": "Skapa en issue med reproducerbara steg, förväntat beteende och gärna en screenshot."
   },
   {
     "id": "community-beacon",
     "name": "Community Beacon",
-    "description": "Sprider positiv stämning och hjälper andra.",
-    "criteria": "Bidrar till en välkomnande och hjälpsam community."
+    "description": "Håller comms välkomnande, tydligt och hjälpsamt.",
+    "criteria": "Bidra med bra ton, onboarding-hjälp eller sammanfattningar som hjälper fler än en person."
   }
 ]

@@ -1,44 +1,128 @@
 ---
 title: DCAT-AP-SE – minsta obligatoriska fält (för människor)
-description: Praktisk checklista för metadatafält i DCAT-AP-SE.
+description: Praktisk och mänsklig checklista för obligatoriska metadatafält i DCAT-AP-SE.
 author: Open Data Orbit
 publishedAt: 2026-01-28
-tags: [dcat-ap-se, metadata, öppna data]
+updatedAt: 2026-01-28
+status: stable
+level: intro
+tags:
+  - dcat-ap-se
+  - metadata
+  - öppna data
+  - dataportal
 ---
 
-# DCAT-AP-SE – minsta obligatoriska fält (för människor)
+## Vad är DCAT-AP-SE?
 
-DCAT-AP-SE är standarden för metadata om öppna data i Sverige. Här är en praktisk checklista för dig som vill publicera data korrekt.
+DCAT-AP-SE är den svenska profilen av DCAT och används för att beskriva metadata om öppna data i Sverige.  
+Den ligger till grund för hur data publiceras på **Dataportal.se**.
 
-## Minsta obligatoriska fält
-- **Titel** – Vad heter datamängden?
-- **Beskrivning** – Vad innehåller datan?
-- **Kontakt** – Vem kan svara på frågor?
-- **Licens** – Hur får datan användas?
-- **Format** – Vilka filtyper finns?
-- **Organisation** – Vem publicerar?
-- **Tillgänglighets-URL** – Var kan man ladda ner?
+Den här guiden fokuserar på **minsta uppsättning fält som krävs för att publicera data korrekt**, utan att gå in i RDF eller tekniska detaljer.
 
-> **Tips!**
-> Skriv beskrivningen så att en nybörjare förstår vad datan innehåller och varför den är intressant.
+---
 
-## Exempel
+## Viktigt först: Dataset vs Distribution
+
+I DCAT-AP-SE skiljer man på:
+
+- **Dataset** – *Vad* är det för data?
+- **Distribution** – *Hur* får man tillgång till datan?
+
+Båda nivåerna har obligatoriska fält.
+
+---
+
+## Minsta obligatoriska fält – Dataset
+
+Ett **Dataset** beskriver själva datamängden.
+
+### Obligatoriskt
+
+- **Titel (`dct:title`)**  
+  Vad heter datamängden?
+
+- **Beskrivning (`dct:description`)**  
+  Vad innehåller datan och vad kan den användas till?
+
+- **Utgivare / Publisher (`dct:publisher`)**  
+  Vilken organisation ansvarar för datan?
+
+- **Kontaktpunkt (`dcat:contactPoint`)**  
+  Vem kontaktar man vid frågor? (ofta e-post eller funktionsbrevlåda)
+
+---
+
+## Minsta obligatoriska fält – Distribution
+
+En **Distribution** beskriver hur datan nås.
+
+### Obligatoriskt (minst ett av följande)
+
+- **Tillgänglighets-URL (`dcat:accessURL`)**  
+  En sida eller endpoint där datan kan nås
+
+**eller**
+
+- **Nedladdnings-URL (`dcat:downloadURL`)**  
+  Direktlänk till filen
+
+### Rekommenderat (men i praktiken alltid med)
+
+- **Licens (`dct:license`)**  
+  T.ex. CC0 eller CC BY
+
+- **Format (`dct:format`)**  
+  T.ex. CSV, JSON, GeoJSON
+
+---
+
+## Sammanfattning – absolut minimum
+
+För att publicera öppna data korrekt enligt DCAT-AP-SE behöver du minst:
+
+### Dataset
+- Titel  
+- Beskrivning  
+- Utgivare  
+- Kontaktpunkt  
+
+### Distribution
+- accessURL eller downloadURL  
+
+(Allt annat förbättrar kvaliteten men är inte absolut krav.)
+
+---
+
+## Exempel (förenklad, mänsklig)
+
 ```yaml
-Titel: "Befolkningsstatistik 2025"
-Beskrivning: "Statistik över Sveriges befolkning per kommun."
-Kontakt: "data@myndighet.se"
-Licens: "CC0"
-Format: "CSV, JSON"
-Organisation: "Statistiska Centralbyrån"
-Tillgänglighets-URL: "https://scb.se/data/befolkning-2025.csv"
-```
+Dataset:
+  Titel: "Befolkningsstatistik per kommun 2025"
+  Beskrivning: "Statistik över folkbokförd befolkning per kommun."
+  Utgivare: "Statistiska centralbyrån"
+  Kontaktpunkt: "data@scb.se"
+
+Distribution:
+  Licens: "CC BY 4.0"
+  Format: "CSV"
+  Nedladdnings-URL: "https://www.scb.se/data/befolkning-2025.csv"
+  ```
 
 ## Vanliga misstag
-- Otydlig beskrivning
-- Saknar kontakt eller licens
-- Fel format eller trasig URL
+
+- Beskrivningen säger *vad* men inte *varför*
+- Kontaktpunkt saknas eller pekar på privatperson
+- Licens saknas eller är oklar
+- Trasig accessURL / downloadURL
+- Dataset och Distribution blandas ihop
 
 ## Nästa steg
-- Testa att fylla i metadata för en egen datamängd
-- Läs mer om DCAT-AP-SE på [dataportal.se](https://www.dataportal.se/dcat-ap-se)
-- Fråga om metadata i [forumet](https://github.com/MelissaSkywalkz/open-data-orbit/discussions)
+
+- Kontrollera din metadata mot DCAT-AP-SE
+- Testa publicering i Dataportal.se
+- Läs DIGG:s vägledningar för metadata
+- Ställ frågor i communityt
+
+Metadata behöver inte vara perfekt – men den måste vara begriplig.
+

@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Badge from '../../components/Badge.astro';
 import { getCollection } from 'astro:content';
+
 const base = import.meta.env.BASE_URL;
 
 const guides = await getCollection('guides');
@@ -23,21 +24,22 @@ const fmtDate = (d?: Date | string) => {
 };
 ---
 
-<Layout title="Guider" description="Ready for Launch – guider och tutorials för öppna data">
+<Layout title="Guider" description="Praktiska guider för att hitta, beskriva och publicera öppna data i Sverige.">
   <section class="guides-hero">
-    <h1 class="guides-title">Ready for Launch</h1>
+    <h1 class="guides-title">Guides</h1>
     <p class="guides-lead">
-      Guider och tutorials för att komma igång med öppna data – från pre-flight checks till första riktiga payload.
+      Praktiska guider för att hitta, beskriva och publicera öppna data i Sverige — med fokus på metadata, format och
+      interoperabilitet.
     </p>
 
     <div class="guides-chips">
-      <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
-      <Badge label="PRE-FLIGHT CHECKS" variant="terminal" icon="terminal" />
-      <Badge label="PAYLOAD: OPEN DATA" variant="orbit" icon="orbit" />
+      <Badge label="GUIDES" variant="launch" icon="rocket" />
+      <Badge label="METADATA" variant="orbit" icon="orbit" />
+      <Badge label="PUBLISH" variant="terminal" icon="terminal" />
     </div>
   </section>
 
-  <section class="guides-grid">
+  <section class="guides-grid" aria-label="Guider">
     {sortedGuides.map((guide) => (
       <a href={`${base}guides/${guide.slug}/`} class="card guide-card">
         <div class="guide-top">
@@ -56,9 +58,9 @@ const fmtDate = (d?: Date | string) => {
         </div>
 
         {guide.data.tags && guide.data.tags.length > 0 && (
-          <div class="guide-tags">
+          <div class="guide-tags" aria-label="Taggar">
             {guide.data.tags.slice(0, 6).map((tag) => (
-              <span class="tag">{tag}</span>
+              <span class="guide-tag">{tag}</span>
             ))}
           </div>
         )}
@@ -80,7 +82,8 @@ const fmtDate = (d?: Date | string) => {
           >
             Open Mission Log
           </a>
-          <a class="btn secondary cta" href="/community/">
+          <!-- GitHub Pages-safe -->
+          <a class="btn secondary cta" href={`${base}community/`}>
             Enter Comms
           </a>
         </div>
@@ -164,6 +167,12 @@ const fmtDate = (d?: Date | string) => {
   filter: brightness(1.03);
 }
 
+/* A11y */
+.guide-card:focus-visible{
+  outline: 2.5px solid rgba(88,166,255,0.85);
+  outline-offset: 2px;
+}
+
 .guide-top{
   display:flex;
   align-items:center;
@@ -216,9 +225,8 @@ const fmtDate = (d?: Date | string) => {
   gap: 8px;
 }
 
-/* Reuse your existing .tag styling if it exists in globals,
-   but this one matches Orbit if not */
-.tag{
+/* Avoid clashing with global .tag */
+.guide-tag{
   display:inline-block;
   padding: 3px 10px;
   border-radius: 999px;

@@ -2,72 +2,100 @@
 import Layout from '../layouts/Layout.astro';
 import Badge from '../components/Badge.astro';
 const base = import.meta.env.BASE_URL;
+
+const SOURCES = [
+  { name: "DIGG: Öppna och delade data", url: "https://www.digg.se/kunskap-och-stod/oppna-och-delade-data" },
+  { name: "DIGG: Vägledning för att tillgängliggöra information", url: "https://www.digg.se/kunskap-och-stod/oppna-och-delade-data/vagledning-for-att-tillgangliggora-information" },
+  { name: "Svenskt ramverk för digital samverkan", url: "https://www.digg.se/kunskap-och-stod/svenskt-ramverk-for-digital-samverkan" },
+  { name: "Sveriges dataportal: DCAT (sv)", url: "https://docs.dataportal.se/dcat/3.0.0/sv/" },
+  { name: "Dataportal docs: Specifications", url: "https://docs.dataportal.se/specifications/" },
+];
 ---
 
-<Layout title="Om" description="Join the Crew">
-  <section class="about-hero">
-    <h1 class="about-title">Join the Crew</h1>
+<Layout title="Om" description="Om Open Data Orbit – communityhub för öppna data i Sverige">
+  <section class="about-hero" aria-labelledby="about-title">
+    <p class="about-kicker mono">ABOUT / MISSION CONTROL</p>
+
+    <h1 id="about-title" class="about-title">Om Open Data Orbit</h1>
+
     <p class="about-lead">
-      En community-driven plattform för att lära sig, bygga och dela öppna data i Sverige – allt i omlopp kring kunskap.
+      Open Data Orbit är en oberoende, communitydriven hubb för öppna data i Sverige.
+      Här hittar du guider, resurser och praktiska exempel som gör det lättare att publicera,
+      förstå och återanvända data — utan att drunkna i dokument.
     </p>
 
-    <div class="about-chips">
-      <Badge label="STATUS: IN ORBIT" variant="orbit" icon="orbit" />
-      <Badge label="MISSION: OPEN DATA" variant="orbit" icon="orbit" />
-      <Badge label="OBJECTIVE: TRANSPARENCY" variant="terminal" icon="terminal" />
+    <div class="about-chips" aria-label="Status">
+      <Badge label="STATUS" variant="orbit" icon="orbit" />
+      <span class="chip-value mono">IN ORBIT</span>
+
+      <Badge label="MISSION" variant="orbit" icon="orbit" />
+      <span class="chip-value mono">OPEN DATA</span>
+
+      <Badge label="CREW" variant="comms" icon="antenna" />
+      <span class="chip-value mono">ALL WELCOME</span>
     </div>
+
+    <div class="glow-line"></div>
   </section>
 
-  <section class="about-grid">
+  <section class="about-grid" aria-label="About content">
     <article class="card about-card">
-      <h2>Vad är Open Data Orbit?</h2>
-      <p>
-        Open Data Orbit är en community-driven plattform för att lära sig om, arbeta med och dela öppna data i Sverige.
-        Vi tror på kraften i öppen data för att skapa transparens, driva innovation och lösa verkliga problem.
-      </p>
-    </article>
-
-    <article class="card about-card">
-      <h2>Vår mission</h2>
-      <p>
-        Vi gör det enklare för utvecklare, GIS:are, datakonsulter, journalister och nyfikna att navigera öppna data – från
-        första “launch” till färdiga projekt.
+      <h2>Vad är det här?</h2>
+      <p class="muted">
+        En plats för att göra öppna data <strong>praktiskt</strong>.
+        Fokus ligger på “vad ska jag göra nu?”: metadata, publicering, format och interoperabilitet.
       </p>
 
-      <ul class="about-list">
-        <li><span class="bullet">•</span> Hitta och förstå öppna datakällor i Sverige</li>
-        <li><span class="bullet">•</span> Lära sig bästa praxis för metadata, API:er och formats</li>
-        <li><span class="bullet">•</span> Bygga meningsfulla projekt, visualiseringar och analyser</li>
-        <li><span class="bullet">•</span> Samarbeta och dela kunskap med andra</li>
+      <ul class="about-points">
+        <li><span class="dot" aria-hidden="true"></span> Guider med tydliga steg och exempel</li>
+        <li><span class="dot" aria-hidden="true"></span> Resurser och standards samlade på ett ställe</li>
+        <li><span class="dot" aria-hidden="true"></span> Labs: små verktyg som hjälper i vardagen</li>
       </ul>
+
+      <p class="note">
+        <strong>Obs:</strong> Open Data Orbit är inte en myndighet och ger inte juridisk rådgivning.
+      </p>
     </article>
 
     <article class="card about-card">
-      <h2>Vem kan delta?</h2>
-      <p>
-        Alla är välkomna. Oavsett om du är erfaren, student eller bara nyfiken – det finns en plats för dig i omlopp.
-      </p>
-
-      <div class="about-mini">
-        <Badge label="CREW: ALL WELCOME" variant="comms" icon="antenna" />
-        <Badge label="NO GATEKEEPING" variant="orbit" icon="star" />
-      </div>
-    </article>
-
-    <article class="card about-card about-cta">
-      <h2>Hur börjar jag?</h2>
-      <p>
-        Börja där det känns enklast – och bygg vidare i din egen takt.
+      <h2>Så bidrar du</h2>
+      <p class="muted">
+        Allt byggs öppet. Du kan bidra med frågor, feedback, förbättringar eller egna exempel.
       </p>
 
       <div class="about-actions">
-        <a href={`${base}guides/`} class="btn cta">Launch Guides</a>
-        <a href={`${base}community/`} class="btn secondary cta">Enter Orbit</a>
+        <a href={`${base}community/`} class="btn cta">Delta i communityn</a>
+        <a
+          href="https://github.com/MelissaSkywalkz/open-data-orbit"
+          class="btn secondary cta"
+          target="_blank"
+          rel="noopener"
+        >
+          Bidra på GitHub ↗
+        </a>
       </div>
 
-      <p class="about-links">
-        Eller hoppa direkt till <a href={`${base}resources/`}>Resurser</a> och <a href={`${base}labs/`}>Labs</a>.
+      <div class="about-mini mono" aria-label="Contribution modes">
+        <span class="mini-pill">ASK</span>
+        <span class="mini-pill">SHARE</span>
+        <span class="mini-pill">IMPROVE</span>
+      </div>
+    </article>
+
+    <article class="card about-card about-wide">
+      <h2>Källor vi lutar oss mot</h2>
+      <p class="muted">
+        Vi försöker vara kompatibla med svensk vägledning och de specifikationer som används i praktiken.
       </p>
+
+      <div class="about-sources" role="list">
+        {SOURCES.map((s) => (
+          <a class="source" role="listitem" href={s.url} target="_blank" rel="noopener">
+            <span class="source-name">{s.name}</span>
+            <span class="source-arrow mono" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
     </article>
   </section>
 </Layout>
@@ -75,19 +103,26 @@ const base = import.meta.env.BASE_URL;
 <style>
 .about-hero{
   padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
-  position: relative;
+}
+
+.about-kicker{
+  margin: 0 0 10px 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
 }
 
 .about-title{
   margin-top: 0;
   font-family: var(--font-display);
   letter-spacing: 0.03em;
-  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+  text-shadow: 0 18px 70px rgba(88,166,255,0.16);
 }
 
 .about-lead{
-  max-width: 72ch;
-  color: rgba(230,237,243,0.80);
+  max-width: 80ch;
+  color: rgba(230,237,243,0.78);
   margin: 0 0 var(--spacing-lg) 0;
   line-height: 1.75;
 }
@@ -96,6 +131,18 @@ const base = import.meta.env.BASE_URL;
   display:flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
+}
+
+.chip-value{
+  color: rgba(230,237,243,0.72);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(13,17,23,0.14);
 }
 
 .about-grid{
@@ -109,66 +156,48 @@ const base = import.meta.env.BASE_URL;
 .about-card{
   grid-column: span 6;
   padding: var(--spacing-lg);
-  background:
-    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.14) 0%, transparent 55%),
-    rgba(22,27,34,0.70);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
-  position: relative;
-  overflow: hidden;
 }
 
-.about-card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background: linear-gradient(
-    120deg,
-    rgba(31,111,235,0.10) 0%,
-    rgba(13,17,23,0.00) 55%,
-    rgba(44,83,100,0.10) 100%
-  );
-  opacity: .9;
+.about-wide{
+  grid-column: span 12;
 }
 
-.about-card > *{ position: relative; z-index: 1; }
-
-.about-card h2{
-  margin-top: 0;
+.muted{
+  color: rgba(230,237,243,0.70);
+  line-height: 1.7;
 }
 
-.about-list{
+.about-points{
   list-style: none;
   padding: 0;
   margin: var(--spacing-md) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.about-list li{
+.about-points li{
   display:flex;
-  gap: 10px;
   align-items: baseline;
-  margin-bottom: 10px;
+  gap: 10px;
   color: rgba(230,237,243,0.78);
 }
 
-.bullet{
-  color: rgba(88,166,255,0.85);
-  font-weight: 900;
+.dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(88,166,255,0.75);
+  box-shadow: 0 0 18px rgba(88,166,255,0.18);
+  margin-top: 6px;
+  flex: 0 0 auto;
 }
 
-.about-mini{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.note{
   margin-top: var(--spacing-md);
-}
-
-.about-cta{
-  grid-column: span 12;
+  color: rgba(230,237,243,0.62);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: var(--spacing-md);
 }
 
 .about-actions{
@@ -178,12 +207,62 @@ const base = import.meta.env.BASE_URL;
   margin-top: var(--spacing-md);
 }
 
-.about-links{
+.about-mini{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: var(--spacing-md);
-  color: rgba(230,237,243,0.74);
+}
+
+.mini-pill{
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.18);
+  color: rgba(88,166,255,0.85);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.about-sources{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
+
+.source{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  text-decoration: none;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(13,17,23,0.16);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.source:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.22);
+}
+
+.source-name{
+  font-weight: 800;
+  color: rgba(230,237,243,0.90);
+}
+
+.source-arrow{
+  color: rgba(88,166,255,0.75);
 }
 
 @media (max-width: 900px){
   .about-card{ grid-column: span 12; }
+  .about-sources{ grid-template-columns: 1fr; }
 }
 </style>

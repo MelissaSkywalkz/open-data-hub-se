@@ -2,76 +2,98 @@
 import Layout from '../layouts/Layout.astro';
 import Badge from '../components/Badge.astro';
 const base = import.meta.env.BASE_URL;
+
+const DISCUSSIONS = "https://github.com/MelissaSkywalkz/open-data-orbit/discussions";
 ---
 
-<Layout title="Community" description="Explore the Orbit">
-  <section class="community-hero">
-    <h1 class="community-title">Explore the Orbit</h1>
+<Layout title="Community" description="Mission Control – frågor, idéer och samarbete kring öppna data">
+  <section class="community-hero" aria-labelledby="community-title">
+    <p class="community-kicker mono">COMMUNITY / MISSION CONTROL</p>
+
+    <h1 id="community-title" class="community-title">Mission Control</h1>
+
     <p class="community-lead">
       Här samlas crewet som vill lära sig, bygga och dela öppna data i Sverige.
-      Communityn är öppen för alla – oavsett erfarenhet.
+      Ställ frågor, dela exempel och hitta andra som löser samma problem.
     </p>
 
-    <div class="community-chips">
-      <Badge label="COMMS: ONLINE" variant="comms" icon="antenna" />
-      <Badge label="CREW: OPEN" variant="orbit" icon="orbit" />
-      <Badge label="SIGNALS: GITHUB" variant="terminal" icon="terminal" />
+    <div class="community-status" aria-label="Status">
+      <Badge label="STATUS" variant="comms" icon="antenna" />
+      <span class="chip-value mono">ONLINE</span>
+
+      <Badge label="SIGNAL" variant="terminal" icon="terminal" />
+      <span class="chip-value mono">GITHUB</span>
+
+      <Badge label="CREW" variant="orbit" icon="orbit" />
+      <span class="chip-value mono">OPEN</span>
     </div>
 
     <div class="community-actions">
-      <a
-        href="https://github.com/MelissaSkywalkz/open-data-orbit/discussions"
-        class="btn cta"
-        target="_blank"
-        rel="noopener"
-      >
-        Enter Comms Channel
+      <a href={DISCUSSIONS} class="btn cta community-btn" target="_blank" rel="noopener">
+        Enter Comms <span class="btn-arrow" aria-hidden="true">→</span>
       </a>
+      <p class="community-micro muted">
+        Tips: börja med en tydlig titel + vad du redan testat. Länka gärna data/kod.
+      </p>
     </div>
+
+    <div class="glow-line"></div>
   </section>
 
-  <section class="community-grid">
+  <section class="community-grid" aria-label="How it works">
     <article class="card community-card">
-      <h2>Mission Control</h2>
-      <p>
-        Forumet körs via GitHub Discussions och är platsen för frågor, idéer,
-        feedback och samarbete kring öppna data.
-      </p>
+      <h2>Vad är det här?</h2>
       <p class="muted">
-        Perfekt för allt från “hur börjar jag?” till djupare tekniska diskussioner.
+        Communityn körs via GitHub Discussions. Det är platsen för frågor, idéer,
+        feedback och samarbete — från “hur börjar jag?” till djupare metadata/API-spår.
       </p>
+
+      <div class="mini mono" aria-label="Channels">
+        <span class="mini-pill">QUESTIONS</span>
+        <span class="mini-pill">SHOW &amp; TELL</span>
+        <span class="mini-pill">REQUESTS</span>
+      </div>
     </article>
 
     <article class="card community-card">
-      <h2>Send a Signal</h2>
-      <ul class="community-list">
-        <li>Beskriv ditt problem eller din idé tydligt</li>
-        <li>Berätta vad du har testat eller letat efter</li>
-        <li>Länka gärna till data, kod eller exempel</li>
-        <li>Var öppen för följdfrågor och feedback</li>
+      <h2>Skicka en signal</h2>
+      <ul class="points">
+        <li><span class="dot" aria-hidden="true"></span> Beskriv problemet i en mening</li>
+        <li><span class="dot" aria-hidden="true"></span> Säg vad du testat (så vi slipper börja om)</li>
+        <li><span class="dot" aria-hidden="true"></span> Länka data, kod eller skärmdump</li>
+        <li><span class="dot" aria-hidden="true"></span> Märk gärna: format / standard / verktyg</li>
       </ul>
     </article>
 
     <article class="card community-card">
       <h2>Code of Orbit</h2>
-      <ul class="community-list">
-        <li>Var hjälpsam och respektfull</li>
-        <li>Ingen diskriminering eller personangrepp</li>
-        <li>Ge konstruktiv feedback</li>
-        <li>Vi är här för att lära och dela</li>
+      <ul class="points">
+        <li><span class="dot" aria-hidden="true"></span> Var hjälpsam och respektfull</li>
+        <li><span class="dot" aria-hidden="true"></span> Inga personangrepp eller diskriminering</li>
+        <li><span class="dot" aria-hidden="true"></span> Feedback = konkret och konstruktiv</li>
+        <li><span class="dot" aria-hidden="true"></span> Anta god intention och fråga om du är osäker</li>
       </ul>
     </article>
 
     <article class="card community-card community-cta">
-      <h2>Earn Badges</h2>
-      <p>
-        Du kan få <a href={`${base}rewards`}>badges & rewards</a> genom att hjälpa andra,
-        bidra med kunskap och vara aktiv i omlopp.
+      <div class="cta-top">
+        <h2>Badges &amp; Rewards</h2>
+        <span class="cta-tag mono">PROGRESSION</span>
+      </div>
+
+      <p class="muted">
+        Du kan samla badges genom att hjälpa andra, dela lösningar och bidra med förbättringar.
+        Inga krav — bara ett sätt att göra insatser synliga.
       </p>
 
-      <a href={`${base}rewards`} class="btn secondary cta">
-        View Mission Rewards
-      </a>
+      <div class="cta-actions">
+        <a href={`${base}rewards/`} class="btn secondary cta">
+          View Rewards <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href={DISCUSSIONS} class="btn cta" target="_blank" rel="noopener">
+          Open Discussions <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
     </article>
   </section>
 </Layout>
@@ -81,27 +103,74 @@ const base = import.meta.env.BASE_URL;
   padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
 }
 
+.community-kicker{
+  margin: 0 0 10px 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+}
+
 .community-title{
   margin-top: 0;
   font-family: var(--font-display);
   letter-spacing: 0.03em;
-  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+  text-shadow: 0 18px 70px rgba(88,166,255,0.16);
 }
 
 .community-lead{
-  max-width: 70ch;
-  color: rgba(230,237,243,0.80);
-  margin-bottom: var(--spacing-lg);
+  max-width: 72ch;
+  color: rgba(230,237,243,0.78);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: 1.75;
 }
 
-.community-chips{
+.muted{ color: rgba(230,237,243,0.70); line-height: 1.7; }
+
+.community-status{
   display:flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
+}
+
+.chip-value{
+  color: rgba(230,237,243,0.72);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(13,17,23,0.14);
 }
 
 .community-actions{
   margin-top: var(--spacing-lg);
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.community-btn{
+  border-radius: 999px;
+  padding: 0.85rem 1.15rem;
+}
+
+.btn-arrow{
+  font-family: var(--font-mono);
+  color: rgba(230,237,243,0.60);
+  transition: transform 140ms ease, color 140ms ease;
+}
+.community-btn:hover .btn-arrow{
+  transform: translateX(2px);
+  color: rgba(230,237,243,0.90);
+}
+
+.community-micro{
+  font-size: 0.95rem;
+  max-width: 70ch;
 }
 
 .community-grid{
@@ -112,28 +181,89 @@ const base = import.meta.env.BASE_URL;
   padding-bottom: var(--spacing-2xl);
 }
 
-.community-card{
-  grid-column: span 6;
+.community-card{ grid-column: span 4; }
+.community-cta{ grid-column: span 12; }
+
+.community-card h2{ margin-top: 0; }
+
+.points{
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0 0 0;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.community-card h2{
-  margin-top: 0;
-}
-
-.community-list{
-  padding-left: 1.1em;
-}
-
-.community-list li{
-  margin-bottom: 8px;
+.points li{
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
   color: rgba(230,237,243,0.78);
 }
 
-.community-cta{
-  grid-column: span 12;
+.dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(88,166,255,0.75);
+  box-shadow: 0 0 18px rgba(88,166,255,0.18);
+  margin-top: 6px;
+  flex: 0 0 auto;
 }
 
+/* mini pills */
+.mini{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
+
+.mini-pill{
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.18);
+  color: rgba(88,166,255,0.85);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+/* CTA card */
+.cta-top{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cta-tag{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(13,17,23,0.14);
+  color: rgba(230,237,243,0.55);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.cta-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@media (max-width: 980px){
+  .community-card{ grid-column: span 6; }
+}
 @media (max-width: 900px){
   .community-card{ grid-column: span 12; }
+  .community-actions{ align-items: stretch; }
+  .community-btn{ width: 100%; }
 }
 </style>

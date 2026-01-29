@@ -1,0 +1,503 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+
+  return guides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide },
+  }));
+}
+
+interface Props {
+  guide: {
+    data: {
+      title: string;
+      description: string;
+      author?: string;
+      publishedAt?: Date | string;
+      updatedAt?: Date | string;
+      tags?: string[];
+      status?: 'draft' | 'stable' | 'deprecated';
+      level?: 'intro' | 'intermediate' | 'advanced';
+    };
+    slug: string;
+    render: () => Promise<{ Content: any }>;
+  };
+}
+
+const { guide } = Astro.props;
+const { Content } = await guide.render();
+
+const safeDate = (d?: Date | string) => {
+  if (!d) return null;
+  const date = typeof d === 'string' ? new Date(d) : d;
+  return Number.isFinite(date.getTime()) ? date : null;
+};
+
+const fmtDate = (d?: Date | string) => {
+  const date = safeDate(d);
+  if (!date) return '';
+  try {
+    return new Intl.DateTimeFormat('sv-SE', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    }).format(date);
+  } catch {
+    return date.toISOString().slice(0, 10);
+  }
+};
+
+const path = `/guides/${guide.slug}/`;
+const canonical = new URL(path.replace(/^\//, ''), Astro.site ?? 'https://example.invalid').toString();
+---
+
+<Layout title={guide.data.title} description={guide.data.description}>
+  <article class="briefing" itemscope itemtype="https://schema.org/TechArticle">
+    <meta itemprop="headline" content={guide.data.title} />
+    <meta itemprop="description" content={guide.data.description} />
+    <meta itemprop="url" content={canonical} />
+
+    <header class="briefing-header card">
+      <div class="briefing-top">
+        <div class="briefing-chips" aria-label="Guide status">
+          <Badge label="MISSION BRIEFING" variant="orbit" icon="orbit" />
+
+          {guide.data.status === 'draft' && (
+            <Badge label="DRAFT" variant="warn" icon="beaker" />
+          )}
+          {(!guide.data.status || guide.data.status === 'stable') && (
+            <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
+          )}
+          {guide.data.status === 'deprecated' && (
+            <Badge label="DEPRECATED" variant="danger" icon="alert" />
+          )}
+
+          {guide.data.level && (
+            <Badge label={guide.data.level.toUpperCase()} variant="ghost" icon="target" />
+          )}
+        </div>
+
+        <nav class="briefing-nav" aria-label="Tillbaka">
+          <a class="back-pill" href={`${base}guides/`}>
+            ← Tillbaka till guider
+          </a>
+        </nav>
+      </div>
+
+      <h1 class="briefing-title" itemprop="name">{guide.data.title}</h1>
+      <p class="briefing-lead">{guide.data.description}</p>
+
+      <aside class="telemetry" aria-label="Metadata">
+        {guide.data.author && (
+          <span class="telemetry-item">
+            <span class="telemetry-label">CREW</span>
+            <span class="telemetry-value" itemprop="author">{guide.data.author}</span>
+          </span>
+        )}
+
+        {guide.data.publishedAt && (
+          <span class="telemetry-item">
+            <span class="telemetry-label">PUBLICERAD</span>
+            <time class="telemetry-value" datetime={safeDate(guide.data.publishedAt)?.toISOString()} itemprop="datePublished">
+              {fmtDate(guide.data.publishedAt)}
+            </time>
+          </span>
+        )}
+
+        {guide.data.updatedAt && (
+          <span class="telemetry-item">
+            <span class="telemetry-label">UPPDATERAD</span>
+            <time class="telemetry-value" datetime={safeDate(guide.data.updatedAt)?.toISOString()} itemprop="dateModified">
+              {fmtDate(guide.data.updatedAt)}
+            </time>
+          </span>
+        )}
+
+        <span class="telemetry-item">
+          <span class="telemetry-label">PATH</span>
+          <span class="telemetry-value">{path}</span>
+        </span>
+      </aside>
+
+      {guide.data.tags && guide.data.tags.length > 0 && (
+        <div class="briefing-tags" aria-label="Taggar">
+          {guide.data.tags.slice(0, 10).map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <section class="briefing-body card" aria-label="Innehåll" itemprop="articleBody">
+      <div class="content">
+        <Content />
+      </div>
+    </section>
+
+    <footer class="briefing-footer" aria-label="Nästa steg">
+      <a href={`${base}guides/`} class="btn secondary cta">← Till guider</a>
+      <a href={`${base}community/`} class="btn cta">Enter Comms</a>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+.briefing{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+}
+
+/* Card base */
+.briefing-header,
+.briefing-body{
+  padding: var(--spacing-xl);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.briefing-header::before,
+.briefing-body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
+
+.briefing-header > *,
+.briefing-body > *{ position: relative; z-index: 1; }
+
+.briefing-top{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.briefing-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.back-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.25);
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+}
+
+.back-pill:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.30);
+  filter: brightness(1.06);
+}
+
+.briefing-title{
+  margin: 0 0 var(--spacing-sm) 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+  color: rgba(230,237,243,0.96);
+}
+
+.briefing-lead{
+  margin: 0 0 var(--spacing-lg) 0;
+  color: rgba(230,237,243,0.80);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+/* Telemetry */
+.telemetry{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.telemetry-item{
+  display:inline-flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+}
+
+.telemetry-label{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+  font-weight: 900;
+}
+
+.telemetry-value{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: rgba(230,237,243,0.74);
+}
+
+/* Tags */
+.briefing-tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--spacing-lg);
+}
+
+.tag{
+  display:inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.28);
+  color: rgba(230,237,243,0.70);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* Content styling inside */
+.briefing-body{
+  margin-top: var(--spacing-lg);
+}
+
+.content{
+  font-family: var(--font-body, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif);
+  font-size: 1.02rem;
+  line-height: 1.9;
+  color: rgba(230,237,243,0.82);
+}
+
+/* Consistent vertical rhythm */
+.content :global(p),
+.content :global(ul),
+.content :global(ol),
+.content :global(pre),
+.content :global(blockquote),
+.content :global(table){
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.content :global(p + p){
+  margin-top: calc(var(--spacing-md) * -0.25);
+}
+
+/* Headings: stronger hierarchy */
+.content :global(h2){
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  letter-spacing: 0.01em;
+  color: rgba(230,237,243,0.95);
+  text-shadow: 0 18px 60px rgba(88,166,255,0.12);
+}
+
+.content :global(h3){
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  letter-spacing: 0.01em;
+  color: rgba(230,237,243,0.92);
+}
+
+.content :global(h4){
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+}
+
+/* Links: consistent underline glow */
+.content :global(a){
+  color: rgba(155,205,255,0.95);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(88,166,255,0.25);
+  transition: filter 160ms ease, border-color 160ms ease;
+}
+.content :global(a:hover){
+  border-bottom-color: rgba(88,166,255,0.55);
+  filter: brightness(1.05);
+}
+
+/* Lists */
+.content :global(ul),
+.content :global(ol){
+  padding-left: 1.15rem;
+}
+
+.content :global(li){
+  margin: 0.5rem 0;
+}
+
+.content :global(li::marker){
+  color: rgba(88,166,255,0.65);
+}
+
+/* Task lists (- [ ]) become Orbit checklist cards */
+.content :global(ul.contains-task-list){
+  padding-left: 0;
+  margin-top: var(--spacing-sm);
+}
+
+.content :global(.task-list-item){
+  list-style: none;
+  margin: 0.55rem 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 14px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.20);
+}
+
+.content :global(.task-list-item input[type="checkbox"]){
+  margin: 0 0.65rem 0 0.15rem;
+  transform: translateY(2px);
+  accent-color: rgba(88,166,255,0.95);
+}
+
+.content :global(.task-list-item:hover){
+  border-color: rgba(88,166,255,0.22);
+  filter: brightness(1.02);
+}
+
+/* Inline code */
+.content :global(code){
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  padding: 0.12em 0.4em;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.35);
+  color: rgba(230,237,243,0.88);
+}
+
+/* Code blocks */
+.content :global(pre){
+  padding: 1rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid rgba(88,166,255,0.12);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.10) 0%, transparent 55%),
+    rgba(13,17,23,0.40);
+  overflow-x: auto;
+}
+
+.content :global(pre code){
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+/* HR becomes a “section divider” */
+.content :global(hr){
+  border: 0;
+  height: 1px;
+  margin: var(--spacing-2xl) 0;
+  background: linear-gradient(
+    90deg,
+    rgba(88,166,255,0.0) 0%,
+    rgba(88,166,255,0.28) 35%,
+    rgba(88,166,255,0.55) 50%,
+    rgba(88,166,255,0.28) 65%,
+    rgba(88,166,255,0.0) 100%
+  );
+  opacity: 0.9;
+}
+
+/* Blockquotes as “Tip/Note” panels */
+.content :global(blockquote){
+  margin: var(--spacing-lg) 0;
+  padding: 0.95rem 1rem;
+  border-left: 3px solid rgba(88,166,255,0.38);
+  border-radius: 16px;
+  background: rgba(13,17,23,0.25);
+}
+
+.content :global(blockquote p){
+  margin: 0.25rem 0;
+}
+
+/* Optional: tables if you ever use them */
+.content :global(table){
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.18);
+}
+.content :global(th),
+.content :global(td){
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.content :global(th){
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+  background: rgba(13,17,23,0.22);
+}
+.briefing-footer{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: space-between;
+  margin-top: var(--spacing-xl);
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .briefing{ padding-top: var(--spacing-xl); }
+  .briefing-header, .briefing-body{ padding: var(--spacing-lg); }
+  .briefing-footer{ justify-content: flex-start; }
+}
+</style>

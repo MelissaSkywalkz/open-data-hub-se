@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://melissaskywalkz.github.io",
-  base: "/open-data-orbit",
+  site: "https://MelissaSkywalkz.github.io/open-data-orbit/",
+  base: "/open-data-orbit/",
 });

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import rewards from '../data/rewards.json';
 import Badge from '../components/Badge.astro';
+const base = import.meta.env.BASE_URL;
 
 /** Enkel mapping baserat på id/name (du kan justera när du vill) */
 const pickVariant = (badge: any) => {
@@ -32,7 +33,7 @@ const pickVariant = (badge: any) => {
     <h2>Hur funkar rewards?</h2>
     <p>
       I MVP-versionen delas badges ut <strong>manuellt av moderatorer</strong> baserat på dina insatser.
-      Läs mer om hur du kan bidra i <a href="/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a>.
+      Läs mer om hur du kan bidra i <a href={`${base}CONTRIBUTING.md`} target="_blank">CONTRIBUTING.md</a>.
     </p>
   </section>
 

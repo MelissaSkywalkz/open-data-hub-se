@@ -1,3 +1,51 @@
+.glow-line{
+  height: 2px;
+  margin-top: var(--spacing-2xl);
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(88,166,255,0.35) 20%,
+    rgba(31,111,235,0.55) 50%,
+    rgba(88,166,255,0.35) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 0 1px rgba(88,166,255,0.10), 0 12px 40px rgba(31,111,235,0.14);
+  opacity: .9;
+}
+
+.panel-head {
+  margin-bottom: var(--spacing-md);
+}
+.panel-kicker {
+  font-family: var(--font-mono);
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.80);
+}
+.panel-h2 {
+  margin: 8px 0 6px 0;
+  font-size: 1.35rem;
+}
+.panel-desc {
+  margin: 0;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.6;
+}
+.panel-grid {
+  display: grid;
+  gap: 10px;
+}
+.kicker {
+  font-family: var(--font-mono);
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.80);
+}
+.mono {
+  font-family: var(--font-mono);
+}
 /* ---------- Tokens ---------- */
 :root {
   /* Base */
@@ -185,6 +233,11 @@ h1 {
 p, ul, ol {
   margin-bottom: var(--spacing-md);
   color: var(--muted);
+}
+
+:focus-visible{
+  outline: 2px solid rgba(88,166,255,0.75);
+  outline-offset: 2px;
 }
 
 a {

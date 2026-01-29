@@ -5,560 +5,905 @@ import Badge from '../components/Badge.astro';
 
 const base = import.meta.env.BASE_URL;
 
-const quickActions = [
-  { title: "JSON Terminal", desc: "Validera & beautify JSON direkt i webben.", href: `${base}labs/`, icon: "code", tag: "LAB" },
-  { title: "Access Terminal", desc: "Alla experiment och utilities i Labs.", href: `${base}labs/`, icon: "terminal", tag: "LAB" },
-  { title: "Resources", desc: "Standarder, källor och portaler samlade.", href: `${base}resources/`, icon: "beacon", tag: "ARCHIVE" },
-  { title: "Discussions", desc: "Ställ frågor och dela lösningar med crew.", href: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions", icon: "chat", tag: "COMMS" },
-];
-
-const startHere = [
-  { title: "Kom igång med öppna data", desc: "Vad är öppna data och hur hittar man rätt dataset?", href: `${base}guides/`, icon: "book" },
-  { title: "Metadata som funkar", desc: "DCAT-AP-SE, minimum fields och vanliga fallgropar.", href: `${base}guides/metadata/`, icon: "tag" },
-  { title: "Publicera & dela", desc: "Hur du går från fil → API → katalog.", href: `${base}guides/publish/`, icon: "rocket" },
-];
-
-const forYou = [
-  { title: "För utvecklare", desc: "API:er, formats, interoperabilitet, OpenLayers/Origo.", href: `${base}guides/dev/`, icon: "code" },
-  { title: "För dataägare", desc: "Licenser, kvalitet, metadata och publiceringsflöden.", href: `${base}guides/data-owners/`, icon: "shield" },
-  { title: "För analys & GIS", desc: "Gridsets, reprojektion, tile-caches och praktiska tips.", href: `${base}guides/gis/`, icon: "layers" },
-];
-
-const activity = [
-  { type: "UPLINK", date: "2026-02-01", text: "DCAT-AP-SE – minimum required fields", icon: "book" },
-  { type: "DEPLOY", date: "2026-01-28", text: "JSON Checker / Beautifier added", icon: "code" },
-  { type: "COMMS",  date: "2026-01-26", text: "“How do I find the right metadata?” (GitHub)", icon: "chat" },
+const MISSION_LOG = [
+  {
+    type: "UPLINK",
+    icon: "book",
+    title: "DCAT-AP-SE – minimum required fields",
+    description:
+      "Ny guide som beskriver miniminivån för metadata — snabbt att checka av innan publicering.",
+    tag: "GUIDE",
+    pathLabel: "/guides/dcat-ap-se-obligatoriska-falt",
+    href: `${base}guides/dcat-ap-se-obligatoriska-falt/`, // byt till specifik guide när den finns
+    timeLabel: "RECENT",
+  },
+  {
+    type: "SYSTEM",
+    icon: "code",
+    title: "JSON Checker / Beautifier added",
+    description:
+      "Snabb validering + formatering för JSON direkt i Labs. Bra för DCAT, GeoJSON, API-payloads.",
+    tag: "LABS",
+    pathLabel: "/labs",
+    href: `${base}labs/`,
+    timeLabel: "RECENT",
+  },
+  {
+    type: "CREW",
+    icon: "chat",
+    title: "“How do I find the right metadata?”",
+    description:
+      "Tråd om fält, vokabulärer och hur man väljer rätt nivå för kataloger/dataset.",
+    tag: "DISCUSSION",
+    pathLabel: "/discussions",
+    href: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions",
+    timeLabel: "RECENT",
+    external: true,
+  },
 ];
 ---
 
 <Layout title="Start" description="Sveriges communityhub för öppna data, guider, resurser och samarbete.">
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-top">
-        <h1 class="hero-title">
-          <span class="hero-title-accent">Open Data</span>
-          <span class="hero-title-core">Orbit</span>
-        </h1>
+ <section class="hero" aria-labelledby="hero-title">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="hero-kicker mono">
+        OPEN DATA ORBIT <span class="kicker-dot" aria-hidden="true">•</span> SWEDEN
+      </p>
 
-        <div class="hero-badges">
-          <Badge label="GUIDES" variant="orbit" icon="orbit" />
-          <Badge label="LABS" variant="terminal" icon="terminal" />
-          <Badge label="COMMUNITY" variant="comms" icon="antenna" />
-        </div>
+      <h1 id="hero-title" class="hero-title">
+        Open Data <span class="hero-title-core">Orbit</span>
+      </h1>
 
-        <p class="hero-tagline">Guider, verktyg och community för öppna data i Sverige.</p>
-        <p class="hero-subtagline">
-          Bygg bättre metadata, hitta rätt standarder och få saker att fungera i verkligheten —
-          från första dataset till produktion.
-        </p>
+      <p class="hero-tagline">
+        Guider, verktyg och community för öppna data i en lugn, tydlig omloppsbana.
+      </p>
 
-        <div class="hero-actions">
-          <a href={`${base}guides/`} class="btn cta">Start here</a>
-          <a href={`${base}community/`} class="btn secondary cta">Join the community</a>
-        </div>
+      <div class="hero-actions">
+        <a href={`${base}guides/`} class="btn cta hero-btn primary">
+          <span>Launch Guides</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
 
-        <div class="hero-stats" aria-label="Mission status">
-          <span class="stat">STATUS: IN ORBIT</span>
-          <span class="stat">FOCUS: OPEN DATA</span>
-          <span class="stat">GOAL: INTEROPERABILITY</span>
-        </div>
+        <a href={`${base}labs/`} class="btn secondary cta hero-btn">
+          <span>Open Labs</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
       </div>
 
-      <!-- Quick actions panel -->
-      <div class="hero-panel card">
-        <div class="panel-head">
-          <div class="panel-title">
-            <span class="panel-kicker">MISSION CONTROL</span>
-            <h2 class="panel-h2">Quick actions</h2>
-          </div>
-          <p class="panel-desc">Saker du ofta vill göra direkt — utan att leta runt.</p>
-        </div>
+      <div class="hero-meta" aria-label="Status">
+        <span class="telemetry">
+          <span class="k mono">STATUS</span>
+          <span class="v mono">IN ORBIT</span>
+        </span>
 
-        <div class="panel-grid">
-          {quickActions.map((a) => (
-            <a class="quick" href={a.href}>
-              <div class="quick-ico"><Icon name={a.icon} size={20} /></div>
-              <div class="quick-body">
-                <div class="quick-top">
-                  <span class="quick-title">{a.title}</span>
-                  <span class="quick-tag">{a.tag}</span>
-                </div>
-                <span class="quick-desc">{a.desc}</span>
-              </div>
-              <span class="quick-arrow" aria-hidden="true">→</span>
-            </a>
-          ))}
-        </div>
+        <span class="telemetry">
+          <span class="k mono">MISSION</span>
+          <span class="v mono">OPEN DATA</span>
+        </span>
+
+        <span class="telemetry">
+          <span class="k mono">CREW</span>
+          <span class="v mono">CONNECTED</span>
+        </span>
       </div>
+
     </div>
-  </section>
+
+    <aside class="hero-panel" aria-label="Quick access">
+      <div class="panel-head">
+        <span class="panel-title mono">QUICK ACCESS</span>
+        <span class="panel-sub mono">POPULAR ROUTES</span>
+      </div>
+
+      <div class="panel-links" role="list">
+        <a class="panel-link" role="listitem" href={`${base}guides/`}>
+          <span class="panel-ico" aria-hidden="true"><Icon name="book" size={18} /></span>
+          <span class="panel-text">
+            <span class="t">Guides</span>
+            <span class="d">Starta här: DCAT, metadata, publicering</span>
+          </span>
+          <span class="panel-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="panel-link" role="listitem" href={`${base}labs/`}>
+          <span class="panel-ico" aria-hidden="true"><Icon name="code" size={18} /></span>
+          <span class="panel-text">
+            <span class="t">Labs</span>
+            <span class="d">Utilities & prototyper (JSON, format, checks)</span>
+          </span>
+          <span class="panel-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="panel-link" role="listitem" href={`${base}community/`}>
+          <span class="panel-ico" aria-hidden="true"><Icon name="chat" size={18} /></span>
+          <span class="panel-text">
+            <span class="t">Community</span>
+            <span class="d">Frågor, trådar och samarbeten</span>
+          </span>
+          <span class="panel-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </aside>
+  </div>
 
   <div class="glow-line"></div>
 
-  <!-- MAIN GRID -->
-  <section class="home-grid">
-    <!-- Start here -->
-    <div class="home-card card">
-      <div class="home-card-head">
-        <span class="kicker">STARTA HÄR</span>
-        <h2 class="home-h2">Tre snabba spår</h2>
-        <p class="home-sub">Om du bara gör tre saker idag: börja här.</p>
+</section>
+
+  <section class="cards-section" aria-label="Primary modules">
+  <div class="cards-grid">
+    <a href={`${base}guides/`} class="card-home" aria-label="Guides – Lär dig">
+      <div class="card-top">
+        <span class="card-kicker mono">GUIDES</span>
+        <span class="card-arrow" aria-hidden="true">→</span>
       </div>
 
-      <div class="list">
-        {startHere.map((i) => (
-          <a class="row" href={i.href}>
-            <span class="row-ico"><Icon name={i.icon} size={18} /></span>
-            <span class="row-main">
-              <span class="row-title">{i.title}</span>
-              <span class="row-desc">{i.desc}</span>
-            </span>
-            <span class="row-arrow" aria-hidden="true">↗</span>
-          </a>
-        ))}
+      <div class="card-head">
+        <div class="card-icon"><Icon name="book" size={26} /></div>
+        <h3 class="card-title">Lär dig</h3>
       </div>
+
+      <p class="card-description">
+        Utforska guider och resurser för att komma igång med öppna data.
+      </p>
+
+      <div class="card-meta">
+        <Badge label="READY" variant="launch" icon="rocket" />
+        <span class="card-route mono">/guides</span>
+      </div>
+    </a>
+
+    <a href={`${base}labs/`} class="card-home" aria-label="Labs – Bygg">
+      <div class="card-top">
+        <span class="card-kicker mono">LABS</span>
+        <span class="card-arrow" aria-hidden="true">→</span>
+      </div>
+
+      <div class="card-head">
+        <div class="card-icon"><Icon name="code" size={26} /></div>
+        <h3 class="card-title">Bygg</h3>
+      </div>
+
+      <p class="card-description">
+        Testa verktyg, bygg prototyper och lansera idéer i Labs.
+      </p>
+
+      <div class="card-meta">
+        <Badge label="UTILITY" variant="terminal" icon="terminal" />
+        <span class="card-route mono">/labs</span>
+      </div>
+    </a>
+
+    <a href={`${base}community/`} class="card-home" aria-label="Community – Fråga och dela">
+      <div class="card-top">
+        <span class="card-kicker mono">COMMUNITY</span>
+        <span class="card-arrow" aria-hidden="true">→</span>
+      </div>
+
+      <div class="card-head">
+        <div class="card-icon"><Icon name="chat" size={26} /></div>
+        <h3 class="card-title">Fråga &amp; Dela</h3>
+      </div>
+
+      <p class="card-description">
+        Ställ frågor, dela kunskap och koppla upp dig med communityn.
+      </p>
+
+      <div class="card-meta">
+        <Badge label="COMMS" variant="comms" icon="antenna" />
+        <span class="card-route mono">/community</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="mission-log" aria-labelledby="mission-log-title">
+  <div class="mission-log-head">
+    <div>
+      <h2 id="mission-log-title" class="mission-log-title">Mission Log</h2>
+      <p class="mission-log-subtitle">
+        Senaste händelser i omlopp — uppdateringar, nya guider och community-trådar.
+      </p>
     </div>
 
-    <!-- For you -->
-    <div class="home-card card">
-      <div class="home-card-head">
-        <span class="kicker">FÖR DIG SOM…</span>
-        <h2 class="home-h2">Välj din ingång</h2>
-        <p class="home-sub">Guides som är skrivna för din roll — inte generiska listor.</p>
-      </div>
+    <a
+      class="btn secondary cta mission-log-cta"
+      href="https://github.com/MelissaSkywalkz/open-data-orbit/discussions"
+      target="_blank"
+      rel="noopener"
+    >
+      View Comms ↗
+    </a>
+  </div>
 
-      <div class="pill-grid">
-        {forYou.map((x) => (
-          <a class="pill" href={x.href}>
-            <span class="pill-ico"><Icon name={x.icon} size={18} /></span>
-            <span class="pill-title">{x.title}</span>
-            <span class="pill-desc">{x.desc}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Activity feed -->
-  <section class="activity">
-    <div class="activity-head">
-      <h2 class="activity-title">Mission Log</h2>
-      <p class="activity-sub">Senaste uplinks, deploys och comms.</p>
-    </div>
-
-    <div class="activity-panel card">
-      {activity.map((r) => (
-        <div class="activity-row">
-          <span class={`dot dot-${r.type.toLowerCase()}`} aria-hidden="true"></span>
-          <Icon name={r.icon} size={18} />
-          <span class="chip">{r.type}</span>
-          <span class="date">{r.date}</span>
-          <span class="text">{r.text}</span>
+  <div class="mission-log-card" role="list">
+    {MISSION_LOG.map((item) => (
+      <a
+        class="log-item"
+        role="listitem"
+        href={item.href}
+        target={item.external ? "_blank" : undefined}
+        rel={item.external ? "noopener" : undefined}
+        data-type={item.type}
+        aria-label={`${item.type}: ${item.title}`}
+      >
+        <div class="log-rail" aria-hidden="true">
+          <span class="log-dot"></span>
         </div>
-      ))}
-    </div>
-  </section>
+
+        <div class="log-body">
+          <div class="log-header">
+            <span class="log-type mono">{item.type}</span>
+            <span class="log-time mono">{item.timeLabel}</span>
+          </div>
+
+          <div class="log-title-row">
+            <span class="log-ico" aria-hidden="true"><Icon name={item.icon} size={18} /></span>
+            <span class="log-title">{item.title}</span>
+            <span class="log-arrow mono" aria-hidden="true">→</span>
+          </div>
+
+          <p class="log-desc">{item.description}</p>
+
+          <div class="log-meta mono">
+            <span class="log-tag">{item.tag}</span>
+            <span class="log-path">{item.pathLabel}</span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
 </Layout>
 
 <style>
-/* ---------- HERO ---------- */
+/* --- Hero: quiet, professional, GitHub-ish + space --- */
 .hero{
   padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
 }
 
 .hero-inner{
   display:grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1.2fr 0.8fr;
   gap: var(--spacing-xl);
   align-items: start;
 }
 
-.hero-title{
-  margin: 0 0 10px 0;
-  font-family: var(--font-display);
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  text-shadow:
-    0 12px 40px rgba(31,111,235,0.25),
-    0 2px 12px rgba(0,0,0,0.6);
+.hero-copy{
+  text-align: left;
 }
 
-.hero-title-accent{
-  background: linear-gradient(90deg, #1f6feb 0%, #58a6ff 45%, #1f6feb 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.hero-kicker{
+  margin: 0 0 10px 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+}
+
+.kicker-dot{
+  display:inline-block;
+  margin: 0 8px;
+  opacity: 0.6;
+}
+
+.hero-title{
+  margin: 0 0 var(--spacing-sm) 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.14);
 }
 
 .hero-title-core{
-  color: rgba(230,237,243,0.94);
-  text-shadow:
-    0 0 0.5px rgba(255,255,255,0.55),
-    0 0 18px rgba(88,166,255,0.18),
-    0 18px 55px rgba(31,111,235,0.20);
-}
-
-.hero-badges{
-  display:flex;
-  justify-content:flex-start;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 10px 0 10px 0;
+  color: rgba(230,237,243,0.95);
 }
 
 .hero-tagline{
-  margin: 12px 0 6px 0;
-  color: rgba(230,237,243,0.90);
-  font-size: 1.08rem;
-}
-
-.hero-subtagline{
-  margin: 0 0 var(--spacing-md) 0;
-  color: rgba(230,237,243,0.70);
-  line-height: 1.7;
-  max-width: 70ch;
+  margin: 0 0 var(--spacing-lg) 0;
+  max-width: 62ch;
+  color: rgba(230,237,243,0.72);
+  line-height: 1.75;
+  text-shadow: none;
 }
 
 .hero-actions{
   display:flex;
-  gap: var(--spacing-md);
+  gap: 12px;
   flex-wrap: wrap;
-  margin-top: var(--spacing-md);
-}
-
-.hero-stats{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: var(--spacing-lg);
-}
-
-.stat{
-  display:inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: rgba(88,166,255,0.85);
-  background: rgba(13,17,23,0.28);
-  border: 1px solid rgba(88,166,255,0.18);
-  border-radius: 999px;
-  padding: 6px 12px;
-  letter-spacing: 0.06em;
-  font-weight: 800;
-}
-
-/* Right panel */
-.hero-panel{
-  padding: var(--spacing-lg);
-}
-
-.panel-head{
   margin-bottom: var(--spacing-md);
 }
 
-.panel-kicker{
-  font-family: var(--font-mono);
-  letter-spacing: 0.16em;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  color: rgba(88,166,255,0.80);
-}
-
-.panel-h2{
-  margin: 8px 0 6px 0;
-  font-size: 1.35rem;
-}
-
-.panel-desc{
-  margin: 0;
-  color: rgba(230,237,243,0.62);
-  line-height: 1.6;
-}
-
-.panel-grid{
-  display:grid;
-  gap: 10px;
-}
-
-.quick{
-  display:flex;
-  align-items:flex-start;
-  gap: 10px;
-  padding: 12px 12px;
+.hero-actions .hero-btn{
+  min-width: 150px;
+  padding: 10px 16px;
   border-radius: 14px;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hero-actions .hero-btn.primary{
+  background: linear-gradient(
+    180deg,
+    rgba(31,111,235,0.20),
+    rgba(31,111,235,0.12)
+  );
+  border-color: rgba(88,166,255,0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 10px 30px rgba(0,0,0,0.25);
+}
+
+.hero-actions .hero-btn.primary:hover{
+  background: linear-gradient(
+    180deg,
+    rgba(31,111,235,0.26),
+    rgba(31,111,235,0.16)
+  );
+  border-color: rgba(88,166,255,0.40);
+}
+
+.hero-actions .hero-btn.secondary{
   background: rgba(13,17,23,0.18);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
-  color: rgba(230,237,243,0.85);
-}
-.quick:hover{
-  transform: translateY(-1px);
-  border-color: rgba(88,166,255,0.20);
-  filter: brightness(1.05);
+  border-color: rgba(255,255,255,0.10);
 }
 
-.quick-ico{
-  width: 34px;
-  height: 34px;
-  display:grid;
-  place-items:center;
-  border-radius: 12px;
-  color: rgba(88,166,255,0.90);
-  border: 1px solid rgba(88,166,255,0.14);
-  background: rgba(13,17,23,0.22);
-  flex: 0 0 auto;
+.hero-actions .hero-btn.secondary:hover{
+  background: rgba(13,17,23,0.28);
+  border-color: rgba(255,255,255,0.18);
 }
 
-.quick-body{ flex: 1; }
-.quick-top{
-  display:flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-}
-.quick-title{
-  font-weight: 900;
-  letter-spacing: 0.01em;
-  color: rgba(230,237,243,0.92);
-}
-.quick-tag{
+.btn-arrow{
   font-family: var(--font-mono);
+  font-size: 0.85em;
+  opacity: 0.75;
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.hero-actions .hero-btn:hover .btn-arrow{
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+/* Telemetry: tillbaka till “k / v” med olika färg */
+.hero-meta{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.telemetry{
+  display:inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.18);
+}
+
+.telemetry .k{
   font-size: 0.70rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(88,166,255,0.78);
-  border: 1px solid rgba(88,166,255,0.14);
-  background: rgba(13,17,23,0.22);
-  padding: 3px 8px;
-  border-radius: 999px;
-}
-.quick-desc{
-  display:block;
-  margin-top: 4px;
-  color: rgba(230,237,243,0.62);
-  line-height: 1.55;
-}
-.quick-arrow{
-  color: rgba(88,166,255,0.70);
   font-weight: 900;
 }
 
-/* ---------- MAIN GRID ---------- */
-.home-grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl) 0;
-}
-
-.home-card{
-  padding: var(--spacing-lg);
-}
-
-.kicker{
-  font-family: var(--font-mono);
-  letter-spacing: 0.16em;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  color: rgba(88,166,255,0.80);
-}
-
-.home-h2{
-  margin: 10px 0 6px 0;
-  font-size: 1.35rem;
-}
-
-.home-sub{
-  margin: 0 0 var(--spacing-md) 0;
-  color: rgba(230,237,243,0.62);
-  line-height: 1.6;
-}
-
-.list{
-  display:grid;
-  gap: 10px;
-}
-
-.row{
-  display:flex;
-  align-items:flex-start;
-  gap: 10px;
-  padding: 12px 12px;
-  border-radius: 14px;
-  background: rgba(13,17,23,0.18);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
-}
-.row:hover{
-  transform: translateY(-1px);
-  border-color: rgba(88,166,255,0.20);
-  filter: brightness(1.05);
-}
-.row-ico{
-  width: 32px;
-  height: 32px;
-  display:grid;
-  place-items:center;
-  border-radius: 12px;
-  color: rgba(88,166,255,0.90);
-  border: 1px solid rgba(88,166,255,0.14);
-  background: rgba(13,17,23,0.22);
-}
-.row-main{ flex: 1; }
-.row-title{
-  display:block;
-  font-weight: 900;
-  color: rgba(230,237,243,0.92);
-}
-.row-desc{
-  display:block;
-  margin-top: 4px;
-  color: rgba(230,237,243,0.62);
-  line-height: 1.55;
-}
-.row-arrow{
-  color: rgba(88,166,255,0.70);
-  font-weight: 900;
-}
-
-/* Role pills */
-.pill-grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.pill{
-  padding: 14px 14px;
-  border-radius: 16px;
-  background: rgba(13,17,23,0.18);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
-  position: relative;
-}
-.pill:hover{
-  transform: translateY(-1px);
-  border-color: rgba(88,166,255,0.20);
-  filter: brightness(1.05);
-}
-
-.pill-ico{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width: 32px;
-  height: 32px;
-  border-radius: 12px;
-  color: rgba(88,166,255,0.90);
-  border: 1px solid rgba(88,166,255,0.14);
-  background: rgba(13,17,23,0.22);
-  margin-bottom: 10px;
-}
-
-.pill-title{
-  display:block;
-  font-weight: 900;
-  color: rgba(230,237,243,0.92);
-  margin-bottom: 4px;
-}
-.pill-desc{
-  display:block;
-  color: rgba(230,237,243,0.62);
-  line-height: 1.6;
-}
-
-/* ---------- ACTIVITY ---------- */
-.activity{
-  padding: var(--spacing-xl) 0;
-}
-
-.activity-head{
-  display:flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: var(--spacing-md);
-}
-
-.activity-title{ margin: 0; }
-.activity-sub{
-  margin: 0;
-  color: rgba(230,237,243,0.62);
-}
-
-.activity-panel{
-  padding: var(--spacing-lg);
-  display:flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.activity-row{
-  display:grid;
-  grid-template-columns: 10px 22px auto auto 1fr;
-  align-items: center;
-  gap: 10px;
-}
-
-.dot{
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  box-shadow: 0 0 18px rgba(88,166,255,0.22);
-}
-.dot-uplink{ background: rgba(88,166,255,0.90); }
-.dot-deploy{ background: rgba(31,111,235,0.92); }
-.dot-comms{  background: rgba(179,136,255,0.85); }
-
-.chip{
-  font-family: var(--font-mono);
+.telemetry .v{
   font-size: 0.78rem;
   letter-spacing: 0.10em;
   text-transform: uppercase;
+  color: rgba(230,237,243,0.78);
+  font-weight: 700;
+}
+
+/* --- Right panel --- */
+.hero-panel{
+  position: relative;
+  overflow:hidden;
+  border-radius: var(--radius);
+  background: rgba(22,27,34,0.62);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 14px;
+}
+
+.hero-panel::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  pointer-events:none;
+  border-radius: inherit;
+  background: radial-gradient(120% 80% at 20% -20%, rgba(88,166,255,0.10), transparent 60%);
+  opacity: 0.9;
+}
+
+.panel-head{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 6px 10px 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.panel-title{
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: rgba(88,166,255,0.85);
-  background: rgba(13,17,23,0.30);
+  font-weight: 900;
+}
+
+.panel-sub{
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.45);
+}
+
+.panel-links{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.panel-link{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(13,17,23,0.14);
+  transition: transform 140ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.panel-link:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.24);
+}
+
+.panel-ico{
+  width: 30px;
+  height: 30px;
+  display:grid;
+  place-items:center;
+  border-radius: 10px;
   border: 1px solid rgba(88,166,255,0.14);
-  border-radius: 999px;
-  padding: 4px 10px;
-  width: fit-content;
+  background: rgba(13,17,23,0.22);
+  color: rgba(88,166,255,0.92);
+  flex: 0 0 auto;
 }
 
-.date{
+.panel-text{
+  display:flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.panel-text .t{
+  font-weight: 900;
+  color: rgba(230,237,243,0.92);
+}
+
+.panel-text .d{
+  color: rgba(230,237,243,0.55);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.panel-arrow{
+  margin-left: auto;
   font-family: var(--font-mono);
-  font-size: 0.80rem;
-  color: rgba(230,237,243,0.62);
-  white-space: nowrap;
-  letter-spacing: 0.06em;
+  color: rgba(230,237,243,0.45);
+  transition: transform 140ms ease, color 140ms ease;
+}
+.panel-link:hover .panel-arrow{
+  transform: translateX(2px);
+  color: rgba(230,237,243,0.78);
 }
 
-.text{
-  color: rgba(230,237,243,0.82);
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 980px){
+/* Mobile */
+@media (max-width: 920px){
   .hero-inner{
     grid-template-columns: 1fr;
   }
+  .hero-copy{
+    text-align: center;
+  }
+  .hero-tagline{
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-actions{
+    justify-content: center;
+  }
 }
 
+.cards-section{
+  margin-bottom: var(--spacing-2xl);
+  padding-top: 0;
+}
+
+.cards-grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.card-home{
+  grid-column: span 4;
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+
+  padding: 16px;
+  border-radius: var(--radius);
+  text-decoration:none;
+
+  background: rgba(22,27,34,0.66);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.card-home:hover{
+  transform: translateY(-2px);
+  border-color: rgba(88,166,255,0.22);
+  background: rgba(22,27,34,0.74);
+}
+
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.card-kicker{
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+}
+
+.card-arrow{
+  font-family: var(--font-mono);
+  color: rgba(230,237,243,0.50);
+  transition: transform 140ms ease, color 140ms ease;
+}
+.card-home:hover .card-arrow{
+  transform: translateX(2px);
+  color: rgba(230,237,243,0.78);
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.card-icon{
+  width: 34px;
+  height: 34px;
+  display:grid;
+  place-items:center;
+  border-radius: 10px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.22);
+  color: rgba(88,166,255,0.92);
+}
+
+.card-title{
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: rgba(230,237,243,0.95);
+}
+
+.card-description{
+  margin: 0;
+  color: rgba(230,237,243,0.70);
+  line-height: 1.65;
+}
+
+.card-meta{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  opacity: 0.92;
+}
+
+.card-meta .badge{
+  transform: scale(0.95);
+  transform-origin: left center;
+}
+
+.card-route{
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  opacity: 0.9;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.52);
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .card-home{ grid-column: span 6; }
+}
+@media (max-width: 640px){
+  .cards-grid{ gap: var(--spacing-md); }
+  .card-home{ grid-column: span 12; padding: 14px; }
+}
+
+/* --- Mission Log: data-driven activity list --- */
+.mission-log{
+  margin-top: var(--spacing-2xl);
+  padding-top: 0;
+}
+
+.mission-log-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: 14px;
+}
+
+.mission-log-title{ margin: 0 0 6px 0; }
+
+.mission-log-subtitle{
+  margin: 0;
+  max-width: 70ch;
+  color: rgba(230,237,243,0.62);
+}
+
+.mission-log-cta{
+  white-space: nowrap;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+/* Card container: mindre “låda”, mer “feed” */
+.mission-log-card{
+  position: relative;
+  border-radius: 16px;
+  background: rgba(22,27,34,0.58);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.mission-log-card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  pointer-events:none;
+  border-radius: inherit;
+  background: radial-gradient(120% 80% at 25% -25%, rgba(88,166,255,0.10), transparent 60%);
+  opacity: 0.9;
+}
+
+/* Item = timeline row */
+.log-item{
+  display:grid;
+  grid-template-columns: 16px 1fr;
+  gap: 14px;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  transition: background 140ms ease;
+}
+.log-item:first-child{ border-top: 0; }
+
+.log-item:hover{
+  background: rgba(13,17,23,0.16);
+}
+
+.log-item:focus-visible{
+  outline: 2.5px solid rgba(88,166,255,0.85);
+  outline-offset: -2px;
+}
+
+/* Rail + dot */
+.log-rail{
+  position: relative;
+  display:flex;
+  justify-content:center;
+}
+.log-rail::before{
+  content:"";
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.08);
+  opacity: 0.8;
+}
+
+.log-dot{
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: rgba(180,190,205,0.55);
+  box-shadow: 0 0 10px rgba(180,190,205,0.15);
+}
+
+/* Type-specific signal dots */
+.log-item[data-type="UPLINK"] .log-dot{
+  background: rgba(88,166,255,0.85);
+  box-shadow: 0 0 14px rgba(88,166,255,0.25);
+}
+
+.log-item[data-type="SYSTEM"] .log-dot{
+  background: rgba(110,200,255,0.75);
+  box-shadow: 0 0 14px rgba(110,200,255,0.22);
+}
+
+.log-item[data-type="CREW"] .log-dot{
+  background: rgba(200,210,225,0.65);
+  box-shadow: 0 0 12px rgba(200,210,225,0.18);
+}
+
+/* Body */
+.log-body{
+  display:flex;
+  flex-direction:column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.log-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+}
+
+/* Type som “chip” (färgas per type) */
+.log-type{
+  font-size: 0.70rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 900;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.22);
+  color: rgba(88,166,255,0.88);
+}
+
+.log-time{
+  font-size: 0.70rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.45);
+}
+
+/* Titelrad */
+.log-title-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.log-ico{
+  width: 30px;
+  height: 30px;
+  display:grid;
+  place-items:center;
+  border-radius: 10px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.20);
+  color: rgba(88,166,255,0.92);
+  flex: 0 0 auto;
+}
+
+.log-title{
+  font-weight: 800;
+  color: rgba(230,237,243,0.92);
+  line-height: 1.35;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-arrow{
+  margin-left: auto;
+  color: rgba(230,237,243,0.45);
+  transition: transform 140ms ease, color 140ms ease;
+}
+.log-item:hover .log-arrow{
+  transform: translateX(2px);
+  color: rgba(230,237,243,0.80);
+}
+
+/* Beskrivning lite tightare */
+.log-desc{
+  margin: 0;
+  color: rgba(230,237,243,0.62);
+  line-height: 1.55;
+  max-width: 90ch;
+}
+
+/* Meta på en rad, mer “quiet” */
+.log-meta{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items:center;
+  padding-top: 2px;
+  opacity: 0.92;
+}
+
+.log-tag{
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.18);
+  color: rgba(230,237,243,0.72);
+}
+
+.log-path{
+  font-size: 0.68rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.45);
+}
+
+.log-item[data-type="UPLINK"] .log-type{
+  color: rgba(88,166,255,0.92);      /* Primary orbit blue */
+}
+
+.log-item[data-type="SYSTEM"] .log-type{
+  color: rgba(110,200,255,0.90);     /* Ljusare cyan */
+}
+
+.log-item[data-type="CREW"] .log-type{
+  color: rgba(200,210,225,0.78);     /* Neutral silver/crew */
+}
+
+/* Mobile */
 @media (max-width: 768px){
-  .hero-actions{
+  .mission-log-head{
     flex-direction: column;
+    align-items: flex-start;
   }
-
-  .home-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .activity-row{
-    grid-template-columns: 10px 22px 1fr;
-    grid-template-rows: auto auto auto;
-    align-items: start;
-  }
-  .chip{ grid-column: 3; }
-  .date{ grid-column: 3; }
-  .text{ grid-column: 3; }
+  .log-title{ white-space: normal; }
 }
 </style>

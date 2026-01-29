@@ -34,5 +34,5 @@ Att börja med öppna data är enklare än du tror! Här är en praktisk guide f
 
 ## Nästa steg
 - Utforska fler datakällor på [dataportal.se](https://www.dataportal.se)
-- Ställ en fråga i [forumet](https://github.com/MelissaSkywalkz/open-data-hub-se/discussions)
+- Ställ en fråga i [forumet](https://github.com/MelissaSkywalkz/open-data-orbit/discussions)
 - Läs nästa guide om Entryscape och dataportal.se

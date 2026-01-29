@@ -41,4 +41,4 @@ Tillgänglighets-URL: "https://scb.se/data/befolkning-2025.csv"
 ## Nästa steg
 - Testa att fylla i metadata för en egen datamängd
 - Läs mer om DCAT-AP-SE på [dataportal.se](https://www.dataportal.se/dcat-ap-se)
-- Fråga om metadata i [forumet](https://github.com/MelissaSkywalkz/open-data-hub-se/discussions)
+- Fråga om metadata i [forumet](https://github.com/MelissaSkywalkz/open-data-orbit/discussions)

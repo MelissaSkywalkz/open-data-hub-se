@@ -6,7 +6,7 @@
 
 **Key Technologies**: Astro, TypeScript, Markdown/MDX, CSS (no external UI frameworks)
 **Location**: `/site` directory
-**Base Path**: `/open-data-hub-se/` (GitHub Pages)
+**Base Path**: `/open-data-orbit/` (GitHub Pages)
 
 ## Architecture & Structure
 
@@ -109,8 +109,8 @@ tags: [intro, basics]
 ```
 
 ### GitHub Pages Deployment
-- **Base path**: `base: '/open-data-hub-se/'` in `astro.config.ts`
-- **Site URL**: `site: 'https://MelissaSkywalkz.github.io/open-data-hub-se/'`
+- **Base path**: `base: '/open-data-orbit/'` in `astro.config.ts`
+- **Site URL**: `site: 'https://MelissaSkywalkz.github.io/open-data-orbit/'`
 - **Build output**: Static files in `dist/` → committed to `gh-pages` branch
 
 ## Adding Content
@@ -154,7 +154,7 @@ tags: [intro, basics]
 ## External Integrations
 
 - **GitHub Discussions**: Link in community page (`/community.astro`)
-- **Repository**: [github.com/MelissaSkywalkz/open-data-hub-se](https://github.com/MelissaSkywalkz/open-data-hub-se)
+- **Repository**: [github.com/MelissaSkywalkz/open-data-orbit](https://github.com/MelissaSkywalkz/open-data-orbit)
 
 ## Common Tasks
 

@@ -35,4 +35,4 @@ Entryscape är ett verktyg för att publicera och hantera metadata om öppna dat
 ## Nästa steg
 - Läs mer om DCAT-AP-SE och metadatafält
 - Testa att skapa en datamängd i Entryscape (demo finns på entryscape.com)
-- Fråga i [forumet](https://github.com/MelissaSkywalkz/open-data-hub-se/discussions) om du kör fast
+- Fråga i [forumet](https://github.com/MelissaSkywalkz/open-data-orbit/discussions) om du kör fast

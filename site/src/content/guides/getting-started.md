@@ -25,4 +25,4 @@ tags: [introduktion, grundläggande, för-nybörjare]
 
 ## Nästa steg
 
-Läs mer i vår [guide om datakällor](./data-sources/) eller gå med i [communityn](https://github.com/MelissaSkywalkz/open-data-hub-se/discussions).
+Läs mer i vår [guide om datakällor](./data-sources/) eller gå med i [communityn](https://github.com/MelissaSkywalkz/open-data-orbit/discussions).

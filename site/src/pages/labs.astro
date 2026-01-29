@@ -1,147 +1,412 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
 ---
 
-<Layout title="Labs" description="Projekt och labs för öppna data">
-  <h1>Labs</h1>
-  <p>
-    Här kan du hitta olika projekt och labs där du kan experimentera med öppna data.
-  </p>
+<Layout title="Terminal" description="Experiment, verktyg och prototyper i omlopp">
+  <header class="terminal-hero">
+    <p class="terminal-kicker">LABS / TERMINAL</p>
+    <h1 class="terminal-title">Access Terminal</h1>
+    <p class="terminal-subtitle">
+      Experimentera med verktyg, prototyper och utilities för öppna data.
+    </p>
 
+    <div class="terminal-chips">
+      <Badge label="STATUS: ONLINE" variant="orbit" icon="orbit" />
+      <Badge label="MODE: SANDBOX" variant="terminal" icon="terminal" />
+      <Badge label="UPLINK: READY" variant="comms" icon="antenna" />
+    </div>
+  </header>
 
-  <div class="labs-content">
-    <div class="lab-item">
-      <h3>🔬 JSON Checker / Beautifier</h3>
-      <p>Klistra in din JSON nedan och klicka på "Validera & formatera" för att se om den är giltig och få den snyggt formaterad.</p>
-      <textarea id="json-input" class="json-textarea" rows="8" placeholder="Klistra in JSON här..."></textarea>
-      <button id="json-validate-btn" class="json-btn">Validera & formatera</button>
-      <div id="json-result" class="json-result"></div>
+  <section class="labs-grid">
+    <!-- JSON Terminal -->
+    <article class="module module-terminal">
+      <div class="module-head">
+        <div class="module-title">
+          <span class="module-icon">⌁</span>
+          <h2>JSON Terminal</h2>
+        </div>
 
-      <div class="json-mistakes">
-        <h4>Vanliga misstag</h4>
-        <ul>
-          <li>Extra kommatecken (trailing comma)</li>
-          <li>Felaktiga eller saknade citationstecken</li>
-          <li>Blandade enkla och dubbla citationstecken</li>
-          <li>Glömda klamrar eller hakparenteser</li>
-          <li>Kommentarer (tillåts ej i JSON)</li>
-        </ul>
+        <div class="module-meta">
+          <Badge label="UTILITY" variant="terminal" icon="terminal" />
+          <span class="module-route">/labs/json</span>
+        </div>
       </div>
-    </div>
 
-    <div class="lab-item">
-      <h3>📊 Data Visualizations</h3>
-      <p>Exempel på visualiseringar och interaktiva dashboards byggt på öppna data.</p>
-    </div>
+      <p class="module-desc">
+        Klistra in JSON och kör <span class="mono">VALIDATE + FORMAT</span> för att
+        verifiera och beautify utan drama.
+      </p>
 
-    <div class="lab-item">
-      <h3>🚀 Project Showcase</h3>
-      <p>Se vad andra har byggt! Dela dina egna projekt med communityn.</p>
-    </div>
-  </div>
+      <div class="terminal-panel">
+        <div class="terminal-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="terminal-label mono">open-data-orbit://terminal/json</span>
+        </div>
+
+        <label class="sr-only" for="json-input">JSON input</label>
+        <textarea
+          id="json-input"
+          class="json-textarea mono"
+          rows="10"
+          placeholder="{&#10;  &quot;mission&quot;: &quot;open data&quot;,&#10;  &quot;status&quot;: &quot;in orbit&quot;&#10;}"
+          spellcheck="false"
+        ></textarea>
+
+        <div class="terminal-actions">
+          <button id="json-validate-btn" class="btn cta terminal-btn">
+            Validate &amp; Format
+          </button>
+          <button id="json-copy-btn" class="btn secondary terminal-btn" type="button">
+            Copy Output
+          </button>
+          <span id="json-hint" class="terminal-hint mono" aria-live="polite"></span>
+        </div>
+
+        <div id="json-result" class="json-result mono" aria-live="polite"></div>
+      </div>
+
+      <details class="terminal-notes">
+        <summary class="mono">Common errors</summary>
+        <ul>
+          <li>Trailing comma (extra kommatecken)</li>
+          <li>Fel eller saknade citationstecken</li>
+          <li>Blandade enkla/dubbla citationstecken</li>
+          <li>Glömda klamrar / hakparenteser</li>
+          <li>Kommentarer (tillåts inte i JSON)</li>
+        </ul>
+      </details>
+    </article>
+
+    <!-- Coming modules -->
+    <article class="module">
+      <div class="module-head">
+        <div class="module-title">
+          <span class="module-icon">⟡</span>
+          <h2>Data Visualizations</h2>
+        </div>
+        <div class="module-meta">
+          <Badge label="IN ORBIT" variant="orbit" icon="orbit" />
+          <span class="module-route">/labs/viz</span>
+        </div>
+      </div>
+
+      <p class="module-desc">
+        Exempel på visualiseringar och interaktiva dashboards byggda på öppna data.
+      </p>
+
+      <div class="module-status mono">
+        STATUS: <span class="ok">PLANNED</span> · ETA: SOON™
+      </div>
+    </article>
+
+    <article class="module">
+      <div class="module-head">
+        <div class="module-title">
+          <span class="module-icon">✶</span>
+          <h2>Project Showcase</h2>
+        </div>
+        <div class="module-meta">
+          <Badge label="COMMS" variant="comms" icon="antenna" />
+          <span class="module-route">/labs/showcase</span>
+        </div>
+      </div>
+
+      <p class="module-desc">
+        Se vad andra bygger – och dela dina egna projekt med crew:et.
+      </p>
+
+      <div class="module-status mono">
+        STATUS: <span class="ok">OPEN</span> · Submit via GitHub Discussions
+      </div>
+    </article>
+  </section>
 </Layout>
 
 <style>
-  .labs-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-  }
+/* ---------- Hero ---------- */
+.terminal-hero{
+  text-align:center;
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+}
+.terminal-kicker{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.80);
+  margin-bottom: 10px;
+}
+.terminal-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.16);
+}
+.terminal-subtitle{
+  max-width: 62ch;
+  margin: 0 auto var(--spacing-md);
+  color: rgba(230,237,243,0.72);
+}
+.terminal-chips{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap: 10px;
+}
 
-  .lab-item {
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    transition: all 0.2s;
-    background: var(--color-bg);
-  }
+/* ---------- Grid ---------- */
+.labs-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
 
-  .lab-item:hover {
-    border-color: var(--color-accent);
-    background-color: var(--color-bg-secondary);
-  }
+/* ---------- Modules (cards) ---------- */
+.module{
+  position:relative;
+  overflow:hidden;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(22,27,34,0.72);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: var(--spacing-lg);
+}
+.module::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .85;
+}
+.module > *{ position:relative; z-index:1; }
 
-  .lab-item h3 {
-    margin-top: 0;
-  }
+.module-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.module-title{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.module-title h2{
+  margin:0;
+  font-size: 1.15rem;
+}
+.module-icon{
+  width: 34px;
+  height: 34px;
+  display:grid;
+  place-items:center;
+  border-radius: 10px;
+  border: 1px solid rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.25);
+  color: rgba(88,166,255,0.92);
+  box-shadow: 0 0 22px rgba(31,111,235,0.14);
+}
+.module-meta{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap: 6px;
+}
+.module-route{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.55);
+}
 
-  .json-textarea {
-    width: 100%;
-    font-family: monospace;
-    font-size: 1rem;
-    padding: var(--spacing-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--spacing-md);
-    background: var(--color-bg-secondary);
-    resize: vertical;
-  }
+.module-desc{
+  margin: 0 0 var(--spacing-md) 0;
+  color: rgba(230,237,243,0.72);
+}
+.mono{ font-family: var(--font-mono); }
 
-  .json-btn {
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: var(--gradient-accent);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: var(--spacing-md);
-    transition: background 0.2s;
-  }
+/* ---------- Terminal Panel ---------- */
+.terminal-panel{
+  border-radius: 16px;
+  border: 1px solid rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.40);
+  overflow:hidden;
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position:relative;
+}
+.terminal-panel::after{
+  /* scanline-ish */
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,0.02),
+    transparent 40%,
+    rgba(255,255,255,0.015)
+  );
+  opacity:.6;
+  mix-blend-mode: screen;
+}
+.terminal-bar{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(22,27,34,0.45);
+}
+.dot{
+  width: 9px; height: 9px; border-radius: 999px;
+  background: rgba(230,237,243,0.18);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.terminal-label{
+  margin-left: 6px;
+  color: rgba(230,237,243,0.60);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
-  .json-btn:hover {
-    background: var(--color-accent);
-  }
+.json-textarea{
+  width:100%;
+  border: 0;
+  outline: none;
+  padding: 14px 14px;
+  background: transparent;
+  color: rgba(230,237,243,0.90);
+  resize: vertical;
+  min-height: 160px;
+  line-height: 1.55;
+}
+.json-textarea::placeholder{
+  color: rgba(230,237,243,0.35);
+}
 
-  .json-result {
-    font-family: monospace;
-    font-size: 1rem;
-    white-space: pre-wrap;
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    min-height: 2rem;
-  }
+.terminal-actions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(22,27,34,0.35);
+}
+.terminal-btn{
+  padding: 0.75rem 1.05rem;
+}
+.terminal-hint{
+  color: rgba(230,237,243,0.55);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
-  .json-result.error {
-    color: #b20000;
-    background: #fff0f0;
-    border-color: #b20000;
-  }
+.json-result{
+  padding: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  min-height: 56px;
+  white-space: pre-wrap;
+  color: rgba(230,237,243,0.86);
+}
+.json-result.ok{
+  outline: 1px solid rgba(88,166,255,0.22);
+  box-shadow: inset 0 0 0 1px rgba(31,111,235,0.12);
+}
+.json-result.error{
+  color: rgba(255,180,180,0.95);
+  background: rgba(120, 20, 20, 0.10);
+  outline: 1px solid rgba(255, 90, 90, 0.28);
+}
 
-  .json-mistakes {
-    margin-top: var(--spacing-lg);
-    background: var(--color-bg-secondary);
-    border-radius: var(--radius-sm);
-    padding: var(--spacing-md);
-    border: 1px solid var(--color-border);
-  }
+/* Details */
+.terminal-notes{
+  margin-top: var(--spacing-md);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  background: rgba(13,17,23,0.20);
+  padding: 10px 12px;
+}
+.terminal-notes summary{
+  cursor:pointer;
+  color: rgba(88,166,255,0.85);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.terminal-notes ul{
+  margin: 10px 0 0 18px;
+  color: rgba(230,237,243,0.70);
+}
+.module-status{
+  color: rgba(230,237,243,0.70);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+.ok{ color: rgba(88,166,255,0.95); }
+
+.sr-only{
+  position:absolute;
+  width:1px;height:1px;
+  padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);
+  white-space:nowrap;border:0;
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('json-input');
   const btn = document.getElementById('json-validate-btn');
+  const copyBtn = document.getElementById('json-copy-btn');
   const result = document.getElementById('json-result');
+  const hint = document.getElementById('json-hint');
+
+  const setHint = (txt) => { if (hint) hint.textContent = txt || ''; };
 
   btn.addEventListener('click', function () {
-    let value = input.value.trim();
+    const value = input.value.trim();
     if (!value) {
-      result.textContent = 'Klistra in JSON ovan.';
-      result.className = 'json-result error';
+      result.textContent = 'Paste JSON to begin.';
+      result.className = 'json-result mono error';
+      setHint('NO INPUT');
       return;
     }
     try {
       const parsed = JSON.parse(value);
       const pretty = JSON.stringify(parsed, null, 2);
       result.textContent = pretty;
-      result.className = 'json-result';
+      result.className = 'json-result mono ok';
+      setHint('VALID JSON');
     } catch (e) {
-      result.textContent = 'Ogiltig JSON! ' + e.message;
-      result.className = 'json-result error';
+      result.textContent = 'Invalid JSON: ' + e.message;
+      result.className = 'json-result mono error';
+      setHint('ERROR');
+    }
+  });
+
+  copyBtn.addEventListener('click', async function(){
+    const txt = result.textContent || '';
+    if (!txt.trim()) { setHint('NOTHING TO COPY'); return; }
+    try{
+      await navigator.clipboard.writeText(txt);
+      setHint('COPIED');
+      setTimeout(()=>setHint(''), 1200);
+    }catch{
+      setHint('COPY FAILED');
     }
   });
 });

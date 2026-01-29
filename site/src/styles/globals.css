@@ -78,47 +78,78 @@ html {
 /* ---------- Background (single source of truth) ---------- */
 body{
   min-height: 100vh;
-  background: #0b0f14;
   color: var(--fg);
   position: relative;
   overflow-x: hidden;
 }
 
-/* Baslager: djup + gradientfält */
 body::before{
   content:"";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -2;
+
   background:
-    radial-gradient(900px 520px at 55% 18%, rgba(31,111,235,0.22), transparent 60%),
-    radial-gradient(720px 420px at 18% 68%, rgba(44,83,100,0.22), transparent 62%),
-    radial-gradient(520px 360px at 82% 62%, rgba(15,32,39,0.26), transparent 58%),
+    /* Earth limb / horizon glow (top center) */
+    radial-gradient(1200px 900px at 50% -10%,
+      rgba(88,166,255,0.16) 0%,
+      rgba(31,111,235,0.12) 30%,
+      transparent 62%
+    ),
+
+    /* Subtle inner horizon ring (adds definition) */
+    radial-gradient(1200px 900px at 50% -8%,
+      transparent 52%,
+      rgba(88,166,255,0.10) 58%,
+      transparent 68%
+    ),
+
+    /* Nebula blobs */
+    radial-gradient(900px 520px at 58% 18%, rgba(31,111,235,0.18), transparent 60%),
+    radial-gradient(760px 460px at 18% 70%, rgba(44,83,100,0.20), transparent 62%),
+    radial-gradient(640px 420px at 86% 64%, rgba(15,32,39,0.26), transparent 60%),
+
+    /* Vignette */
+    radial-gradient(1400px 900px at 50% 50%,
+      transparent 55%,
+      rgba(0,0,0,0.62) 100%
+    ),
+
+    /* Base */
     linear-gradient(120deg, #0b0f14 0%, #0d1117 35%, #0b1220 100%);
-  filter: saturate(1.05);
+
+  filter: saturate(1.08) contrast(1.02);
 }
 
-/* Energi-strömmar: subtila diagonala “bands” (levande känsla) */
 body::after{
   content:"";
   position: fixed;
-  inset: -20%;
+  inset: 0;
   pointer-events: none;
   z-index: -1;
+
   background:
-    linear-gradient(115deg,
-      transparent 0%,
-      rgba(56,139,253,0.08) 18%,
-      rgba(32,58,67,0.08) 34%,
-      transparent 52%,
-      rgba(31,111,235,0.10) 66%,
-      transparent 82%
-    );
-  transform: rotate(-8deg);
-  filter: blur(18px);
-  opacity: 0.85;
+    /* Stars (spridda, små) */
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,0.14) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 42%, rgba(255,255,255,0.10) 0 1px, transparent 2px),
+    radial-gradient(circle at 66% 26%, rgba(255,255,255,0.12) 0 1px, transparent 2px),
+    radial-gradient(circle at 78% 54%, rgba(255,255,255,0.11) 0 1px, transparent 2px),
+    radial-gradient(circle at 54% 78%, rgba(255,255,255,0.14) 0 1px, transparent 2px),
+    radial-gradient(circle at 84% 82%, rgba(255,255,255,0.08) 0 1px, transparent 2px),
+
+    /* Soft grain-ish overlay (billigt och snyggt) */
+    linear-gradient(0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
+
+  opacity: 0.75;
+  filter: blur(0.2px);
   mix-blend-mode: screen;
+}
+
+/* Se till att content ligger över overlays */
+main, header, footer {
+  position: relative;
+  z-index: 1;
 }
 
 /* Optional: super-subtil “grain” (gör stor skillnad) */
@@ -329,9 +360,6 @@ section { padding: var(--spacing-xl) 0; }
   h1 { font-size: 1.85rem; }
 }
 
-/* =========================
-   Footer (Mission Control)
-========================= */
 .footer{
   margin-top: var(--spacing-2xl);
   position: relative;
@@ -343,10 +371,6 @@ section { padding: var(--spacing-xl) 0; }
   position:absolute;
   inset:-40px 0 0 0;
   pointer-events:none;
-  background:
-    radial-gradient(ellipse 60% 70% at 50% 0%, rgba(31,111,235,0.16) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 70% at 20% 20%, rgba(44,83,100,0.14) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 70% at 80% 30%, rgba(88,166,255,0.10) 0%, transparent 62%);
   filter: blur(14px);
   opacity: 0.9;
 }

@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
 ---
 
-<Layout title="Start" description="Guider, labs och community för öppna data">
+<Layout title="Start" description="Allt du behöver för Öppna Data i omlopp">
   <section class="hero">
     <div class="hero-content">
       <h1 class="hero-title">
@@ -88,26 +88,7 @@ import Badge from '../components/Badge.astro';
   padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
   position: relative;
   z-index: 1;
-}
-
-/* Hero glow: tight + elegant (inte en stor dimma över allt) */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: -40px -20px -60px -20px;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 55% 45% at 50% 25%, rgba(31,111,235,0.22) 0%, transparent 62%),
-    radial-gradient(ellipse 45% 35% at 30% 22%, rgba(88,166,255,0.14) 0%, transparent 65%),
-    radial-gradient(ellipse 45% 35% at 70% 18%, rgba(9,105,218,0.10) 0%, transparent 65%);
-  filter: blur(10px);
-  opacity: 0.9;
-}
-
-.hero > * {
-  position: relative;
-  z-index: 1;
+  overflow: hidden; /* ok nu när vi maskar */
 }
 
 .hero-title{

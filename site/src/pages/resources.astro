@@ -1,72 +1,370 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
+
+const sections = [
+  {
+    title: "Data Sources",
+    subtitle: "Primära källor i svensk omloppsbana",
+    variant: "orbit",
+    icon: "orbit",
+    items: [
+      {
+        name: "dataportal.se",
+        url: "https://www.dataportal.se",
+        note: "Nationell dataportal – katalog & publicering"
+      },
+      {
+        name: "SCB",
+        url: "https://www.scb.se",
+        note: "Officiell statistik och öppna dataset"
+      },
+      {
+        name: "Stockholm Open Data",
+        url: "https://opendata.stockholm.se",
+        note: "Kommunal dataportal & API:er"
+      }
+    ]
+  },
+  {
+    title: "Community & Comms",
+    subtitle: "Där signalerna går – frågor, idéer, samarbete",
+    variant: "comms",
+    icon: "antenna",
+    items: [
+      {
+        name: "Open Data Orbit – Discussions",
+        url: "https://github.com/MelissaSkywalkz/open-data-hub-se/discussions",
+        note: "Forumet: frågor, feedback, mission updates"
+      },
+      {
+        name: "GitHub",
+        url: "https://github.com",
+        note: "Kod, PRs, issues, discussions"
+      },
+      {
+        name: "Open Data Sweden",
+        url: "https://www.opendata.se",
+        note: "Communitysite (om den lever vidare)"
+      }
+    ]
+  },
+  {
+    title: "Tools & Libraries",
+    subtitle: "Terminal-ready verktyg för payload & visualisering",
+    variant: "terminal",
+    icon: "terminal",
+    items: [
+      { name: "Python", url: "https://www.python.org", note: "Data, automation, API:er" },
+      { name: "Jupyter", url: "https://jupyter.org", note: "Notebooks för analys & demo" },
+      { name: "R Project", url: "https://www.r-project.org", note: "Statistik och visualisering" }
+    ]
+  }
+];
 ---
 
-<Layout title="Resurser" description="Resurser och länksamlingar för öppna data">
-  <h1>Resurser</h1>
-  <p>
-    Här samlar vi användbara resurser för att arbeta med öppna data i Sverige.
-  </p>
+<Layout title="Resurser" description="Resource Radar – länkar, verktyg och dataportaler i omlopp">
+  <section class="res-hero">
+    <h1 class="res-title">Resource Radar</h1>
+    <p class="res-lead">
+      En kuraterad katalog över dataportaler, community-kanaler och verktyg – allt du behöver för öppna data, i omlopp.
+    </p>
 
-  <div class="resources-grid">
-    <div class="resource-card">
-      <h3>Datakällor</h3>
-      <ul>
-        <li><a href="https://www.dataportal.se">dataportal.se</a> - Sveriges motsvarighet till data.gov</li>
-        <li><a href="https://www.scb.se">SCB Statistiska Centralbyrån</a> - Officiell statistik</li>
-        <li><a href="https://opendata.stockholm.se">Stockholm Open Data</a> - Stockholms kommun</li>
-      </ul>
+    <div class="res-chips">
+      <Badge label="ORBIT DIRECTORY" variant="orbit" icon="orbit" />
+      <Badge label="COMMS CHANNELS" variant="comms" icon="antenna" />
+      <Badge label="TERMINAL READY" variant="terminal" icon="terminal" />
     </div>
 
-    <div class="resource-card">
-      <h3>Community & Forum</h3>
-      <ul>
-        <li><a href="https://github.com">GitHub</a> - Kod och collaboration</li>
-        <li><a href="https://www.opendata.se">Open Data Sweden</a> - Community site</li>
-      </ul>
+    <div class="res-search card">
+      <div class="search-left">
+        <span class="search-label">SEARCH</span>
+        <span class="search-hint">Snart: filtrering av resurser (MVP+)</span>
+      </div>
+      <div class="search-box" aria-hidden="true">
+        <span class="search-placeholder">Type to scan the orbit…</span>
+        <span class="kbd">CTRL</span><span class="kbd">K</span>
+      </div>
     </div>
+  </section>
 
-    <div class="resource-card">
-      <h3>Verktyg & Libraries</h3>
-      <ul>
-        <li><a href="https://jupyter.org">Jupyter</a> - Interaktiv datanalys</li>
-        <li><a href="https://www.python.org">Python</a> - Populärt för data science</li>
-        <li><a href="https://r-project.org">R</a> - Statistik och visualisering</li>
-      </ul>
+  <section class="res-grid">
+    {sections.map((s) => (
+      <article class="card res-card">
+        <div class="res-head">
+          <div>
+            <h2>{s.title}</h2>
+            <p class="res-sub">{s.subtitle}</p>
+          </div>
+          <Badge label={s.title.toUpperCase()} variant={s.variant} icon={s.icon} />
+        </div>
+
+        <div class="res-list">
+          {s.items.map((it) => (
+            <a class="res-item" href={it.url} target="_blank" rel="noopener">
+              <div class="res-item-top">
+                <span class="res-name">{it.name}</span>
+                <span class="res-arrow">↗</span>
+              </div>
+              <p class="res-note">{it.note}</p>
+            </a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </section>
+
+  <section class="res-bottom">
+    <div class="card res-cta">
+      <h2>Missing a resource?</h2>
+      <p>
+        Föreslå en länk via Discussions eller öppna en PR. Vi vill att detta blir Sveriges bästa “open data radar”.
+      </p>
+      <div class="res-actions">
+        <a
+          class="btn cta"
+          href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions"
+          target="_blank"
+          rel="noopener"
+        >
+          Send a Signal
+        </a>
+        <a class="btn secondary cta" href="/community/">
+          Explore the Orbit
+        </a>
+      </div>
     </div>
-  </div>
+  </section>
 </Layout>
 
 <style>
-  .resources-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-  }
+/* Hero */
+.res-hero{
+  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+}
 
-  .resource-card {
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg-secondary);
-  }
+.res-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+}
 
-  .resource-card h3 {
-    margin-top: 0;
-  }
+.res-lead{
+  max-width: 76ch;
+  color: rgba(230,237,243,0.80);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: 1.75;
+}
 
-  .resource-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+.res-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
 
-  .resource-card li {
-    padding: var(--spacing-sm) 0;
-  }
+/* “Search” panel (visual only) */
+.res-search{
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.14) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+}
 
-  .resource-card a {
-    color: var(--color-accent);
-  }
+.search-left{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.search-label{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+  font-weight: 900;
+}
+
+.search-hint{
+  color: rgba(230,237,243,0.72);
+}
+
+.search-box{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.25);
+  min-width: min(420px, 100%);
+}
+
+.search-placeholder{
+  color: rgba(230,237,243,0.55);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.kbd{
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(22,27,34,0.70);
+  color: rgba(230,237,243,0.70);
+}
+
+/* Cards grid */
+.res-grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.res-card{
+  grid-column: span 4;
+  padding: var(--spacing-lg);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.14) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.res-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
+
+.res-card > *{ position: relative; z-index: 1; }
+
+.res-head{
+  display:flex;
+  justify-content: space-between;
+  align-items:flex-start;
+  gap: 12px;
+  margin-bottom: var(--spacing-md);
+}
+
+.res-card h2{
+  margin: 0 0 6px 0;
+}
+
+.res-sub{
+  margin: 0;
+  color: rgba(230,237,243,0.70);
+  line-height: 1.6;
+}
+
+.res-list{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
+
+.res-item{
+  display:block;
+  text-decoration:none;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(88,166,255,0.10);
+  background: rgba(13,17,23,0.20);
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+}
+
+.res-item:hover{
+  transform: translateY(-2px);
+  border-color: rgba(88,166,255,0.22);
+  filter: brightness(1.05);
+}
+
+.res-item-top{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.res-name{
+  font-weight: 800;
+  color: rgba(230,237,243,0.92);
+}
+
+.res-arrow{
+  font-family: var(--font-mono);
+  color: rgba(88,166,255,0.75);
+}
+
+.res-note{
+  margin: 6px 0 0 0;
+  color: rgba(230,237,243,0.72);
+  line-height: 1.6;
+}
+
+/* Bottom CTA */
+.res-bottom{
+  padding-bottom: var(--spacing-2xl);
+}
+
+.res-cta{
+  padding: var(--spacing-xl);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.40);
+}
+
+.res-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@media (max-width: 1100px){
+  .res-card{ grid-column: span 6; }
+  .search-box{ min-width: 280px; }
+}
+
+@media (max-width: 768px){
+  .res-card{ grid-column: span 12; }
+  .res-search{ flex-direction: column; align-items:flex-start; }
+  .search-box{ width: 100%; }
+}
 </style>

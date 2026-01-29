@@ -1,7 +1,233 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
+
+const DISCUSSIONS_URL = "https://github.com/MelissaSkywalkz/open-data-orbit/discussions";
 ---
-<Layout title="Sidan finns inte">
-  <h1>404 – Sidan finns inte</h1>
-  <p>Den här sidan existerar inte ännu. Gå till <a href="/">startsidan</a> eller använd navigationen ovan.</p>
+
+<Layout title="404 – Lost in Orbit" description="You drifted off course">
+  <section class="error-wrap">
+    <div class="error-hero card">
+      <div class="error-top">
+        <Badge label="STATUS: LOST IN ORBIT" variant="orbit" icon="orbit" />
+        <span class="signal">SIGNAL LOST</span>
+      </div>
+
+      <div class="orbit-visual" aria-hidden="true">
+        <div class="orbit-ring"></div>
+
+        <div class="satellite">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Body -->
+            <rect x="26" y="26" width="12" height="12" rx="3" stroke="currentColor" stroke-width="2"/>
+            <!-- Panels -->
+            <rect x="8" y="28" width="14" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+            <rect x="42" y="28" width="14" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+            <!-- Antenna -->
+            <path d="M32 14v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="12" r="2" fill="currentColor"/>
+            <!-- Connection struts -->
+            <path d="M22 32h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M38 32h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <!-- Tiny details -->
+            <circle cx="30" cy="30" r="1.2" fill="currentColor"/>
+            <circle cx="34" cy="34" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+
+        <div class="stars"></div>
+      </div>
+
+      <h1 class="error-title">404</h1>
+      <p class="error-subtitle">You drifted off course</p>
+
+      <p class="error-text">
+        Den här sidan finns inte (än). Antingen har länken ändrats – eller så har du hamnat utanför omloppsbanan.
+      </p>
+
+      <div class="error-actions">
+        <a href="/" class="btn cta">Return to Base</a>
+        <a href="/guides/" class="btn secondary cta">Launch Guides</a>
+        <a href={DISCUSSIONS_URL} target="_blank" rel="noopener" class="btn secondary cta">
+          Report missing trajectory ↗
+        </a>
+      </div>
+
+      <p class="error-hint">
+        Tips: använd navigationen ovan för att hitta rätt modul (Guides / Resources / Labs / Community).
+      </p>
+    </div>
+  </section>
 </Layout>
+
+<style>
+/* Wrapper */
+.error-wrap{
+  padding: var(--spacing-2xl) 0;
+  display:flex;
+  justify-content:center;
+}
+
+.error-hero{
+  max-width: 860px;
+  width: 100%;
+  padding: var(--spacing-xl);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.18) 0%, transparent 55%),
+    rgba(22,27,34,0.72);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.error-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
+
+.error-hero > *{ position: relative; z-index: 1; }
+
+.error-top{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+}
+
+.signal{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.22);
+  animation: signalBlink 1.7s ease-in-out infinite;
+}
+
+@keyframes signalBlink{
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* Visual */
+.orbit-visual{
+  margin: var(--spacing-md) auto var(--spacing-lg) auto;
+  width: min(520px, 100%);
+  aspect-ratio: 1 / 1;
+  position: relative;
+  display:grid;
+  place-items:center;
+}
+
+.orbit-ring{
+  position:absolute;
+  inset: 10%;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  box-shadow: 0 0 40px rgba(31,111,235,0.18);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(31,111,235,0.10), transparent 60%);
+}
+
+.stars{
+  position:absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10) 0 1px, transparent 2px),
+    radial-gradient(circle at 65% 20%, rgba(255,255,255,0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 60%, rgba(255,255,255,0.10) 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 70%, rgba(255,255,255,0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 55% 85%, rgba(255,255,255,0.10) 0 1px, transparent 2px);
+  opacity: 0.9;
+  filter: blur(0.2px);
+}
+
+.satellite{
+  position:absolute;
+  width: 70px;
+  height: 70px;
+  display:grid;
+  place-items:center;
+  color: rgba(230,237,243,0.92);
+  filter: drop-shadow(0 0 18px rgba(88,166,255,0.30));
+  animation: orbitSpin 7.5s linear infinite;
+  transform-origin: 50% 250%;
+  translate: 0 -35%;
+}
+
+@keyframes orbitSpin{
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Title */
+.error-title{
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 7vw, 5.2rem);
+  letter-spacing: 0.14em;
+  color: rgba(230,237,243,0.96);
+  text-shadow:
+    0 0 40px rgba(31,111,235,0.35),
+    0 0 80px rgba(31,111,235,0.16);
+}
+
+.error-subtitle{
+  margin: 8px 0 var(--spacing-md) 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  color: rgba(88,166,255,0.86);
+}
+
+.error-text{
+  margin: 0 auto var(--spacing-lg) auto;
+  max-width: 70ch;
+  color: rgba(230,237,243,0.78);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+.error-actions{
+  display:flex;
+  justify-content:center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
+.error-hint{
+  margin-top: var(--spacing-lg);
+  color: rgba(230,237,243,0.60);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .error-hero{ padding: var(--spacing-lg); }
+  .error-top{ justify-content:center; }
+  .satellite{ transform-origin: 50% 220%; }
+}
+</style>

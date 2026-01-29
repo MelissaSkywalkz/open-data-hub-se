@@ -1,66 +1,169 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import rewards from '../data/rewards.json';
+import Badge from '../components/Badge.astro';
+
+/** Enkel mapping baserat på id/name (du kan justera när du vill) */
+const pickVariant = (badge: any) => {
+  const s = `${badge?.id ?? ''} ${badge?.name ?? ''}`.toLowerCase();
+  if (s.includes('launch') || s.includes('ready') || s.includes('guide')) return { variant: 'launch', icon: 'rocket' };
+  if (s.includes('lab') || s.includes('terminal') || s.includes('build')) return { variant: 'terminal', icon: 'terminal' };
+  if (s.includes('comms') || s.includes('community') || s.includes('help')) return { variant: 'comms', icon: 'antenna' };
+  if (s.includes('star') || s.includes('legend') || s.includes('elite')) return { variant: 'star', icon: 'star' };
+  return { variant: 'orbit', icon: 'orbit' };
+};
 ---
 
-
 <Layout title="Rewards" description="Badges och incitament för contributions">
-  <h1>Badges & Rewards</h1>
-  <p>
-    I Open Data Orbit kan du få badges för att bidra, hjälpa andra och vara aktiv i communityn.
-  </p>
+  <section class="rewards-hero">
+    <h1 class="rewards-title">Mission Rewards</h1>
+    <p class="rewards-lead">
+      I Open Data Orbit kan du låsa upp badges för att bidra, hjälpa andra och hålla missionen i omlopp.
+    </p>
 
-  <div class="rewards-info">
+    <div class="rewards-chips">
+      <Badge label="MISSION LOG" variant="orbit" icon="orbit" />
+      <Badge label="BADGES" variant="star" icon="star" />
+      <Badge label="MANUAL AWARDS (MVP)" variant="terminal" icon="terminal" />
+    </div>
+  </section>
+
+  <section class="rewards-info card reward-info">
     <h2>Hur funkar rewards?</h2>
     <p>
-      I MVP-versionen delas badges ut <strong>manuellt av moderatorer</strong> baserat på dina insatser. Läs mer om hur du kan bidra i <a href="/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a>.
+      I MVP-versionen delas badges ut <strong>manuellt av moderatorer</strong> baserat på dina insatser.
+      Läs mer om hur du kan bidra i <a href="/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a>.
     </p>
-  </div>
+  </section>
 
-  <div class="badges-list">
-    {rewards.map((badge) => (
-      <div class="badge-card" key={badge.id}>
-        <div class="badge-icon">🏅</div>
-        <div class="badge-info">
-          <h3>{badge.name}</h3>
-          <p>{badge.description}</p>
-          <p class="badge-criteria"><strong>Hur får man den?</strong> {badge.criteria}</p>
-        </div>
-      </div>
-    ))}
-  </div>
+  <section class="badges-grid">
+    {rewards.map((b) => {
+      const meta = pickVariant(b);
+      return (
+        <article class="card reward-card" key={b.id}>
+          <div class="reward-top">
+            <Badge label={b.name} variant={meta.variant} icon={meta.icon} size="md" />
+          </div>
+
+          <p class="reward-desc">{b.description}</p>
+
+          <div class="reward-criteria">
+            <span class="criteria-label">HOW TO UNLOCK</span>
+            <p class="criteria-text">{b.criteria}</p>
+          </div>
+        </article>
+      );
+    })}
+  </section>
 </Layout>
 
 <style>
-  .badges-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-  }
+.rewards-hero{
+  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+  text-align: left;
+  position: relative;
+}
 
-  .badge-card {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg-secondary);
-  }
+.rewards-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+}
 
-  .badge-icon {
-    font-size: 2.5rem;
-    margin-right: var(--spacing-md);
-  }
+.rewards-lead{
+  max-width: 68ch;
+  color: rgba(230,237,243,0.80);
+  margin-bottom: var(--spacing-lg);
+}
 
-  .badge-info h3 {
-    margin: 0 0 var(--spacing-xs) 0;
-    font-size: var(--font-size-lg);
-  }
+.rewards-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
 
-  .badge-info p {
-    margin: 0;
-    color: var(--color-text-secondary);
-  }
+.reward-info{
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.72);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.40);
+}
+
+.badges-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.reward-card{
+  padding: var(--spacing-lg);
+  background: rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  margin: var(--spacing)
+}
+
+.reward-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
+
+.reward-card > *{ position: relative; z-index: 1; }
+
+.reward-top{
+  margin-bottom: var(--spacing-md);
+}
+
+.reward-desc{
+  margin: 0 0 var(--spacing-lg) 0;
+  color: rgba(230,237,243,0.78);
+  line-height: 1.7;
+}
+
+.reward-criteria{
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: var(--spacing-md);
+}
+
+.criteria-label{
+  display:inline-block;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: rgba(88,166,255,0.85);
+  margin-bottom: 8px;
+}
+
+.criteria-text{
+  margin: 0;
+  color: rgba(230,237,243,0.74);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px){
+  .rewards-hero{ padding-top: var(--spacing-xl); }
+}
 </style>

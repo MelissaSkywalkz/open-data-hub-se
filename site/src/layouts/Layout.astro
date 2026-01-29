@@ -7,7 +7,14 @@ export interface Props {
   description?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  title = 'Open Data Orbit',
+  description = 'Sveriges communityhub för öppna data, guider, resurser och samarbete.',
+} = Astro.props;
+
+const baseUrl = 'https://melissaskywalkz.github.io/open-data-orbit';
+const canonical = new URL(Astro.url.pathname, baseUrl).toString();
+const ogImage = `${baseUrl}/favicon.svg`;
 ---
 
 <!doctype html>
@@ -15,115 +22,90 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Open Data Orbit</title>
-    <meta name="description" content="Sveriges communityhub för öppna data, guider, resurser och samarbete." />
-    <meta name="theme-color" content="#161b22" />
-    <link rel="icon" type="image/svg+xml" href="/open-data-hub-se/favicon.svg" />
-    <meta property="og:title" content="Open Data Orbit" />
-    <meta property="og:description" content="Sveriges communityhub för öppna data, guider, resurser och samarbete." />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="theme-color" content="#0d1117" />
+    <link rel="icon" type="image/svg+xml" href="/open-data-orbit/favicon.svg" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://MelissaSkywalkz.github.io/open-data-hub-se/" />
-    <meta property="og:image" content="https://MelissaSkywalkz.github.io/open-data-hub-se/favicon.svg" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Red+Hat+Display:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <!-- All CSS moved below -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Red+Hat+Display:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    >
   </head>
   <body>
     <Navigation />
     <main class="container">
       <slot />
     </main>
-    <footer class="footer-glass">
-      <div class="footer-inner">
-        <div class="footer-brand">Open Data Orbit</div>
-        <div class="footer-links">
-          <a href="https://github.com/MelissaSkywalkz/open-data-hub-se" target="_blank">GitHub</a>
-          <a href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions" target="_blank">Community</a>
+    <footer class="footer">
+      <div class="footer-inner container">
+        <div class="footer-col footer-brand">
+          <div class="footer-mark">
+            <span class="footer-dot" aria-hidden="true"></span>
+            <span class="footer-name">Open Data Orbit</span>
+          </div>
+          <p class="footer-tagline">
+            Communitydriven kunskapsbank för öppna data i Sverige — i omlopp.
+          </p>
+
+          <div class="footer-telemetry">
+            <span class="telemetry-pill"><span class="k">STATUS</span><span class="v">IN ORBIT</span></span>
+            <span class="telemetry-pill"><span class="k">YEAR</span><span class="v">2026</span></span>
+          </div>
         </div>
-        <div class="footer-meta">&copy; 2026 – communitydriven kunskapsbank för öppna data i Sverige.</div>
+
+        <nav class="footer-col" aria-label="Site">
+          <h3 class="footer-title">Orbit Directory</h3>
+          <a href="/guides/" class="footer-link">Guides</a>
+          <a href="/resources/" class="footer-link">Resources</a>
+          <a href="/labs/" class="footer-link">Labs</a>
+          <a href="/community/" class="footer-link">Community</a>
+          <a href="/rewards/" class="footer-link">Rewards</a>
+          <a href="/about/" class="footer-link">About</a>
+        </nav>
+
+        <div class="footer-col">
+          <h3 class="footer-title">Mission Control</h3>
+          <a class="footer-link" href="https://github.com/MelissaSkywalkz/open-data-orbit" target="_blank" rel="noopener">
+            GitHub Repository ↗
+          </a>
+          <a class="footer-link" href="https://github.com/MelissaSkywalkz/open-data-orbit/discussions" target="_blank" rel="noopener">
+            Discussions / Comms ↗
+          </a>
+
+          <div class="footer-cta">
+            <a class="btn cta footer-btn" href="https://github.com/MelissaSkywalkz/open-data-orbit" target="_blank" rel="noopener">
+              Contribute
+            </a>
+            <a class="btn secondary cta footer-btn" href="/community/">
+              Enter Comms
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="footer-glow-line"></div>
+
+      <div class="footer-bottom">
+        <div class="container footer-bottom-inner">
+          <span class="footer-muted">© 2026 Open Data Orbit</span>
+          <span class="footer-muted">Built with Astro • Deployed on GitHub Pages</span>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
-<style>
-    .footer-glass {
-      border-top: none;
-      background: rgba(22,27,34,0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      margin-top: var(--spacing-2xl);
-      padding: var(--spacing-lg) 0 var(--spacing-md) 0;
-      box-shadow: 0 -2px 32px #1f6feb22;
-      position: relative;
-    }
-    .footer-inner {
-      max-width: 540px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      text-align: center;
-    }
-    .footer-brand {
-      font-weight: 800;
-      font-size: 1.1rem;
-      letter-spacing: 0.02em;
-      color: var(--accent1);
-      margin-bottom: 2px;
-      text-shadow: 0 0 8px #58a6ff44;
-    }
-    .footer-links {
-      display: flex;
-      gap: 1.2rem;
-      margin-bottom: 2px;
-    }
-    .footer-links a {
-      color: var(--accent2);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.98rem;
-      letter-spacing: 0.01em;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: rgba(36,44,60,0.18);
-      border: 1px solid rgba(88,166,255,0.10);
-      box-shadow: 0 1px 8px #1f6feb11;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-    }
-    .footer-links a:hover {
-      color: var(--accent3);
-      background: var(--gradient-accent);
-      box-shadow: 0 0 12px #58a6ff44;
-    }
-    .footer-meta {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-top: 2px;
-    }
-    .footer-glow-line {
-      width: 100%;
-      height: 2px;
-      background: var(--gradient-glow);
-      opacity: 0.7;
-      margin-top: var(--spacing-md);
-      box-shadow: 0 0 12px #1f6feb22;
-    }
-    @media (max-width: 600px) {
-      .footer-inner {
-        max-width: 98vw;
-        gap: 0.3rem;
-      }
-      .footer-links {
-        gap: 0.7rem;
-      }
-      .footer-brand {
-        font-size: 1rem;
-      }
-      .footer-meta {
-        font-size: 0.85rem;
-      }
-    }
-  </style>

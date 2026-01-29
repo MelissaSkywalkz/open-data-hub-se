@@ -1,84 +1,138 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
 ---
 
+<Layout title="Community" description="Explore the Orbit">
+  <section class="community-hero">
+    <h1 class="community-title">Explore the Orbit</h1>
+    <p class="community-lead">
+      Här samlas crewet som vill lära sig, bygga och dela öppna data i Sverige.
+      Communityn är öppen för alla – oavsett erfarenhet.
+    </p>
 
-<Layout title="Community" description="Så fungerar communityn och forumet">
-  <h1>Välkommen till Open Data Orbit</h1>
-  <p>
-    Här samlas vi som vill lära oss, bygga och dela öppna data i Sverige. Communityn är öppen för alla – oavsett erfarenhet!
-  </p>
+    <div class="community-chips">
+      <Badge label="COMMS: ONLINE" variant="comms" icon="antenna" />
+      <Badge label="CREW: OPEN" variant="orbit" icon="orbit" />
+      <Badge label="SIGNALS: GITHUB" variant="terminal" icon="terminal" />
+    </div>
 
-  <h2>Så använder du forumet (GitHub Discussions)</h2>
-  <p>
-    Forumet är vår plats för frågor, idéer, feedback och samarbete. Du hittar det på GitHub Discussions.
-  </p>
-  <a href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions" class="cta-button" style="margin-bottom: var(--spacing-xl);">
-    Gå till forumet
-  </a>
+    <div class="community-actions">
+      <a
+        href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions"
+        class="btn cta"
+        target="_blank"
+        rel="noopener"
+      >
+        Enter Comms Channel
+      </a>
+    </div>
+  </section>
 
-  <h2>Hur du ställer en bra fråga</h2>
-  <ul>
-    <li>Beskriv ditt problem eller din idé tydligt</li>
-    <li>Berätta vad du har testat eller letat efter</li>
-    <li>Var öppen för feedback och följdfrågor</li>
-    <li>Var gärna konkret – länka till data, kod eller exempel</li>
-  </ul>
+  <section class="community-grid">
+    <article class="card community-card">
+      <h2>Mission Control</h2>
+      <p>
+        Forumet körs via GitHub Discussions och är platsen för frågor, idéer,
+        feedback och samarbete kring öppna data.
+      </p>
+      <p class="muted">
+        Perfekt för allt från “hur börjar jag?” till djupare tekniska diskussioner.
+      </p>
+    </article>
 
-  <h2>Community-regler</h2>
-  <ul>
-    <li>Var hjälpsam och respektfull mot andra</li>
-    <li>Ingen diskriminering, trakasserier eller personangrepp</li>
-    <li>Ge konstruktiv feedback</li>
-    <li>Tänk på tonen – vi är här för att lära och dela</li>
-  </ul>
+    <article class="card community-card">
+      <h2>Send a Signal</h2>
+      <ul class="community-list">
+        <li>Beskriv ditt problem eller din idé tydligt</li>
+        <li>Berätta vad du har testat eller letat efter</li>
+        <li>Länka gärna till data, kod eller exempel</li>
+        <li>Var öppen för följdfrågor och feedback</li>
+      </ul>
+    </article>
 
-  <h2>Badges & Rewards</h2>
-  <p>
-    Du kan få <a href="/rewards">badges och rewards</a> för att bidra, hjälpa andra och vara aktiv i communityn!
-  </p>
+    <article class="card community-card">
+      <h2>Code of Orbit</h2>
+      <ul class="community-list">
+        <li>Var hjälpsam och respektfull</li>
+        <li>Ingen diskriminering eller personangrepp</li>
+        <li>Ge konstruktiv feedback</li>
+        <li>Vi är här för att lära och dela</li>
+      </ul>
+    </article>
+
+    <article class="card community-card community-cta">
+      <h2>Earn Badges</h2>
+      <p>
+        Du kan få <a href="/rewards">badges & rewards</a> genom att hjälpa andra,
+        bidra med kunskap och vara aktiv i omlopp.
+      </p>
+
+      <a href="/rewards" class="btn secondary cta">
+        View Mission Rewards
+      </a>
+    </article>
+  </section>
 </Layout>
 
 <style>
-  .community-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-  }
+.community-hero{
+  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+}
 
-  .community-card {
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg-secondary);
-    display: flex;
-    flex-direction: column;
-  }
+.community-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+}
 
-  .community-card h3 {
-    margin-top: 0;
-  }
+.community-lead{
+  max-width: 70ch;
+  color: rgba(230,237,243,0.80);
+  margin-bottom: var(--spacing-lg);
+}
 
-  .community-card p {
-    flex: 1;
-  }
+.community-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-  .cta-button {
-    display: inline-block;
-    padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 600;
-    transition: transform 0.2s;
-    margin-top: var(--spacing-md);
-    text-align: center;
-  }
+.community-actions{
+  margin-top: var(--spacing-lg);
+}
 
-  .cta-button:hover {
-    transform: translateY(-2px);
-  }
+.community-grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.community-card{
+  grid-column: span 6;
+}
+
+.community-card h2{
+  margin-top: 0;
+}
+
+.community-list{
+  padding-left: 1.1em;
+}
+
+.community-list li{
+  margin-bottom: 8px;
+  color: rgba(230,237,243,0.78);
+}
+
+.community-cta{
+  grid-column: span 12;
+}
+
+@media (max-width: 900px){
+  .community-card{ grid-column: span 12; }
+}
 </style>

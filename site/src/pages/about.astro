@@ -1,54 +1,188 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
 ---
 
-<Layout title="Om" description="Om Open Data Orbit">
-  <h1>Om Open Data Orbit</h1>
-
-  <section class="about-section">
-    <h2>Vad är Open Data Orbit?</h2>
-    <p>
-      Open Data Orbit är en community-driven plattform för att lära sig om, arbeta med och dela öppna data i Sverige.
-      Vi tror på kraften i öppen data för att skapa transparens, driva innovation och lösa verkliga problem.
+<Layout title="Om" description="Join the Crew">
+  <section class="about-hero">
+    <h1 class="about-title">Join the Crew</h1>
+    <p class="about-lead">
+      En community-driven plattform för att lära sig, bygga och dela öppna data i Sverige – allt i omlopp kring kunskap.
     </p>
 
-    <h2>Vår Mission</h2>
-    <p>
-      Vi vill göra det enkelt för utvecklare, datakonsulter, journalister och medborgare att:
-    </p>
-    <ul>
-      <li>Hitta och förstå öppna datakällor i Sverige</li>
-      <li>Lära sig bästa praxis för att arbeta med data</li>
-      <li>Bygga meningsfulla projekt och analyser</li>
-      <li>Samarbeta och dela kunskap med andra</li>
-    </ul>
+    <div class="about-chips">
+      <Badge label="STATUS: IN ORBIT" variant="orbit" icon="orbit" />
+      <Badge label="MISSION: OPEN DATA" variant="orbit" icon="orbit" />
+      <Badge label="OBJECTIVE: TRANSPARENCY" variant="terminal" icon="terminal" />
+    </div>
+  </section>
 
-    <h2>Vem kan delta?</h2>
-    <p>
-      Alla är välkomna! Oavsett om du är erfaren datatekniker, student eller bara nyfiken på data - det finns något för dig här.
-    </p>
+  <section class="about-grid">
+    <article class="card about-card">
+      <h2>Vad är Open Data Orbit?</h2>
+      <p>
+        Open Data Orbit är en community-driven plattform för att lära sig om, arbeta med och dela öppna data i Sverige.
+        Vi tror på kraften i öppen data för att skapa transparens, driva innovation och lösa verkliga problem.
+      </p>
+    </article>
 
-    <h2>Hur börjar jag?</h2>
-    <p>
-      Börja med att läsa <a href="/guides/">våra guider</a>, utforska <a href="/resources/">resurser</a>, eller gå med i <a href="/community/">communityn</a>.
-    </p>
+    <article class="card about-card">
+      <h2>Vår mission</h2>
+      <p>
+        Vi gör det enklare för utvecklare, GIS:are, datakonsulter, journalister och nyfikna att navigera öppna data – från
+        första “launch” till färdiga projekt.
+      </p>
+
+      <ul class="about-list">
+        <li><span class="bullet">•</span> Hitta och förstå öppna datakällor i Sverige</li>
+        <li><span class="bullet">•</span> Lära sig bästa praxis för metadata, API:er och formats</li>
+        <li><span class="bullet">•</span> Bygga meningsfulla projekt, visualiseringar och analyser</li>
+        <li><span class="bullet">•</span> Samarbeta och dela kunskap med andra</li>
+      </ul>
+    </article>
+
+    <article class="card about-card">
+      <h2>Vem kan delta?</h2>
+      <p>
+        Alla är välkomna. Oavsett om du är erfaren, student eller bara nyfiken – det finns en plats för dig i omlopp.
+      </p>
+
+      <div class="about-mini">
+        <Badge label="CREW: ALL WELCOME" variant="comms" icon="antenna" />
+        <Badge label="NO GATEKEEPING" variant="orbit" icon="star" />
+      </div>
+    </article>
+
+    <article class="card about-card about-cta">
+      <h2>Hur börjar jag?</h2>
+      <p>
+        Börja där det känns enklast – och bygg vidare i din egen takt.
+      </p>
+
+      <div class="about-actions">
+        <a href="/guides/" class="btn cta">Launch Guides</a>
+        <a href="/community/" class="btn secondary cta">Enter Orbit</a>
+      </div>
+
+      <p class="about-links">
+        Eller hoppa direkt till <a href="/resources/">Resurser</a> och <a href="/labs/">Labs</a>.
+      </p>
+    </article>
   </section>
 </Layout>
 
 <style>
-  .about-section {
-    max-width: 800px;
-  }
+.about-hero{
+  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+  position: relative;
+}
 
-  .about-section h2 {
-    margin-top: var(--spacing-xl);
-  }
+.about-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+}
 
-  .about-section ul {
-    margin-left: var(--spacing-lg);
-  }
+.about-lead{
+  max-width: 72ch;
+  color: rgba(230,237,243,0.80);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: 1.75;
+}
 
-  .about-section li {
-    margin-bottom: var(--spacing-md);
-  }
+.about-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.about-card{
+  grid-column: span 6;
+  padding: var(--spacing-lg);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.14) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
+
+.about-card > *{ position: relative; z-index: 1; }
+
+.about-card h2{
+  margin-top: 0;
+}
+
+.about-list{
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0 0 0;
+}
+
+.about-list li{
+  display:flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 10px;
+  color: rgba(230,237,243,0.78);
+}
+
+.bullet{
+  color: rgba(88,166,255,0.85);
+  font-weight: 900;
+}
+
+.about-mini{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
+
+.about-cta{
+  grid-column: span 12;
+}
+
+.about-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.about-links{
+  margin-top: var(--spacing-md);
+  color: rgba(230,237,243,0.74);
+}
+
+@media (max-width: 900px){
+  .about-card{ grid-column: span 12; }
+}
 </style>

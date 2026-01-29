@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -16,7 +17,7 @@ interface Props {
       title: string;
       description: string;
       author?: string;
-      publishedAt?: Date;
+      publishedAt?: Date | string;
       tags?: string[];
     };
     slug: string;
@@ -26,102 +27,273 @@ interface Props {
 
 const { guide } = Astro.props;
 const { Content } = await guide.render();
+
+const fmtDate = (d?: Date | string) => {
+  if (!d) return '';
+  const date = typeof d === 'string' ? new Date(d) : d;
+  try {
+    return new Intl.DateTimeFormat('sv-SE', { year: 'numeric', month: 'short', day: '2-digit' }).format(date);
+  } catch {
+    return date.toISOString().slice(0, 10);
+  }
+};
 ---
 
 <Layout title={guide.data.title} description={guide.data.description}>
-  <article class="guide-article">
-    <header class="article-header">
-      <h1>{guide.data.title}</h1>
-      <p class="article-description">{guide.data.description}</p>
-      <div class="article-meta">
+  <article class="briefing">
+    <header class="briefing-header card">
+      <div class="briefing-top">
+        <div class="briefing-chips">
+          <Badge label="MISSION BRIEFING" variant="orbit" icon="orbit" />
+          <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
+        </div>
+
+        <a class="back-pill" href="/guides/">
+          ← Back to Guides
+        </a>
+      </div>
+
+      <h1 class="briefing-title">{guide.data.title}</h1>
+      <p class="briefing-lead">{guide.data.description}</p>
+
+      <div class="telemetry">
         {guide.data.author && (
-          <span>Av {guide.data.author}</span>
-        )}
-        {guide.data.publishedAt && (
-          <span>
-            {new Date(guide.data.publishedAt).toLocaleDateString('sv-SE')}
+          <span class="telemetry-item">
+            <span class="telemetry-label">CREW</span>
+            <span class="telemetry-value">{guide.data.author}</span>
           </span>
         )}
+        {guide.data.publishedAt && (
+          <span class="telemetry-item">
+            <span class="telemetry-label">DATE</span>
+            <span class="telemetry-value">{fmtDate(guide.data.publishedAt)}</span>
+          </span>
+        )}
+        <span class="telemetry-item">
+          <span class="telemetry-label">PATH</span>
+          <span class="telemetry-value">/guides/{guide.slug}/</span>
+        </span>
       </div>
+
+      {guide.data.tags && guide.data.tags.length > 0 && (
+        <div class="briefing-tags">
+          {guide.data.tags.slice(0, 10).map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
     </header>
 
-    {guide.data.tags && guide.data.tags.length > 0 && (
-      <div class="article-tags">
-        {guide.data.tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
+    <section class="briefing-body card">
+      <div class="content">
+        <Content />
       </div>
-    )}
+    </section>
 
-    <div class="article-content">
-      <Content />
-    </div>
-
-    <footer class="article-footer">
-      <a href="/guides/" class="back-link">← Tillbaka till guider</a>
+    <footer class="briefing-footer">
+      <a href="/guides/" class="btn secondary cta">Back to Guides</a>
+      <a href="/community/" class="btn cta">Enter Comms</a>
     </footer>
   </article>
 </Layout>
 
 <style>
-  .guide-article {
-    max-width: 800px;
-  }
+.briefing{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+}
 
-  .article-header {
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    border-bottom: 1px solid var(--color-border);
-  }
+/* Card base */
+.briefing-header,
+.briefing-body{
+  padding: var(--spacing-xl);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
 
-  .article-header h1 {
-    margin-top: 0;
-  }
+.briefing-header::before,
+.briefing-body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
 
-  .article-description {
-    font-size: var(--font-size-lg);
-    color: var(--color-text-secondary);
-  }
+.briefing-header > *,
+.briefing-body > *{ position: relative; z-index: 1; }
 
-  .article-meta {
-    display: flex;
-    gap: var(--spacing-lg);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-  }
+.briefing-top{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
 
-  .article-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-xl);
-  }
+.briefing-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-  .tag {
-    display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-  }
+.back-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.85);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.18);
+  background: rgba(13,17,23,0.25);
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, filter 160ms ease;
+}
 
-  .article-content {
-    margin-bottom: var(--spacing-2xl);
-  }
+.back-pill:hover{
+  transform: translateY(-1px);
+  border-color: rgba(88,166,255,0.30);
+  filter: brightness(1.06);
+}
 
-  .article-footer {
-    padding-top: var(--spacing-lg);
-    border-top: 1px solid var(--color-border);
-  }
+.briefing-title{
+  margin: 0 0 var(--spacing-sm) 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+  color: rgba(230,237,243,0.96);
+}
 
-  .back-link {
-    color: var(--color-accent);
-    text-decoration: none;
-  }
+.briefing-lead{
+  margin: 0 0 var(--spacing-lg) 0;
+  color: rgba(230,237,243,0.80);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
 
-  .back-link:hover {
-    text-decoration: underline;
-  }
+/* Telemetry */
+.telemetry{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.telemetry-item{
+  display:inline-flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.14);
+  background: rgba(13,17,23,0.22);
+}
+
+.telemetry-label{
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+  font-weight: 900;
+}
+
+.telemetry-value{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: rgba(230,237,243,0.74);
+}
+
+/* Tags */
+.briefing-tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--spacing-lg);
+}
+
+.tag{
+  display:inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.28);
+  color: rgba(230,237,243,0.70);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* Content styling inside */
+.briefing-body{
+  margin-top: var(--spacing-lg);
+}
+
+.content :global(h2){
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 0.01em;
+}
+
+.content :global(h3){
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.content :global(p),
+.content :global(ul),
+.content :global(ol){
+  color: rgba(230,237,243,0.80);
+  line-height: 1.85;
+}
+
+.content :global(a){
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.content :global(a:hover){
+  border-bottom-color: rgba(88,166,255,0.40);
+}
+
+.content :global(pre){
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.briefing-footer{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  justify-content: space-between;
+  margin-top: var(--spacing-xl);
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .briefing{ padding-top: var(--spacing-xl); }
+  .briefing-header, .briefing-body{ padding: var(--spacing-lg); }
+  .briefing-footer{ justify-content: flex-start; }
+}
 </style>

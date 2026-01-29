@@ -12,47 +12,64 @@ import Badge from '../components/Badge.astro';
         <span class="hero-title-accent">Open Data</span>
         <span class="hero-title-core">Orbit</span>
       </h1>
-      <div class="hero-tags">
-        <Badge label="GUIDES" />
-        <Badge label="LABS" />
-        <Badge label="COMMUNITY" />
-      </div>
-      <p class="hero-tagline">Guider, labs och community för öppna data.</p>
+      <Badge label="GUIDES" variant="orbit" icon="orbit" />
+      <Badge label="LABS" variant="terminal" icon="terminal" />
+      <Badge label="COMMUNITY" variant="comms" icon="antenna" />
+      <p class="hero-tagline">Allt du behöver för Öppna Data i omlopp</p>
       <div class="glow-line"></div>
       <div class="hero-actions">
-        <a href="/guides/" class="btn">Launch Guides</a>
-        <a href="/community/" class="btn secondary">Enter Orbit</a>
+        <a href="/guides/" class="btn cta">Launch Guides</a>
+        <a href="/community/" class="btn secondary cta">Enter Orbit</a>
       </div>
       <div class="hero-stats">
-        <span class="stat">Status: In Orbit</span>
-        <span class="stat">Mission: Open Data</span>
+        <span class="stat">STATUS: IN ORBIT</span>
+        <span class="stat">MISSION: OPEN DATA</span>
+        <span class="stat">OBJECTIVE: TRANSPARENCY</span>
       </div>
     </div>
   </section>
 
-  <div class="glow-line"></div>
-  <section class="cards-section">
-    <div class="cards-grid">
-      <a href="/guides/" class="card card-home">
-        <div class="card-icon"><Icon name="book" size={32} /></div>
-        <h3 class="card-title">Lär dig</h3>
-        <Badge label="GUIDES" />
-        <p class="card-description">Utforska guider, tutorials och resurser för att komma igång med öppna data.</p>
-      </a>
-      <a href="/labs/" class="card card-home">
-        <div class="card-icon"><Icon name="code" size={32} /></div>
-        <h3 class="card-title">Bygg</h3>
-        <Badge label="LABS" />
-        <p class="card-description">Hitta datasets, tänk igenom idéer och implementera projekt i Labs.</p>
-      </a>
-      <a href="/community/" class="card card-home">
-        <div class="card-icon"><Icon name="chat" size={32} /></div>
-        <h3 class="card-title">Fråga & Dela</h3>
-        <Badge label="COMMUNITY" />
-        <p class="card-description">Ställ frågor, dela kunskap och samarbeta med communityn.</p>
-      </a>
-    </div>
-  </section>
+<div class="glow-line"></div>
+<section class="cards-section">
+  <div class="cards-grid">
+    <a href="/guides/" class="card card-home">
+      <div class="card-icon"><Icon name="book" size={32} /></div>
+
+      <div class="card-meta">
+        <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
+        <span class="card-route">Guides</span>
+      </div>
+
+      <h3 class="card-title">Lär dig</h3>
+      <p class="card-description">Utforska guider och resurser för att komma igång med öppna data.</p>
+    </a>
+
+    <a href="/labs/" class="card card-home">
+      <div class="card-icon"><Icon name="code" size={32} /></div>
+
+      <div class="card-meta">
+        <Badge label="ACCESS TERMINAL" variant="terminal" icon="terminal" />
+        <span class="card-route">Labs</span>
+      </div>
+
+      <h3 class="card-title">Bygg</h3>
+      <p class="card-description">Testa verktyg, bygg prototyper och lansera idéer i Labs.</p>
+    </a>
+
+    <a href="/community/" class="card card-home">
+      <div class="card-icon"><Icon name="chat" size={32} /></div>
+
+      <div class="card-meta">
+        <Badge label="EXPLORE THE ORBIT" variant="comms" icon="antenna" />
+        <span class="card-route">Community</span>
+      </div>
+
+      <h3 class="card-title">Fråga &amp; Dela</h3>
+      <p class="card-description">Ställ frågor, dela kunskap och koppla upp dig med communityn.</p>
+    </a>
+  </div>
+</section>
+
 
   <section class="latest-section">
     <h2>Mission Log</h2>
@@ -122,6 +139,7 @@ import Badge from '../components/Badge.astro';
 
 /* Tagline vit/off-white (som du ville) */
 .hero-tagline{
+  margin: var(--spacing-md);
   color: rgba(230,237,243,0.92);
   text-shadow: 0 10px 40px rgba(31,111,235,0.12);
 }
@@ -256,6 +274,35 @@ import Badge from '../components/Badge.astro';
 .card-home .badge {
   margin-bottom: var(--spacing-xs);
   border-radius: 999px;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.card-route {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(230, 237, 243, 0.65);
+}
+
+/* Om din Badge-komponent redan har .badge */
+.card-home .badge {
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* Lite extra hover-känsla på meta utan att ändra cards */
+.card-home:hover .card-route {
+  color: rgba(230, 237, 243, 0.78);
 }
 
 /* Latest */

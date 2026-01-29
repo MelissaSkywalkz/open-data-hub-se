@@ -1,105 +1,261 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
 import { getCollection } from 'astro:content';
 
 const guides = await getCollection('guides');
+
 const sortedGuides = guides.sort((a, b) => {
-  const dateA = a.data.publishedAt || new Date(0);
-  const dateB = b.data.publishedAt || new Date(0);
+  const dateA = a.data.publishedAt ? new Date(a.data.publishedAt) : new Date(0);
+  const dateB = b.data.publishedAt ? new Date(b.data.publishedAt) : new Date(0);
   return dateB.getTime() - dateA.getTime();
 });
+
+const fmtDate = (d?: Date | string) => {
+  if (!d) return '';
+  const date = typeof d === 'string' ? new Date(d) : d;
+  try {
+    return new Intl.DateTimeFormat('sv-SE', { year: 'numeric', month: 'short', day: '2-digit' }).format(date);
+  } catch {
+    return date.toISOString().slice(0, 10);
+  }
+};
 ---
 
-<Layout title="Guider" description="Guider och tutorials för öppna data">
-  <h1>Guider</h1>
-  <p>
-    Lär dig mer om öppna data genom våra guider och tutorials.
-  </p>
+<Layout title="Guider" description="Ready for Launch – guider och tutorials för öppna data">
+  <section class="guides-hero">
+    <h1 class="guides-title">Ready for Launch</h1>
+    <p class="guides-lead">
+      Guider och tutorials för att komma igång med öppna data – från pre-flight checks till första riktiga payload.
+    </p>
 
-  <div class="guides-grid">
+    <div class="guides-chips">
+      <Badge label="READY FOR LAUNCH" variant="launch" icon="rocket" />
+      <Badge label="PRE-FLIGHT CHECKS" variant="terminal" icon="terminal" />
+      <Badge label="PAYLOAD: OPEN DATA" variant="orbit" icon="orbit" />
+    </div>
+  </section>
+
+  <section class="guides-grid">
     {sortedGuides.map((guide) => (
-      <a href={`/guides/${guide.slug}/`} class="guide-card">
-        <h3>{guide.data.title}</h3>
+      <a href={`/guides/${guide.slug}/`} class="card guide-card">
+        <div class="guide-top">
+          <Badge label="GUIDE" variant="orbit" icon="orbit" />
+          {guide.data.publishedAt && (
+            <span class="guide-date">{fmtDate(guide.data.publishedAt)}</span>
+          )}
+        </div>
+
+        <h3 class="guide-title">{guide.data.title}</h3>
         <p class="guide-description">{guide.data.description}</p>
-        {guide.data.author && (
-          <p class="guide-meta">Av {guide.data.author}</p>
-        )}
+
+        <div class="guide-meta">
+          {guide.data.author && <span class="meta-item">Av {guide.data.author}</span>}
+          <span class="meta-item">Explore →</span>
+        </div>
+
         {guide.data.tags && guide.data.tags.length > 0 && (
           <div class="guide-tags">
-            {guide.data.tags.map((tag) => (
+            {guide.data.tags.slice(0, 6).map((tag) => (
               <span class="tag">{tag}</span>
             ))}
           </div>
         )}
       </a>
     ))}
-  </div>
+  </section>
 
   {sortedGuides.length === 0 && (
-    <div class="empty-state">
-      <p>Inga guider ännu. Kom tillbaka snart!</p>
-    </div>
+    <section class="empty">
+      <div class="card empty-card">
+        <h2>Inga guider ännu</h2>
+        <p>Vi fyller på snart. Vill du bidra? Öppna en discussion eller PR med ett guideförslag.</p>
+        <div class="empty-actions">
+          <a
+            class="btn cta"
+            href="https://github.com/MelissaSkywalkz/open-data-hub-se/discussions"
+            target="_blank"
+            rel="noopener"
+          >
+            Open Mission Log
+          </a>
+          <a class="btn secondary cta" href="/community/">
+            Enter Comms
+          </a>
+        </div>
+      </div>
+    </section>
   )}
 </Layout>
 
 <style>
-  .guides-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-xl);
-  }
+.guides-hero{
+  padding: var(--spacing-2xl) 0 var(--spacing-xl) 0;
+}
 
-  .guide-card {
-    display: block;
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg);
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-  }
+.guides-title{
+  margin-top: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  text-shadow: 0 18px 70px rgba(88,166,255,0.18);
+}
 
-  .guide-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 3px 12px rgba(9, 105, 218, 0.15);
-    transform: translateY(-2px);
-  }
+.guides-lead{
+  max-width: 74ch;
+  color: rgba(230,237,243,0.80);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: 1.75;
+}
 
-  .guide-card h3 {
-    margin-top: 0;
-    color: var(--color-text);
-  }
+.guides-chips{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+}
 
-  .guide-description {
-    margin-bottom: var(--spacing-md);
-  }
+/* Grid */
+.guides-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-2xl);
+}
 
-  .guide-meta {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-md);
-  }
+/* Card */
+.guide-card{
+  padding: var(--spacing-lg);
+  text-decoration: none;
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.14) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
 
-  .guide-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-  }
+.guide-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    120deg,
+    rgba(31,111,235,0.10) 0%,
+    rgba(13,17,23,0.00) 55%,
+    rgba(44,83,100,0.10) 100%
+  );
+  opacity: .9;
+}
 
-  .tag {
-    display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-  }
+.guide-card > *{ position: relative; z-index: 1; }
 
-  .empty-state {
-    text-align: center;
-    padding: var(--spacing-2xl);
-    color: var(--color-text-secondary);
-  }
+.guide-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(88,166,255,0.28);
+  box-shadow: 0 28px 75px rgba(0,0,0,0.45);
+  filter: brightness(1.03);
+}
+
+.guide-top{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: var(--spacing-md);
+}
+
+.guide-date{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.62);
+  white-space: nowrap;
+}
+
+.guide-title{
+  margin: 0 0 var(--spacing-sm) 0;
+  color: rgba(230,237,243,0.95);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.guide-description{
+  margin: 0 0 var(--spacing-md) 0;
+  color: rgba(230,237,243,0.78);
+  line-height: 1.75;
+}
+
+.guide-meta{
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+  margin-bottom: var(--spacing-md);
+}
+
+.meta-item{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.78);
+}
+
+.guide-tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Reuse your existing .tag styling if it exists in globals,
+   but this one matches Orbit if not */
+.tag{
+  display:inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.28);
+  color: rgba(230,237,243,0.70);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* Empty */
+.empty{
+  margin-top: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+.empty-card{
+  padding: var(--spacing-xl);
+  background:
+    radial-gradient(ellipse 80% 120% at 20% 0%, rgba(31,111,235,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 120% at 80% 100%, rgba(44,83,100,0.16) 0%, transparent 55%),
+    rgba(22,27,34,0.70);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.40);
+}
+
+.empty-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@media (max-width: 768px){
+  .guide-meta{ flex-direction: column; align-items:flex-start; }
+}
 </style>

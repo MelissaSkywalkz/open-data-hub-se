@@ -172,8 +172,9 @@ const base = import.meta.env.BASE_URL;
     </ul>
   </section>
 
-  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js" defer></script>
   <script is:inline>
+    window.addEventListener('load', () => {
     const map = new maplibregl.Map({
       container: 'map',
       style: {
@@ -643,6 +644,7 @@ const base = import.meta.env.BASE_URL;
 
     map.on('load', () => {
       setStatus('Idle');
+    });
     });
   </script>
 </Layout>

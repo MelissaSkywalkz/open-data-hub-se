@@ -122,6 +122,34 @@ const base = import.meta.env.BASE_URL;
     <article class="module">
       <div class="module-head">
         <div class="module-title">
+          <span class="module-icon" aria-hidden="true">◎</span>
+          <div>
+            <h2 class="module-h">GeoJSON Preview Map</h2>
+            <p class="module-sub mono">MapLibre · Dark · Static</p>
+          </div>
+        </div>
+        <div class="module-meta">
+          <Badge label="IN ORBIT" variant="orbit" icon="orbit" />
+          <span class="module-route">/labs/geojson-preview</span>
+        </div>
+      </div>
+
+      <p class="module-desc">
+        Förhandsvisa GeoJSON direkt i webbläsaren med mörk basemap, export och attributpanel.
+      </p>
+
+      <div class="module-status mono">
+        STATUS: <span class="ok">READY</span> · Open now
+      </div>
+
+      <a class="btn secondary" href={`${base}labs/geojson-preview/`}>
+        Open GeoJSON Preview
+      </a>
+    </article>
+
+    <article class="module">
+      <div class="module-head">
+        <div class="module-title">
           <span class="module-icon" aria-hidden="true">⟡</span>
           <div>
             <h2 class="module-h">Data Visualizations</h2>

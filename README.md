@@ -64,6 +64,7 @@ Labs kan till exempel användas för att:
 - validera JSON och metadata
 - testa format och strukturer
 - visualisera och förstå dataflöden
+- förhandsvisa GeoJSON på mörk basemap med export (GeoJSON Preview Map)
 
 Labs är inte färdiga produkter. De är till för att utforska, prova och lära.
 

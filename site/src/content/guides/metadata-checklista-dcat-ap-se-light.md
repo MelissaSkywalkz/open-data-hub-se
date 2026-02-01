@@ -1,5 +1,5 @@
 ---
-title: Metadata-checklista (DCAT-AP-SE light)
+title: Metadata-checklista
 description: Praktisk checklista för att säkerställa grundläggande och korrekt metadata enligt DCAT-AP-SE.
 author: Open Data Orbit
 publishedAt: 2026-01-28
@@ -26,70 +26,38 @@ Den är avsedd som en *light-version*:
 
 ## Dataset – grundläggande metadata
 
-### Identifierare & titel
-- [ ] **Unik identifierare** (t.ex. URL eller intern identifierare)
-- [ ] **Tydlig titel** som går att förstå utanför organisationen
+**Identifierare & titel:** Säkerställ att du har en unik identifierare (t.ex. URL eller intern identifierare) och en tydlig titel som går att förstå utanför organisationen.
 
----
+**Beskrivning:** Skapa en kort och begriplig beskrivning som förklarar vad datan innehåller och varför datan är relevant.
 
-### Beskrivning
-- [ ] **Kort och begriplig beskrivning**
-- [ ] Förklarar *vad* datan innehåller
-- [ ] Förklarar *varför* datan är relevant
-
----
-
-### Utgivare & kontakt
-- [ ] **Utgivare (organisationens namn)**
-- [ ] **Kontaktpunkt** (funktionsbrevlåda eller generell e-post)
+**Utgivare & kontakt:** Ange organisationens namn och en kontaktpunkt (funktionsbrevlåda eller generell e-post).
 
 ---
 
 ## Distribution – åtkomst till data
 
-### Licens
-- [ ] **Licens angiven** (t.ex. CC0 eller CC BY)
-- [ ] Länk till licenstext eller tydlig licensreferens
+**Licens:** Ange licens (t.ex. CC0 eller CC BY) med länk till licenstext eller tydlig licensreferens.
 
----
+**Åtkomst:** Säkerställ att accessURL eller downloadURL finns, och att länken fungerar och leder till rätt resurs.
 
-### Åtkomst
-- [ ] **accessURL eller downloadURL finns**
-- [ ] Länken fungerar och leder till rätt resurs
-
----
-
-### Format
-- [ ] Filformat angivet (t.ex. CSV, JSON, GeoJSON)
-- [ ] Formatet stämmer överens med faktisk fil
+**Format:** Ange filformat (t.ex. CSV, JSON, GeoJSON) och verifiera att det stämmer överens med faktisk fil.
 
 ---
 
 ## Uppdatering & status
 
-- [ ] Datum för senaste uppdatering
-- [ ] Information om hur ofta datan uppdateras (om tillämpligt)
-- [ ] Status eller versionsinformation (om relevant)
+Kontrollera datum för senaste uppdatering, information om hur ofta datan uppdateras (om tillämpligt), och status eller versionsinformation (om relevant).
 
 ---
 
 ## Vanliga fel
 
-- Saknar kontaktpunkt eller licens
-- Titel eller beskrivning är intern eller otydlig
-- Dataset saknar Distribution
-- Trasig accessURL / downloadURL
-- Metadata uppdateras inte när datan ändras
+Saknade kontaktpunkt eller licens, titel eller beskrivning som är intern eller otydlig, dataset som saknar Distribution, trasig accessURL/downloadURL, och metadata som inte uppdateras när datan ändras.
 
 ---
 
 ## Tips
 
-- Skriv metadata för **människor först**, maskiner sen
-- Testa att någon utanför din organisation förstår:
-  - vad datan är
-  - hur den kan användas
-- Kontrollera alltid hur det ser ut på dataportal.se
-- Fråga i communityt om du är osäker
+Skriv metadata för människor först, maskiner sen. Testa att någon utanför din organisation förstår vad datan är, hur den kan användas. Kontrollera alltid hur det ser ut på dataportal.se. Fråga i communityt om du är osäker.
 
 Metadata behöver inte vara perfekt – men den måste vara begriplig.

@@ -1,5 +1,5 @@
 ---
-title: DCAT-AP-SE – minsta obligatoriska fält (för människor)
+title: DCAT-AP-SE obligatoriska fält
 description: Praktisk och mänsklig checklista för obligatoriska metadatafält i DCAT-AP-SE.
 author: Open Data Orbit
 publishedAt: 2026-01-28
@@ -26,8 +26,8 @@ Den här guiden fokuserar på **minsta uppsättning fält som krävs för att pu
 
 I DCAT-AP-SE skiljer man på:
 
-- **Dataset** – *Vad* är det för data?
-- **Distribution** – *Hur* får man tillgång till datan?
+- **Dataset**: *Vad* är det för data?
+- **Distribution**: *Hur* får man tillgång till datan?
 
 Båda nivåerna har obligatoriska fält.
 
@@ -53,7 +53,7 @@ Ett **Dataset** beskriver själva datamängden.
 
 ---
 
-## Minsta obligatoriska fält – Distribution
+## Minsta obligatoriska fälten: Distribution
 
 En **Distribution** beskriver hur datan nås.
 
@@ -77,7 +77,7 @@ En **Distribution** beskriver hur datan nås.
 
 ---
 
-## Sammanfattning – absolut minimum
+## Sammanfattning: absolut minimum
 
 För att publicera öppna data korrekt enligt DCAT-AP-SE behöver du minst:
 
@@ -111,11 +111,7 @@ Distribution:
 
 ## Vanliga misstag
 
-- Beskrivningen säger *vad* men inte *varför*
-- Kontaktpunkt saknas eller pekar på privatperson
-- Licens saknas eller är oklar
-- Trasig accessURL / downloadURL
-- Dataset och Distribution blandas ihop
+Beskrivningen säger vad men inte varför, kontaktpunkt saknas eller pekar på privatperson, licens saknas eller är oklar, trasig accessURL/downloadURL, och dataset och distribution blandas ihop.
 
 ## Nästa steg
 

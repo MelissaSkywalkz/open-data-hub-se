@@ -6,152 +6,151 @@ const base = import.meta.env.BASE_URL;
 const sections = [
   {
     title: "Börja här",
-    subtitle: "Officiell vägledning + var du hittar data",
+    subtitle: "Staten ger vägledning. Du behöver veta var du börjar.",
     variant: "orbit",
     icon: "orbit",
     items: [
       {
         name: "DIGG: Öppna och delade data",
         url: "https://www.digg.se/kunskap-och-stod/oppna-och-delade-data",
-        note: "Överblick, begrepp, ansvar och stöd kring öppna & delade data."
+        note: "Statens guide: begrepp, ansvar och varför detta spelar roll för din organisation."
       },
       {
         name: "DIGG: Vägledning för att tillgängliggöra information",
         url: "https://www.digg.se/kunskap-och-stod/oppna-och-delade-data/vagledning-for-att-tillgangliggora-information",
-        note: "Steg-för-steg när du ska publicera data (från urval → publicering)."
+        note: "Praktisk checklista från staten för att gå från 'vi har data' till 'data är publicerad'."
       },
       {
         name: "Sveriges dataportal",
         url: "https://www.dataportal.se",
-        note: "Hitta dataset och datapublicering på nationell nivå."
+        note: "Den nationella katalogen. Här söker människor efter data. Här publicerar du datan."
       },
       {
         name: "Open Data Orbit: Guider",
         url: `${base}guides/`,
-        note: "Praktiska, korta guider med exempel och “checklists”."
+        note: "Våra guider fyller gapen mellan teori och praktik. Börja här för konkreta exempel."
       }
     ]
   },
   {
     title: "Metadata & katalogisering",
-    subtitle: "DCAT, kvalitet och det som faktiskt krävs",
+    subtitle: "Vad är metadata egentligen? Och vad är minimun?",
     variant: "orbit",
     icon: "orbit",
     items: [
       {
-        name: "DCAT 3.0.0 (sv) – Sveriges dataportal docs",
+        name: "DCAT 3.0.0 (sv): Sveriges dataportal docs",
         url: "https://docs.dataportal.se/dcat/3.0.0/sv/",
-        note: "För dig som vill förstå DCAT som modell (dataset, distribution, begrepp)."
+        note: "För dig som vill förstå DCAT som standard. Djupdykning: dataset, distributioner, vokabulärer."
       },
       {
-        name: "Specs: Dataportal.se – specifications",
+        name: "Specs: Dataportal.se (specifications)",
         url: "https://docs.dataportal.se/specifications/",
-        note: "Samlad vy över specifikationer och relaterade dokument."
+        note: "Den officiella specifikationen. Här hittar du tekniska detaljer och hur allt förbinds."
       },
       {
         name: "Open Data Orbit: Metadata-check (light)",
         url: `${base}guides/metadata-checklista-dcat-ap-se-light/`,
-        note: "Snabb check: minsta rimliga metadata innan publicering."
+        note: "Snabb självtest innan du publicerar: Har jag de viktigaste metadatafälten?"
       },
       {
         name: "EntryScape Guide",
         url: "https://docs.entryscape.com/guide/",
-        note: "Om du publicerar/katalogiserar via EntryScape."
+        note: "Om din organisation använder EntryScape för publicering. Här finns hjälp."
       }
     ]
   },
   {
     title: "Samverkan & interoperabilitet",
-    subtitle: "Ramverk, principer och praktisk styrning",
+    subtitle: "Hur gör vi data användbar tillsammans?",
     variant: "terminal",
     icon: "terminal",
     items: [
       {
         name: "DIGG: Svenskt ramverk för digital samverkan",
         url: "https://www.digg.se/kunskap-och-stod/svenskt-ramverk-for-digital-samverkan",
-        note: "Riktning och principer för interoperabilitet och samverkan."
+        note: "Riktning från staten för hur offentlig sektor bör arbeta med data tillsammans."
       },
       {
         name: "DIGG Play (webbinarier & filmer)",
         url: "https://www.digg.se/kunskap-och-stod/digg-play",
-        note: "Bra när du vill få helhetsbild snabbt (intro/grund)."
+        note: "Korta filmer från staten om öppna data. Bra när du behöver snabb översikt."
       }
     ]
   },
   {
     title: "Format & API:er",
-    subtitle: "Publicera så andra kan använda datan",
+    subtitle: "Hur gör du data direkt användbara för andra utvecklare?",
     variant: "terminal",
     icon: "terminal",
     items: [
       {
         name: "Open Data Orbit: Labs",
         url: `${base}labs/`,
-        note: "Verktyg för JSON/format/checks (bra för payloads och metadata)."
+        note: "Våra verktyg: validera JSON, testa GeoJSON, checka metadata snabbt."
       },
       {
         name: "OpenAPI / Swagger",
         url: "https://swagger.io/",
-        note: "När du dokumenterar ett REST-API eller vill testa endpoints."
+        note: "Standard för att dokumentera och testa REST-API:er. Gör ditt API användbart."
       },
       {
         name: "W3C: SPARQL 1.1 overview",
         url: "https://www.w3.org/TR/sparql11-overview/",
-        note: "För länkade data och semantiska frågor."
+        note: "Fragesprak för länkade data. Avancerat, men kraftfullt för stora datamängder."
       }
     ]
   },
   {
     title: "Juridik & licenser",
-    subtitle: "Rätt att dela – och rätt att använda",
+    subtitle: "Vilken licens passar dina data? Och vad säger lagen?",
     variant: "orbit",
     icon: "orbit",
     items: [
       {
         name: "Creative Commons-licenser",
         url: "https://creativecommons.org/licenses/",
-        note: "Välj licens för öppna data (ofta CC BY)."
+        note: "De mest använda licenserna för öppna data. Vi rekommenderar CC0 eller CC BY."
       },
       {
         name: "SKR: Öppna data, datalagen och stöd",
         url: "https://skr.se/digitaliseringivalfarden/datadrivenutveckling/oppnadatadatalagenochstod.8407.html",
-        note: "Kommun-perspektiv + tolkningar/stöd kring öppna data-lagen."
+        note: "Kommunernas perspektiv på öppna data-lagen. Juridisk vägledning för organisationer."
       }
     ]
   },
   {
     title: "Community & support",
-    subtitle: "Fråga, dela och få hjälp (nu när portaler stänger forum)",
+    subtitle: "Du är inte ensam. Här hittar du varandra.",
     variant: "comms",
     icon: "antenna",
     items: [
       {
         name: "Open Data Orbit: GitHub Discussions",
         url: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions",
-        note: "Primär kanal: frågor, svar, förslag och kunskapsbas."
+        note: "Här frågar utvecklare, kommuner och entusiaster. Vi hjälper varandra."
       },
       {
         name: "Open Data Orbit: Community-sidan",
         url: `${base}community/`,
-        note: "Hur du deltar, etikett och var du postar vad."
+        note: "Guide till community: vad är ok att fråga, tonfall, regler och kultur."
       },
       {
         name: "Nyhet: Communityt på Sveriges dataportal stängs ner",
         url: "https://www.dataportal.se/nyheter/communityt-pa-sveriges-dataportal-stangs-ner",
-        note: "Bakgrund till varför vi satsar på Discussions som hem för crew."
+        note: "Sveriges dataportal stänger sitt forum. Så flytta vi dialogen hit till GitHub."
       }
     ]
   }
 ];
 ---
 
-<Layout title="Resurser" description="Resource Radar – länkar, stöd och specifikationer för öppna data i Sverige.">
+<Layout title="Resurser" description="Resource Radar: länkade, kuraterade vägledningar för öppna data i Sverige.">
   <section class="res-hero">
     <p class="res-kicker mono">RESOURCE RADAR</p>
     <h1 class="res-title">Resurser i omlopp</h1>
     <p class="res-lead">
-      Kuraterade länkar till officiell vägledning, specifikationer och community-kanaler.
-      Tanken: du ska snabbt hitta <em>rätt</em> källa för rätt steg.
+      Här samlar vi bästa praktiken för öppna data i Sverige. Från statens officiella vägledning till verktyg, specifikationer och community. Fokus ligger på det du faktiskt behöver för att lyckas.
     </p>
 
     <div class="res-chips">
@@ -202,9 +201,9 @@ const sections = [
 
   <section class="res-bottom">
     <div class="card res-cta">
-      <h2 class="res-cta-title">Saknas något viktigt?</h2>
+      <h2 class="res-cta-title">Du ser något som fattas?</h2>
       <p class="res-cta-text">
-        Föreslå en länk via Discussions (eller öppna en PR). Målet är att bygga Sveriges mest användbara “open data radar”.
+        Det här är en levande samling. Skicka ett förslag via GitHub Discussions, eller öppna en PR direkt. Tillsammans bygger vi Sveriges mest användbara öppen data-radar.
       </p>
       <div class="res-actions">
         <a

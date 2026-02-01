@@ -1,145 +1,129 @@
-# 🌍 Open Data Orbit
+# Open Data Orbit
 
-**Open Data Orbit** är en community-driven plattform för att utforska, förstå och bygga med **öppna data i Sverige**.
+🪐 **Open Data Orbit** är ett öppet, community-drivet projekt om öppna data i Sverige.  
+Här samlas guider, verktyg, resurser och exempel som hjälper dig att förstå, använda och publicera öppna data i praktiken.
 
-Guides · Labs · Community · Rewards  
-Allt du behöver för öppna data – **i omlopp** 🛰️
+Det här är ingen officiell myndighetsdokumentation och ingen standardspecifikation.  
+Det är en gemensam plats för praktisk kunskap, byggd för och av personer som arbetar med öppna data.
 
-🔗 **Live site**  
+🔗 Webbplats:  
 https://melissaskywalkz.github.io/open-data-orbit/
 
 ---
 
-## ✨ Vad är Open Data Orbit?
+## Varför Open Data Orbit?
 
-Open Data Orbit är en kunskaps- och samarbetsplattform för:
+Öppna data är något många känner till, men som ofta är svårt att få grepp om i vardagen.  
+Specifikationer, format och portaler finns, men kunskapen är utspridd, teknisk och ibland svår att omsätta i praktiskt arbete.
 
-- utvecklare
-- datakonsulter
-- GIS-specialister
-- journalister
-- studenter
-- nyfikna medborgare
-
-Målet är att göra öppna data **lättare att hitta, förstå och använda** –  
-från första kontakt → till fungerande analyser, kartor och projekt.
-
-Fokus ligger på **praktisk användning**, inte bara teori.
+Open Data Orbit finns för att göra det enklare att:
+- förstå hur öppna data faktiskt hänger ihop
+- använda öppna data i riktiga projekt
+- publicera och förvalta data på ett genomtänkt sätt
+- lära genom exempel, inte bara teori
 
 ---
 
-## 🧭 Struktur
+## Vad finns här?
 
-| Sektion | Beskrivning |
-|------|------------|
-| **Guides** | Steg-för-steg-guider om öppna data, metadata & dataportaler |
-| **Labs / Access Terminal** | Interaktiva verktyg för data-bearbetning |
-| **Community (Comms)** | Frågor, diskussioner & erfarenhetsutbyte |
-| **Rewards** | Badges & erkännande för contributions |
-| **About / Crew** | Mission, vision & hur du deltar |
+Projektet består av flera delar som är tänkta att användas tillsammans.
 
----
+### 🪐 Guides  
+https://melissaskywalkz.github.io/open-data-orbit/guides/  
 
-## 🧪 Labs: Access Terminal
+Praktiska steg-för-steg-guider som täcker både grunder och fördjupning.  
+Guiderna är skrivna med fokus på verkliga arbetsflöden och svensk kontext.
 
-**Access Terminal** är hjärtat i Labs – byggd för *paste → run → export*.
-
-Den kör helt i webbläsaren och kräver **ingen backend**.
-
-### Stödda verktyg & lägen
-
-#### 🧾 JSON
-- Validering & pretty print
-- Minify
-- Sortering av keys
-- Key-lista (deep)
-- Path-lookup (`a.b[0].c`)
-
-#### 🔄 CSV ⇄ JSON
-- Automatisk delimiter-detektion
-- CSV → JSON
-- JSON (array of objects) → CSV
-- Export direkt från output
-
-#### 🗺️ GeoJSON
-- Grundvalidering
-- Feature- & geometri-sammanfattning
-- Geometry-stats
-- Automatisk **bbox-beräkning**
-
-#### 🧩 DCAT (hardcore-ish)
-- Dataset- & distribution-checks
-- Identifierar vanliga fel:
-  - titel saknas
-  - beskrivning säger *vad* men inte *varför*
-  - kontaktpunkt saknas
-  - licens på fel nivå
-  - trasig accessURL / downloadURL
-- Ger **mänskliga hints** (ej full SHACL/RDF)
-
-> DCAT-checken är avsiktligt praktisk – inte akademiskt perfekt.
-
-#### 🧪 Schema (light)
-- Generera “light schema” från data
-- Validera array-of-objects
-- Identifiera saknade fält & felaktiga typer
-- Täcker ~80 % av verkliga datafel
+Guides är organiserade i nivåer:
+- konsoliderade guider som bygger stabil grund
+- prioriterade guider för tidiga och viktiga moment
+- fördjupningsguider för dig som vill gå vidare
 
 ---
 
-## 🛰️ Tech stack
+### 🪐 Resources  
+https://melissaskywalkz.github.io/open-data-orbit/resources/  
 
-- **Astro**
-- **GitHub Pages**
-- Vanilla CSS (glass / orbit theme)
-- Vanilla JavaScript
-- **No backend** – allt körs klient-side
+En kurerad samling av vägledningar, specifikationer, exempel och verktyg.  
+Resurserna är grupperade efter användningsområde och kompletterar guiderna.
 
----
-
-## 🚀 Deployment (GitHub Pages)
-
-Sajten deployas till **GitHub Pages**.
-
-### Aktivera Pages
-1. Gå till **Settings → Pages**
-2. Source: `gh-pages`
-3. Root: `/`
-4. Spara
-
-Sajten blir tillgänglig på:  
-`https://<username>.github.io/open-data-orbit/`
-
-### Deploy
-- Build & deploy sker automatiskt vid push till `main`
-- Manuell deploy kan köras via  
-  **Actions → Deploy Astro site to GitHub Pages**
+Här hittar du bland annat:
+- officiella rekommendationer och standarder
+- dokumentation från myndigheter och dataplattformar
+- verktyg som stödjer publicering, validering och analys
 
 ---
 
-## 🧑‍🚀 Contributing
+### 🪐 Labs  
+https://melissaskywalkz.github.io/open-data-orbit/labs/  
 
-Open Data Orbit är **community-driven** ❤️
+Labs är projektets experimentyta.  
+Här finns små verktyg och tester som gör det möjligt att arbeta direkt med data.
 
-Bidrag kan vara:
-- guider & tutorials
-- förbättringsförslag
-- buggar & idéer
-- verktyg till Labs
-- exempelprojekt
+Labs kan till exempel användas för att:
+- validera JSON och metadata
+- testa format och strukturer
+- visualisera och förstå dataflöden
 
-👉 Läs [`CONTRIBUTING.md`](./CONTRIBUTING.md)  
-👉 Använd **GitHub Discussions** för frågor & idéer  
-👉 Badges delas ut manuellt i MVP-fasen
+Labs är inte färdiga produkter. De är till för att utforska, prova och lära.
 
 ---
 
-## 📜 License
+### 🪐 Community  
+https://github.com/MelissaSkywalkz/open-data-orbit/discussions  
 
-MIT – använd, bygg vidare, dela.
+Communityt är platsen där projektet lever vidare.  
+Här kan du ställa frågor, dela erfarenheter, diskutera guider och föreslå förbättringar.
+
+Community används för:
+- frågor och svar
+- diskussioner om innehåll och arbetssätt
+- idéer till nya guider, resurser eller Labs
 
 ---
 
-**STATUS:** `IN ORBIT`  
-**MISSION:** `OPEN DATA`  
-**OBJECTIVE:** `TRANSPARENCY & USABILITY`
+## Hur använder du materialet?
+
+Vill du lära dig grunderna börjar du med Guides.  
+Vill du testa något praktiskt går du vidare till Labs.  
+Behöver du officiella definitioner och bakgrund använder du Resources.  
+Har du frågor, synpunkter eller idéer tar du dem i Community.
+
+Allt material är öppet att läsa och använda. Feedback och bidrag uppmuntras.
+
+---
+
+## Bidra
+
+Open Data Orbit utvecklas öppet och iterativt.  
+Du kan bidra genom att:
+- förbättra eller korrigera guider
+- föreslå eller lägga till resurser
+- bidra med nya Labs-idéer
+- ställa frågor som synliggör otydligheter
+
+Se `CONTRIBUTING.md` för hur du går tillväga.
+
+---
+
+## Teknik
+
+Webbplatsen är byggd med Astro och publiceras via GitHub Pages.
+
+Lokal utveckling:
+
+    cd site
+    npm install
+    npm run dev
+
+---
+
+## Licens
+
+MIT. Använd, ändra och dela fritt.
+
+---
+
+STATUS: IN ORBIT  
+MISSION: OPEN DATA  
+CREW: CONNECTED

@@ -232,7 +232,7 @@ h1 {
 
 p, ul, ol {
   margin-bottom: var(--spacing-md);
-  color: var(--muted);
+  color: var(--fg);
 }
 
 :focus-visible{

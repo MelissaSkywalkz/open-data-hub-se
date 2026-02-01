@@ -1,5 +1,5 @@
 ---
-title: Entryscape och dataportal.se – mental modell och vanliga fallgropar
+title: Entryscape och dataportal.se
 description: Praktisk guide till hur Entryscape och dataportal.se hänger ihop, och vanliga misstag vid publicering av öppna data.
 author: Open Data Orbit
 publishedAt: 2026-01-28
@@ -86,42 +86,25 @@ Användare hittar datan och går vidare till källan
 
 ### Metadata syns inte på dataportal.se
 
-**Vanliga orsaker:**
-- Obligatoriska fält saknas
-- Dataset saknar Distribution
-- Dataset är inte publicerat
-- Metadata är tekniskt korrekt men semantiskt bristfällig
+Vanliga orsaker: obligatoriska fält saknas, dataset saknar Distribution, dataset är inte publicerat, eller metadata är tekniskt korrekt men semantiskt bristfällig.
 
 ---
 
 ### “Dataportal.se borde fixa detta”
 
-Dataportal.se:
-- ändrar inte din metadata
-- gissar inte värden
-- kompletterar inte saknade fält
-
-**Ansvar ligger alltid hos utgivaren.**
+Dataportal.se ändrar inte din metadata, gissar inte värden och kompletterar inte saknade fält. Ansvar ligger alltid hos utgivaren.
 
 ---
 
 ### Dataset och Distribution blandas ihop
 
-**Vanligt misstag:**
-- Lägger licens eller format på Dataset istället för Distribution
-- Tror att URL räcker utan Distribution
-
-Det leder ofta till att metadata inte validerar korrekt.
+Vanligt misstag: licens eller format läggs på Dataset istället för Distribution, eller man tror att URL räcker utan Distribution. Det leder ofta till att metadata inte validerar korrekt.
 
 ---
 
 ## Vanliga misstag i praktiken
 
-- Otydliga eller interna titlar
-- Beskrivningar som saknar kontext
-- Kontaktpunkt som pekar på privatperson
-- Trasiga accessURL eller downloadURL
-- Metadata uppdateras inte när datan ändras
+Otydliga eller interna titlar, beskrivningar som saknar kontext, kontaktpunkt som pekar på privatperson, trasiga accessURL eller downloadURL, och metadata som inte uppdateras när datan ändras är alla vanliga problem.
 
 ---
 
@@ -136,9 +119,6 @@ Det leder ofta till att metadata inte validerar korrekt.
 
 ## Nästa steg
 
-- Läs guiden om DCAT-AP-SE obligatoriska fält
-- Fördjupa dig i rekommenderade metadatafält
-- Utforska Entryscapes dokumentation och demo
-- Ställ frågor i communityt när något är oklart
+Läs guiden om DCAT-AP-SE obligatoriska fält, fördjupa dig i rekommenderade metadatafält, utforska Entryscapes dokumentation och demo, och ställ frågor i communityt när något är oklart.
 
 Att förstå flödet sparar tid, frustration och supportärenden.

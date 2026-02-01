@@ -9,9 +9,9 @@ const MISSION_LOG = [
   {
     type: "UPLINK",
     icon: "book",
-    title: "DCAT-AP-SE – minimum required fields",
+    title: "DCAT-AP-SE obligatoriska fält",
     description:
-      "Ny guide som beskriver miniminivån för metadata — snabbt att checka av innan publicering.",
+      "Ny guide om den minsta metadata du behöver innan publicering. Snabb, praktisk checklista ingår.",
     tag: "GUIDE",
     pathLabel: "/guides/dcat-ap-se-obligatoriska-falt",
     href: `${base}guides/dcat-ap-se-obligatoriska-falt/`, // byt till specifik guide när den finns
@@ -20,9 +20,9 @@ const MISSION_LOG = [
   {
     type: "SYSTEM",
     icon: "code",
-    title: "JSON Checker / Beautifier added",
+    title: "JSON Checker och formatering",
     description:
-      "Snabb validering + formatering för JSON direkt i Labs. Bra för DCAT, GeoJSON, API-payloads.",
+      "Validera och formatera JSON direkt i webbläsaren. Perfekt för att checka DCAT, GeoJSON och API-data innan publicering.",
     tag: "LABS",
     pathLabel: "/labs",
     href: `${base}labs/`,
@@ -31,9 +31,9 @@ const MISSION_LOG = [
   {
     type: "CREW",
     icon: "chat",
-    title: "“How do I find the right metadata?”",
+    title: "Community diskussion: Val av metadatafält",
     description:
-      "Tråd om fält, vokabulärer och hur man väljer rätt nivå för kataloger/dataset.",
+      "Aktiv diskussion om hur du väljer rätt metadatafält för din dataset. Se hur andra gör det.",
     tag: "DISCUSSION",
     pathLabel: "/discussions",
     href: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions",
@@ -61,12 +61,12 @@ const MISSION_LOG = [
 
       <div class="hero-actions">
         <a href={`${base}guides/`} class="btn cta hero-btn primary">
-          <span>Launch Guides</span>
+          <span>Öppna Guider</span>
           <span class="btn-arrow" aria-hidden="true">→</span>
         </a>
 
         <a href={`${base}labs/`} class="btn secondary cta hero-btn">
-          <span>Open Labs</span>
+          <span>Öppna Labs</span>
           <span class="btn-arrow" aria-hidden="true">→</span>
         </a>
       </div>
@@ -100,7 +100,7 @@ const MISSION_LOG = [
         <a class="panel-link" role="listitem" href={`${base}guides/`}>
           <span class="panel-ico" aria-hidden="true"><Icon name="book" size={18} /></span>
           <span class="panel-text">
-            <span class="t">Guides</span>
+            <span class="t">Guider</span>
             <span class="d">Starta här: DCAT, metadata, publicering</span>
           </span>
           <span class="panel-arrow" aria-hidden="true">→</span>
@@ -203,7 +203,7 @@ const MISSION_LOG = [
     <div>
       <h2 id="mission-log-title" class="mission-log-title">Mission Log</h2>
       <p class="mission-log-subtitle">
-        Senaste händelser i omlopp — uppdateringar, nya guider och community-trådar.
+        Vad händer i orbit just nu? Nya guider, verktyg och diskussioner från communityt.
       </p>
     </div>
 
@@ -213,7 +213,7 @@ const MISSION_LOG = [
       target="_blank"
       rel="noopener"
     >
-      View Comms ↗
+      Gå till Discussions →
     </a>
   </div>
 

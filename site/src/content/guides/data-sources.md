@@ -17,60 +17,37 @@ tags:
 
 Sverige har ett relativt moget ekosystem för öppna data. Den här guiden ger en praktisk översikt över **var du hittar data**, **vilken typ av data som finns**, och **hur du bör tänka när du väljer datakälla**.
 
-Guiden är tänkt som en startpunkt – inte en fullständig katalog.
+Guiden är tänkt som en startpunkt, inte en fullständig katalog.
 
 ---
 
 ## Nationella portaler
 
 ### Dataportal.se
-Sveriges officiella portal för öppna data, förvaltad av DIGG (Myndigheten för digital förvaltning).
 
-Här publiceras metadata och länkar till dataset från:
-- Statliga myndigheter
-- Kommuner och regioner
-- Andra offentliga organisationer
+Sveriges officiella portal för öppna data, förvaltad av DIGG (Myndigheten för digital förvaltning). Här publiceras metadata och länkar till dataset från statliga myndigheter, kommuner, regioner och andra offentliga organisationer. Dataportal.se följer DCAT-AP-SE och fungerar som den centrala ingången till öppna data i Sverige.
 
-Dataportal.se följer i huvudsak **DCAT-AP-SE** och fungerar som den centrala ingången till öppna data i Sverige.
+URL: https://www.dataportal.se
 
-**URL:** https://www.dataportal.se
-
-**Tips:**  
-Metadata håller varierande kvalitet. Kontrollera alltid:
-- uppdateringsfrekvens  
-- licens  
-- kontaktuppgifter  
+Metadata håller varierande kvalitet. Kontrollera alltid uppdateringsfrekvens, licens och kontaktuppgifter när du använder en datakälla.  
 
 ---
 
 ## Statistik och forskning
 
 ### SCB – Statistiska centralbyrån
-SCB tillhandahåller officiell statistik om bland annat:
-- Befolkning
-- Ekonomi
-- Arbetsmarknad
-- Miljö och samhälle
 
-Data finns både via färdiga tabeller och via API:er.
+SCB tillhandahåller officiell statistik om befolkning, ekonomi, arbetsmarknad, miljö och samhälle. Data finns både via färdiga tabeller och via API:er. URL: https://www.scb.se
 
-**URL:** https://www.scb.se
-
-**Bra att veta:**  
-SCB:s data är ofta mycket stabil, men strukturen skiljer sig från Dataportal.se – metadata följer inte alltid DCAT rakt av.
+SCB:s data är ofta mycket stabil, men strukturen skiljer sig från Dataportal.se. Metadata följer inte alltid DCAT rakt av.
 
 ---
 
 ## Lokala och regionala initiativ
 
 ### Stockholm Open Data
-Stockholms stads portal för öppna data. Här finns data om bland annat:
-- Trafik och mobilitet
-- Geodata
-- Miljö
-- Stadens verksamheter
 
-**URL:** https://opendata.stockholm.se
+Stockholms stads portal för öppna data. Här finns data om trafik och mobilitet, geodata, miljö och stadens verksamheter. URL: https://opendata.stockholm.se
 
 Många kommuner har liknande portaler, men med varierande teknisk nivå och licenspraxis.
 
@@ -78,24 +55,10 @@ Många kommuner har liknande portaler, men med varierande teknisk nivå och lice
 
 ## Tips för att hitta och använda bra data
 
-1. **Börja brett**  
-   Använd Dataportal.se för överblick, men gå till källan för detaljer.
-
-2. **Läs metadata noggrant**  
-   Kontrollera beskrivning, aktualitet och datakvalitet.
-
-3. **Respektera licensen**  
-   De flesta öppna data i Sverige använder Creative Commons, men villkoren varierar.
-
-4. **Kontakta datakällan vid oklarheter**  
-   Seriösa dataproducenter svarar ofta snabbt.
+Börja brett med Dataportal.se för överblick, sedan gå till källan för detaljer. Läs alltid metadata noggrant för att kontrollera beskrivning, aktualitet och datakvalitet. Respektera licensen, eftersom de flesta öppna data i Sverige använder Creative Commons, men villkåren varierar. Kontakta datakällan vid oklarheter, så svar du ofta snabbt från seriösa dataproducenter.
 
 ---
 
 ## Relaterade standarder och riktlinjer
 
-- DCAT-AP-SE  
-- Svenskt ramverk för digital samverkan  
-- DIGG:s vägledningar för öppna data  
-
-(Dessa behandlas mer ingående i separata guider.)
+DCAT-AP-SE, Svenskt ramverk för digital samverkan och DIGG:s vägledningar för öppna data är alla centrala. (Dessa behandlas mer ingående i separata guider.)

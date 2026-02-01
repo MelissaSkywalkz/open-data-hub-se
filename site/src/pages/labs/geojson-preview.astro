@@ -172,9 +172,21 @@ const base = import.meta.env.BASE_URL;
     </ul>
   </section>
 
-  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js" defer></script>
+  <script
+    src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"
+    defer
+  ></script>
   <script is:inline>
-    window.addEventListener('load', () => {
+    const initMap = () => {
+      if (!window.maplibregl) {
+        const alertBox = document.getElementById('alert');
+        if (alertBox) {
+          alertBox.hidden = false;
+          alertBox.textContent = 'MapLibre failed to load. Check your network connection and refresh the page.';
+        }
+        return;
+      }
+
     const map = new maplibregl.Map({
       container: 'map',
       style: {
@@ -645,6 +657,20 @@ const base = import.meta.env.BASE_URL;
     map.on('load', () => {
       setStatus('Idle');
     });
+    };
+
+    window.addEventListener('load', () => {
+      if (window.maplibregl) {
+        initMap();
+        return;
+      }
+      const script = document.querySelector('script[src*="maplibre-gl"]');
+      if (script) {
+        script.addEventListener('load', initMap);
+        script.addEventListener('error', initMap);
+      } else {
+        initMap();
+      }
     });
   </script>
 </Layout>

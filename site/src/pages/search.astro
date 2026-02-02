@@ -11,24 +11,26 @@ const fallbackItems = await buildSearchIndex();
     <p class="search-kicker mono">SEARCH / CONSOLE</p>
     <h1 class="search-title">Sök i Open Data Orbit</h1>
     <p class="search-subtitle">
-      Lokalt index för guider, resurser och Labs.
+      Lokalt index för guider, resurser och Labs. Fuzzy search med direktfiltrering.
     </p>
   </header>
 
   <section class="search-panel" aria-label="Sökverktyg">
     <div class="control-block">
       <form class="search-form" action={`${base}search/`} method="get">
-        <label class="field-label" for="query">Sök</label>
         <div class="field-row search-field">
           <span class="search-indicator" aria-hidden="true">▸</span>
           <input
             id="query"
             name="q"
-            class="lab-input search-input"
+            class="lab-input search-input mono"
             type="search"
-            placeholder="Sök guider, resurser och labs..."
+            placeholder="Type to scan the orbit…"
+            autofocus
           />
-          <button class="btn secondary search-btn" type="submit">Sök</button>
+          <div class="kbd-group">
+            <span class="kbd">CTRL</span><span class="kbd">K</span>
+          </div>
         </div>
       </form>
 
@@ -73,8 +75,7 @@ const fallbackItems = await buildSearchIndex();
     </noscript>
   </section>
 
-  <script is:inline>
-    const basePath = {JSON.stringify(base)};
+  <script is:inline define:vars={{ basePath: base }}>
     const searchInput = document.getElementById('query');
     const resultsGrid = document.getElementById('resultsGrid');
     const resultsMeta = document.getElementById('resultsMeta');
@@ -84,7 +85,7 @@ const fallbackItems = await buildSearchIndex();
       value
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\\u0300-\\u036f]/g, '');
+        .replace(/[\u0300-\u036f]/g, '');
 
     const isSubsequence = (needle, haystack) => {
       let i = 0;
@@ -110,7 +111,6 @@ const fallbackItems = await buildSearchIndex();
             <article class="result-card">
               <div class="result-head">
                 <span class="result-badge">${item.badge}</span>
-                <span class="result-type">${item.type}</span>
               </div>
               <h3 class="result-title"><a href="${item.url}">${item.title}</a></h3>
               <p class="result-desc">${item.description}</p>
@@ -196,7 +196,9 @@ const fallbackItems = await buildSearchIndex();
 .search-panel{
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(13,17,23,0.55);
+  background: rgba(22,27,34,0.66);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: calc(var(--spacing-md) * 0.9);
   box-shadow: 0 20px 55px rgba(0,0,0,0.28);
 }
@@ -212,28 +214,47 @@ const fallbackItems = await buildSearchIndex();
 }
 .search-field{
   position: relative;
-  align-items: center;
+  width: 100%;
 }
 .search-indicator{
   position: absolute;
   left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
   color: rgba(88,166,255,0.85);
   font-size: 0.9rem;
   pointer-events: none;
+  z-index: 1;
 }
 .search-input{
-  padding-left: 32px;
-  font-size: 1.05rem;
+  width: 100%;
+  padding-left: 36px;
+  padding-right: 80px;
+  font-size: 0.95rem;
   padding-top: 10px;
   padding-bottom: 10px;
-  border: 1px solid rgba(255,255,255,0.16);
+  border: 1px solid rgba(88,166,255,0.16);
   background: rgba(13,17,23,0.6);
+  letter-spacing: 0.04em;
+  border-radius: 8px;
 }
-.search-btn{
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.kbd-group{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+}
+.kbd{
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(22,27,34,0.70);
+  color: rgba(230,237,243,0.70);
 }
 .search-input:focus{
   outline: none;

@@ -47,13 +47,13 @@ const isActive = (href: string) => {
     </ul>
 
     <form class="nav-search" action={`${base}search/`} method="get" role="search">
-      <label class="sr-only" for="nav-search-input">Sök</label>
       <input
         id="nav-search-input"
         name="q"
         class="nav-search__input"
         type="search"
         placeholder="Sök..."
+        aria-label="Sök"
       />
     </form>
 
@@ -79,13 +79,13 @@ const isActive = (href: string) => {
       </div>
 
       <form class="nav-search mobile" action={`${base}search/`} method="get" role="search">
-        <label class="sr-only" for="nav-search-input-mobile">Sök</label>
         <input
           id="nav-search-input-mobile"
           name="q"
           class="nav-search__input"
           type="search"
           placeholder="Sök..."
+          aria-label="Sök"
         />
       </form>
 
@@ -231,6 +231,8 @@ const isActive = (href: string) => {
   background: rgba(13,17,23,0.35);
   color: rgba(230,237,243,0.85);
   font-size: 0.85rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
 }
 .nav-search__input::placeholder{
   color: rgba(230,237,243,0.45);

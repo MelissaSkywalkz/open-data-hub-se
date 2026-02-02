@@ -12,4 +12,11 @@ const guidesCollection = defineCollection({
 
 export const collections = {
   guides: guidesCollection,
+  labs: defineCollection({
+    schema: z.object({
+      title: z.string(),
+      description: z.string(),
+      publishedAt: z.date(),
+    }),
+  }),
 };

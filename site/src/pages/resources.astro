@@ -21,16 +21,6 @@ const sections = getResourceSections(base);
       <Badge label="COMMS READY" variant="comms" icon="antenna" />
     </div>
 
-    <div class="res-search card" aria-hidden="true">
-      <div class="search-left">
-        <span class="search-label mono">SEARCH</span>
-        <span class="search-hint">Kommer senare: filtrering + “copy link”</span>
-      </div>
-      <div class="search-box">
-        <span class="search-placeholder mono">Type to scan the orbit…</span>
-        <span class="kbd">CTRL</span><span class="kbd">K</span>
-      </div>
-    </div>
 
     <div class="glow-line"></div>
   </section>
@@ -116,62 +106,6 @@ const sections = getResourceSections(base);
   flex-wrap: wrap;
   gap: 10px;
   margin-top: var(--spacing-md);
-}
-
-/* visual-only search panel */
-.res-search{
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-lg);
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: var(--spacing-lg);
-  background: rgba(22,27,34,0.66);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.28);
-}
-
-.search-left{
-  display:flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.search-label{
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(88,166,255,0.85);
-  font-weight: 900;
-}
-.search-hint{
-  color: rgba(230,237,243,0.62);
-}
-
-.search-box{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(88,166,255,0.16);
-  background: rgba(13,17,23,0.20);
-  min-width: min(420px, 100%);
-}
-.search-placeholder{
-  color: rgba(230,237,243,0.55);
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-}
-.kbd{
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(22,27,34,0.70);
-  color: rgba(230,237,243,0.70);
 }
 
 /* Grid */

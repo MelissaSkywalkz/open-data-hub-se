@@ -1,6 +1,5 @@
 import { getCollection } from 'astro:content';
 import { getResourceSections } from '../data/resources';
-import { getLabs } from '../data/labs';
 
 export type SearchItem = {
   id: string;
@@ -14,6 +13,7 @@ export type SearchItem = {
 export const buildSearchIndex = async (): Promise<SearchItem[]> => {
   const base = import.meta.env.BASE_URL;
   const guides = await getCollection('guides');
+  const labs = await getCollection('labs');
 
   const guideItems: SearchItem[] = guides.map((guide) => ({
     id: `guide:${guide.slug}`,
@@ -35,13 +35,13 @@ export const buildSearchIndex = async (): Promise<SearchItem[]> => {
     }))
   );
 
-  const labItems: SearchItem[] = getLabs(base).map((lab) => ({
-    id: `lab:${lab.title.toLowerCase().replace(/\\s+/g, '-')}`,
+  const labItems: SearchItem[] = labs.map((lab) => ({
+    id: `lab:${lab.slug}`,
     type: 'lab',
-    title: lab.title,
-    description: lab.description,
-    url: lab.url,
-    badge: lab.badge,
+    title: lab.data.title,
+    description: lab.data.description,
+    url: `${base}labs/${lab.slug}/`,
+    badge: 'LAB',
   }));
 
   return [...guideItems, ...resourceItems, ...labItems];

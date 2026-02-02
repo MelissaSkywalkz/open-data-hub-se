@@ -2,45 +2,99 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
+import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
+const guides = await getCollection('guides');
+const labs = await getCollection('labs');
 
-const MISSION_LOG = [
-  {
-    type: "UPLINK",
-    icon: "book",
-    title: "DCAT-AP-SE obligatoriska fält",
-    description:
-      "Ny guide om den minsta metadata du behöver innan publicering. Snabb, praktisk checklista ingår.",
-    tag: "GUIDE",
-    pathLabel: "/guides/dcat-ap-se-obligatoriska-falt",
-    href: `${base}guides/dcat-ap-se-obligatoriska-falt/`, // byt till specifik guide när den finns
-    timeLabel: "RECENT",
-  },
-  {
-    type: "SYSTEM",
-    icon: "code",
-    title: "JSON Checker och formatering",
-    description:
-      "Validera och formatera JSON direkt i webbläsaren. Perfekt för att checka DCAT, GeoJSON och API-data innan publicering.",
-    tag: "LABS",
-    pathLabel: "/labs",
-    href: `${base}labs/`,
-    timeLabel: "RECENT",
-  },
-  {
-    type: "CREW",
-    icon: "chat",
-    title: "Community diskussion: Val av metadatafält",
-    description:
-      "Aktiv diskussion om hur du väljer rätt metadatafält för din dataset. Se hur andra gör det.",
-    tag: "DISCUSSION",
-    pathLabel: "/discussions",
-    href: "https://github.com/MelissaSkywalkz/open-data-orbit/discussions",
-    timeLabel: "RECENT",
-    external: true,
-  },
-];
+const formatDate = (date?: Date) =>
+  date
+    ? new Intl.DateTimeFormat('sv-SE', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+      }).format(date)
+    : 'N/A';
+
+const buildContentLog = (items, typeLabel, icon, tag, basePath) =>
+  items.map((item) => ({
+    type: typeLabel,
+    icon,
+    title: item.data.title,
+    description: item.data.description,
+    tag,
+    pathLabel: `${basePath}/${item.slug}`,
+    href: `${base}${basePath}/${item.slug}/`,
+    timeLabel: formatDate(item.data.publishedAt),
+    sortDate: item.data.publishedAt?.getTime() || 0,
+  }));
+
+const latestContent = [
+  ...buildContentLog(guides, 'GUIDE', 'book', 'GUIDE', 'guides'),
+  ...buildContentLog(labs, 'LAB', 'code', 'LABS', 'labs'),
+]
+  .sort((a, b) => b.sortDate - a.sortDate)
+  .slice(0, 3);
+
+const fetchDiscussions = async () => {
+  const url = 'https://github.com/MelissaSkywalkz/open-data-orbit/discussions.atom';
+  try {
+    const response = await fetch(url, {
+      headers: { Accept: 'application/atom+xml' },
+      cache: 'force-cache',
+    });
+    if (!response.ok) {
+      return [];
+    }
+    const text = await response.text();
+    const entries = Array.from(text.matchAll(/<entry>([\\s\\S]*?)<\\/entry>/g)).slice(0, 3);
+    return entries.map((match) => {
+      const entry = match[1];
+      const title = (entry.match(/<title>([\\s\\S]*?)<\\/title>/)?.[1] || '')
+        .replace(/<!\\[CDATA\\[|\\]\\]>/g, '')
+        .trim();
+      const link = entry.match(/<link[^>]*href=\"([^\"]+)\"/i)?.[1] || url;
+      const updated = entry.match(/<updated>([^<]+)<\\/updated>/)?.[1];
+      const published = entry.match(/<published>([^<]+)<\\/published>/)?.[1];
+      const date = new Date(updated || published || Date.now());
+      return {
+        type: 'CREW',
+        icon: 'chat',
+        title,
+        description: 'Ny diskussion i communityt.',
+        tag: 'DISCUSSION',
+        pathLabel: '/discussions',
+        href: link,
+        timeLabel: formatDate(date),
+        external: true,
+        sortDate: date.getTime(),
+      };
+    });
+  } catch (error) {
+    return [];
+  }
+};
+
+const discussions = await fetchDiscussions();
+const discussionLog = discussions.length
+  ? discussions
+  : [
+      {
+        type: 'CREW',
+        icon: 'chat',
+        title: 'Inga nya diskussioner just nu',
+        description: 'Starta en ny tråd eller kika in senare för uppdateringar.',
+        tag: 'DISCUSSION',
+        pathLabel: '/discussions',
+        href: 'https://github.com/MelissaSkywalkz/open-data-orbit/discussions',
+        timeLabel: 'N/A',
+        external: true,
+        sortDate: 0,
+      },
+    ];
+
+const MISSION_LOG = [...latestContent, ...discussionLog].sort((a, b) => b.sortDate - a.sortDate);
 ---
 
 <Layout title="Open Data Orbit" description="Communitydriven kunskapsbank för öppna data i Sverige.">

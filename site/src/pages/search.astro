@@ -1,0 +1,378 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { buildSearchIndex } from '../utils/searchIndex';
+
+const base = import.meta.env.BASE_URL;
+const fallbackItems = await buildSearchIndex();
+---
+
+<Layout title="Sök · Open Data Orbit" description="Sök bland guider, resurser och Labs.">
+  <header class="search-hero">
+    <p class="search-kicker mono">SEARCH / CONSOLE</p>
+    <h1 class="search-title">Sök i Open Data Orbit</h1>
+    <p class="search-subtitle">
+      Lokalt index för guider, resurser och Labs.
+    </p>
+  </header>
+
+  <section class="search-panel" aria-label="Sökverktyg">
+    <div class="control-block">
+      <form class="search-form" action={`${base}search/`} method="get">
+        <label class="field-label" for="query">Sök</label>
+        <div class="field-row search-field">
+          <span class="search-indicator" aria-hidden="true">▸</span>
+          <input
+            id="query"
+            name="q"
+            class="lab-input search-input"
+            type="search"
+            placeholder="Sök guider, resurser och labs..."
+          />
+          <button class="btn secondary search-btn" type="submit">Sök</button>
+        </div>
+      </form>
+
+      <div class="filter-row" role="group" aria-label="Filtrera">
+        <label class="filter-chip">
+          <input type="checkbox" value="guide" checked />
+          <span>Guider</span>
+        </label>
+        <label class="filter-chip">
+          <input type="checkbox" value="resource" checked />
+          <span>Resurser</span>
+        </label>
+        <label class="filter-chip">
+          <input type="checkbox" value="lab" checked />
+          <span>Labs</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="results-zone">
+      <div class="results-meta" id="resultsMeta" aria-live="polite"></div>
+      <div class="results-grid" id="resultsGrid"></div>
+      <div class="empty-state">
+        <p class="empty-title">Inga träffar ännu</p>
+        <p class="empty-desc">Prova sökningar som: <span class="mono">geojson</span>, <span class="mono">dcat</span>, <span class="mono">API</span> eller <span class="mono">kommun</span>.</p>
+      </div>
+    </div>
+
+    <noscript>
+      <div class="fallback">
+        <p class="fallback-title">Sök utan JavaScript</p>
+        <ul class="fallback-list">
+          {fallbackItems.map((item) => (
+            <li>
+              <a href={item.url}>{item.title}</a>
+              <span class="fallback-type">{item.type}</span>
+              <p class="fallback-desc">{item.description}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </noscript>
+  </section>
+
+  <script is:inline>
+    const basePath = {JSON.stringify(base)};
+    const searchInput = document.getElementById('query');
+    const resultsGrid = document.getElementById('resultsGrid');
+    const resultsMeta = document.getElementById('resultsMeta');
+    const filterInputs = Array.from(document.querySelectorAll('.filter-chip input'));
+
+    const normalizeText = (value) =>
+      value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\\u0300-\\u036f]/g, '');
+
+    const isSubsequence = (needle, haystack) => {
+      let i = 0;
+      let j = 0;
+      while (i < needle.length && j < haystack.length) {
+        if (needle[i] === haystack[j]) i += 1;
+        j += 1;
+      }
+      return i === needle.length;
+    };
+
+    const scoreMatch = (query, text) => {
+      if (!query) return 0;
+      if (text.includes(query)) return 2;
+      if (isSubsequence(query, text)) return 1;
+      return 0;
+    };
+
+    const renderResults = (items) => {
+      resultsGrid.innerHTML = items
+        .map(
+          (item) => `
+            <article class="result-card">
+              <div class="result-head">
+                <span class="result-badge">${item.badge}</span>
+                <span class="result-type">${item.type}</span>
+              </div>
+              <h3 class="result-title"><a href="${item.url}">${item.title}</a></h3>
+              <p class="result-desc">${item.description}</p>
+            </article>
+          `
+        )
+        .join('');
+    };
+
+    const getActiveFilters = () =>
+      filterInputs.filter((input) => input.checked).map((input) => input.value);
+
+    const runSearch = (items) => {
+      const query = normalizeText(searchInput.value.trim());
+      const activeFilters = getActiveFilters();
+      const filtered = items
+        .filter((item) => activeFilters.includes(item.type))
+        .map((item) => {
+          const haystack = normalizeText(`${item.title} ${item.description}`);
+          const score = scoreMatch(query, haystack);
+          return { ...item, score };
+        })
+        .filter((item) => (query ? item.score > 0 : true))
+        .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+
+      const typeCounts = filtered.reduce((acc, item) => {
+        acc[item.type] = (acc[item.type] || 0) + 1;
+        return acc;
+      }, {});
+      const breakdown = [
+        typeCounts.guide ? `${typeCounts.guide} guider` : null,
+        typeCounts.resource ? `${typeCounts.resource} resurser` : null,
+        typeCounts.lab ? `${typeCounts.lab} labs` : null,
+      ].filter(Boolean).join(' · ');
+      resultsMeta.textContent = query
+        ? `${filtered.length} träffar för “${searchInput.value.trim()}”`
+        : `Visar ${filtered.length} poster${breakdown ? ` · ${breakdown}` : ''}`;
+      renderResults(filtered);
+    };
+
+    const loadIndex = async () => {
+      try {
+        const response = await fetch(`${window.location.origin}${basePath}search.json`);
+        const data = await response.json();
+        const urlQuery = new URLSearchParams(window.location.search).get('q') || '';
+        if (urlQuery) searchInput.value = urlQuery;
+        runSearch(data.items || []);
+        searchInput.addEventListener('input', () => runSearch(data.items || []));
+        filterInputs.forEach((input) => input.addEventListener('change', () => runSearch(data.items || [])));
+      } catch (error) {
+        resultsMeta.textContent = 'Kunde inte ladda sökindexet.';
+      }
+    };
+
+    loadIndex();
+  </script>
+</Layout>
+
+<style>
+.search-hero{
+  text-align: center;
+  padding: calc(var(--spacing-xs) * 0.85) 0 calc(var(--spacing-sm) * 0.85);
+}
+.search-kicker{
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.8);
+  margin-bottom: 4px;
+}
+.search-title{
+  margin: 0 0 2px;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+.search-subtitle{
+  margin: 0 auto;
+  color: rgba(230,237,243,0.72);
+  max-width: 60ch;
+  font-size: 0.88rem;
+}
+.search-panel{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.55);
+  padding: calc(var(--spacing-md) * 0.9);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.28);
+}
+.control-block{
+  border-radius: 16px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.45);
+  padding: 14px;
+  margin-bottom: calc(var(--spacing-sm) * 0.85);
+}
+.search-form{
+  margin-bottom: 8px;
+}
+.search-field{
+  position: relative;
+  align-items: center;
+}
+.search-indicator{
+  position: absolute;
+  left: 14px;
+  color: rgba(88,166,255,0.85);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+.search-input{
+  padding-left: 32px;
+  font-size: 1.05rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(13,17,23,0.6);
+}
+.search-btn{
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.search-input:focus{
+  outline: none;
+  border-color: rgba(88,166,255,0.6);
+  box-shadow: 0 0 0 2px rgba(88,166,255,0.28);
+}
+.filter-row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+}
+.filter-chip{
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.3);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.filter-chip input{ accent-color: rgba(88,166,255,0.9); }
+.filter-chip:has(input:checked){
+  border-color: rgba(88,166,255,0.4);
+  color: rgba(88,166,255,0.9);
+  background: rgba(13,17,23,0.5);
+  box-shadow: inset 0 0 0 1px rgba(88,166,255,0.2);
+}
+.results-meta{
+  font-size: 0.85rem;
+  color: rgba(230,237,243,0.6);
+  margin-bottom: 6px;
+}
+.results-zone{
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 10px;
+}
+.results-grid{
+  display: grid;
+  gap: 12px;
+}
+.results-grid:empty + .empty-state{
+  display: block;
+}
+.empty-state{
+  display: none;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(88,166,255,0.2);
+  color: rgba(230,237,243,0.7);
+  background: rgba(13,17,23,0.4);
+  text-align: center;
+}
+.empty-title{
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.8);
+}
+.empty-desc{
+  margin: 0;
+  font-size: 0.9rem;
+}
+.result-card{
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.4);
+}
+.result-head{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.result-badge{
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.9);
+  border: 1px solid rgba(88,166,255,0.2);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.result-type{
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(230,237,243,0.55);
+}
+.result-title{
+  margin: 0 0 6px;
+}
+.result-title a{
+  color: rgba(230,237,243,0.95);
+  text-decoration: none;
+}
+.result-title a:hover{
+  text-decoration: underline;
+}
+.result-desc{
+  margin: 0;
+  color: rgba(230,237,243,0.7);
+  font-size: 0.9rem;
+}
+.fallback{
+  margin-top: var(--spacing-md);
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.4);
+}
+.fallback-title{
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.8);
+}
+.fallback-list{
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(230,237,243,0.85);
+}
+.fallback-list li{ margin-bottom: 10px; }
+.fallback-type{
+  margin-left: 8px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: rgba(230,237,243,0.55);
+}
+.fallback-desc{
+  margin: 4px 0 0;
+  color: rgba(230,237,243,0.65);
+  font-size: 0.85rem;
+}
+</style>

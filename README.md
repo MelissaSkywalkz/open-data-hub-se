@@ -64,8 +64,16 @@ Labs kan till exempel användas för att:
 - validera JSON och metadata
 - testa format och strukturer
 - visualisera och förstå dataflöden
+- förhandsvisa GeoJSON + CSV på mörk basemap med export (GeoJSON Preview Map)
+- förhandsvisa WMS-lager via GetCapabilities med lagerlista (WMS Preview)
 
 Labs är inte färdiga produkter. De är till för att utforska, prova och lära.
+
+---
+
+### 🔎 Sök
+
+Sökindexet byggs vid build genom att samla guider (content collection), resurser (kuraterade listor) och labs till ett lokalt JSON-index (`/search.json`). Sidan `/search` lazy‑loadar indexet client‑side och har en enkel fallback‑lista utan JavaScript.
 
 ---
 

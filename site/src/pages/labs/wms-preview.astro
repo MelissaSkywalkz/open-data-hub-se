@@ -1,0 +1,607 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout
+  title="WMS Preview · Labs"
+  description="Preview WMS layers on a dark basemap without any backend."
+>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+    />
+  </head>
+
+  <header class="lab-hero">
+    <p class="lab-kicker">LABS / WMS</p>
+    <h1 class="lab-title">WMS Preview</h1>
+    <p class="lab-subtitle">
+      Load a WMS GetCapabilities document, choose a layer, and preview it on a dark basemap.
+    </p>
+
+    <div class="lab-actions">
+      <a class="btn secondary" href={`${base}labs/`}>Back to Labs</a>
+    </div>
+  </header>
+
+  <section class="lab-shell" aria-label="WMS preview workspace">
+    <div class="lab-panel">
+      <div class="lab-panel__head">
+        <div>
+          <p class="panel-kicker mono">WMS INPUT</p>
+          <h2 class="panel-title">Load GetCapabilities</h2>
+        </div>
+      </div>
+
+      <label class="field-label" for="wmsUrl">WMS URL</label>
+      <div class="field-row">
+        <input
+          id="wmsUrl"
+          class="lab-input"
+          type="url"
+          placeholder="https://example.com/geoserver/wms?service=WMS&request=GetCapabilities"
+        />
+        <button class="btn cta" id="loadWmsBtn" type="button">Fetch</button>
+      </div>
+      <p class="field-hint">
+        If CORS blocks the request, open the URL in a new tab and ensure it allows cross-origin access.
+      </p>
+
+      <div class="lab-status" aria-live="polite">
+        <div>
+          <span class="status-label">Layers</span>
+          <span id="statusLayers">0</span>
+        </div>
+        <div>
+          <span class="status-label">Selected</span>
+          <span id="statusSelected">-</span>
+        </div>
+        <div class="status-pill" id="statusMessage">Idle</div>
+      </div>
+
+      <div class="lab-alert" id="alert" role="alert" hidden></div>
+      <div class="lab-warning" id="warning" role="status" hidden></div>
+
+      <div class="layer-list" id="layerList" hidden>
+        <p class="list-title">Available layers</p>
+        <div id="layerItems" class="list-items" role="radiogroup" aria-label="WMS layers"></div>
+      </div>
+    </div>
+
+    <div class="map-panel" aria-label="Map preview">
+      <div id="map" class="map"></div>
+      <aside class="info-panel" aria-live="polite">
+        <h3 class="info-title">Layer Info</h3>
+        <pre id="layerInfo" class="info-content">Select a layer to render it on the map.</pre>
+      </aside>
+    </div>
+  </section>
+
+  <script is:inline>
+    const MAPLIBRE_SRC = 'https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js';
+
+    const loadScriptOnce = (src) =>
+      new Promise((resolve, reject) => {
+        if (window.maplibregl) return resolve(window.maplibregl);
+
+        const existing = document.querySelector('script[data-maplibre="true"]');
+        if (existing) {
+          existing.addEventListener('load', () => resolve(window.maplibregl));
+          existing.addEventListener('error', reject);
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.defer = true;
+        script.dataset.maplibre = 'true';
+        script.onload = () => resolve(window.maplibregl);
+        script.onerror = () => reject(new Error('Failed to load MapLibre script.'));
+        document.head.appendChild(script);
+      });
+
+    const start = (maplibregl) => {
+      if (!maplibregl) throw new Error('MapLibre not available after load.');
+
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: {
+          version: 8,
+          sources: {
+            dark: {
+              type: 'raster',
+              tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'],
+              tileSize: 256,
+              attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            },
+          },
+          layers: [{ id: 'dark', type: 'raster', source: 'dark' }],
+        },
+        center: [15.0, 62.0],
+        zoom: 4,
+        maxZoom: 18,
+      });
+
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }));
+
+      const wmsUrlInput = document.getElementById('wmsUrl');
+      const loadWmsBtn = document.getElementById('loadWmsBtn');
+      const statusLayers = document.getElementById('statusLayers');
+      const statusSelected = document.getElementById('statusSelected');
+      const statusMessage = document.getElementById('statusMessage');
+      const alertBox = document.getElementById('alert');
+      const warningBox = document.getElementById('warning');
+      const layerList = document.getElementById('layerList');
+      const layerItems = document.getElementById('layerItems');
+      const layerInfo = document.getElementById('layerInfo');
+
+      let currentLayers = [];
+      let currentBaseUrl = '';
+      const params = new URLSearchParams(window.location.search);
+
+      const setStatus = (message) => {
+        statusMessage.textContent = message;
+      };
+
+      const showAlert = (message) => {
+        alertBox.hidden = false;
+        alertBox.textContent = message;
+      };
+
+      const showWarning = (message) => {
+        warningBox.hidden = false;
+        warningBox.textContent = message;
+      };
+
+      const clearMessages = () => {
+        alertBox.hidden = true;
+        alertBox.textContent = '';
+        warningBox.hidden = true;
+        warningBox.textContent = '';
+      };
+
+      const clearLayerList = () => {
+        layerItems.innerHTML = '';
+        layerList.hidden = true;
+        currentLayers = [];
+        statusLayers.textContent = '0';
+        statusSelected.textContent = '-';
+        layerInfo.textContent = 'Select a layer to render it on the map.';
+      };
+
+      const setParam = (key, value) => {
+        if (!value) {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
+        const query = params.toString();
+        const nextUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+        window.history.replaceState(null, '', nextUrl);
+      };
+
+      const restoreMapView = () => {
+        const centerParam = params.get('center');
+        const zoomParam = params.get('zoom');
+        if (!centerParam || !zoomParam) return;
+        const [lng, lat] = centerParam.split(',').map((value) => Number(value));
+        const zoom = Number(zoomParam);
+        if (!Number.isFinite(lng) || !Number.isFinite(lat) || !Number.isFinite(zoom)) return;
+        map.jumpTo({ center: [lng, lat], zoom });
+      };
+
+      const buildCapabilitiesUrl = (rawUrl) => {
+        const url = new URL(rawUrl);
+        url.searchParams.set('service', 'WMS');
+        url.searchParams.set('request', 'GetCapabilities');
+        return url.toString();
+      };
+
+      const parseCapabilities = (xmlText) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xmlText, 'text/xml');
+        const error = doc.querySelector('parsererror');
+        if (error) {
+          throw new Error('Unable to parse GetCapabilities response.');
+        }
+        const layers = Array.from(doc.querySelectorAll('Layer > Name')).map((nameNode) => {
+          const layerNode = nameNode.parentElement;
+          const titleNode = layerNode?.querySelector('Title');
+          return {
+            name: nameNode.textContent?.trim() || '',
+            title: titleNode?.textContent?.trim() || '',
+          };
+        }).filter((layer) => layer.name);
+        return layers;
+      };
+
+      const buildWmsTiles = (baseUrl, layerName) => {
+        const url = new URL(baseUrl);
+        url.searchParams.set('service', 'WMS');
+        url.searchParams.set('request', 'GetMap');
+        url.searchParams.set('layers', layerName);
+        url.searchParams.set('styles', '');
+        url.searchParams.set('format', 'image/png');
+        url.searchParams.set('transparent', 'true');
+        url.searchParams.set('version', '1.3.0');
+        url.searchParams.set('crs', 'EPSG:3857');
+        url.searchParams.set('width', '256');
+        url.searchParams.set('height', '256');
+        url.searchParams.set('bbox', '{bbox-epsg-3857}');
+        return url.toString();
+      };
+
+      const renderLayer = (layer) => {
+        if (map.getLayer('wms-layer')) map.removeLayer('wms-layer');
+        if (map.getSource('wms-source')) map.removeSource('wms-source');
+
+        const tileUrl = buildWmsTiles(currentBaseUrl, layer.name);
+        map.addSource('wms-source', {
+          type: 'raster',
+          tiles: [tileUrl],
+          tileSize: 256,
+        });
+
+        map.addLayer({
+          id: 'wms-layer',
+          type: 'raster',
+          source: 'wms-source',
+        });
+
+        statusSelected.textContent = layer.title || layer.name;
+        layerInfo.textContent = layer.title
+          ? `${layer.title}\n(${layer.name})`
+          : layer.name;
+        setParam('layer', layer.name);
+      };
+
+      const populateLayers = (layers) => {
+        clearLayerList();
+        currentLayers = layers;
+        statusLayers.textContent = layers.length.toString();
+        if (!layers.length) {
+          showAlert('No named layers were found in the GetCapabilities response.');
+          setStatus('Idle');
+          return;
+        }
+
+        layerItems.innerHTML = layers
+          .map((layer, index) => {
+            const title = layer.title || layer.name;
+            return `
+              <label class="layer-item">
+                <input type="radio" name="wms-layer" value="${layer.name}" data-index="${index}" />
+                <span>${title}</span>
+              </label>
+            `;
+          })
+          .join('');
+        layerList.hidden = false;
+
+        const savedLayer = params.get('layer');
+        if (savedLayer) {
+          const selectedIndex = layers.findIndex((layer) => layer.name === savedLayer);
+          if (selectedIndex >= 0) {
+            const input = layerItems.querySelector(`input[data-index=\"${selectedIndex}\"]`);
+            if (input instanceof HTMLInputElement) {
+              input.checked = true;
+              renderLayer(layers[selectedIndex]);
+            }
+          }
+        }
+      };
+
+      const fetchCapabilities = async () => {
+        const rawUrl = wmsUrlInput.value.trim();
+        if (!rawUrl) {
+          showAlert('Please enter a WMS URL.');
+          setStatus('Idle');
+          return;
+        }
+        clearMessages();
+        clearLayerList();
+        setStatus('Fetching');
+
+        let capabilitiesUrl = rawUrl;
+        try {
+          capabilitiesUrl = buildCapabilitiesUrl(rawUrl);
+          currentBaseUrl = rawUrl;
+          setParam('wms', rawUrl);
+        } catch (error) {
+          showAlert('Invalid URL. Please provide a valid WMS endpoint.');
+          setStatus('Error');
+          return;
+        }
+
+        try {
+          const response = await fetch(capabilitiesUrl, { mode: 'cors' });
+          if (!response.ok) {
+            showAlert(`Fetch failed with status ${response.status} ${response.statusText}.`);
+            setStatus('Error');
+            return;
+          }
+          const text = await response.text();
+          const layers = parseCapabilities(text);
+          populateLayers(layers);
+          setStatus('Ready');
+        } catch (error) {
+          const message =
+            error instanceof TypeError
+              ? 'CORS blocked the request. Ensure the WMS server allows cross-origin access.'
+              : error.message || 'Unable to fetch GetCapabilities.';
+          showAlert(message);
+          showWarning('Tip: try opening the GetCapabilities URL in a new tab to verify access.');
+          setStatus('Error');
+        }
+      };
+
+      layerItems.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement)) return;
+        const index = Number(target.dataset.index);
+        const layer = currentLayers[index];
+        if (!layer) return;
+        renderLayer(layer);
+      });
+
+      loadWmsBtn.addEventListener('click', fetchCapabilities);
+      wmsUrlInput.addEventListener('change', () => {
+        setParam('wms', wmsUrlInput.value.trim());
+      });
+
+      map.on('moveend', () => {
+        const center = map.getCenter();
+        setParam('center', `${center.lng.toFixed(5)},${center.lat.toFixed(5)}`);
+        setParam('zoom', map.getZoom().toFixed(2));
+      });
+
+      map.on('load', () => {
+        restoreMapView();
+        setStatus('Idle');
+      });
+
+      const savedWms = params.get('wms');
+      if (savedWms) {
+        wmsUrlInput.value = savedWms;
+      }
+    };
+
+    const boot = async () => {
+      try {
+        const maplibregl = await loadScriptOnce(MAPLIBRE_SRC);
+        start(maplibregl);
+      } catch (error) {
+        console.error(error);
+        const alertBox = document.getElementById('alert');
+        if (alertBox) {
+          alertBox.hidden = false;
+          alertBox.textContent = 'Failed to initialize MapLibre. Check console for details.';
+        }
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  </script>
+</Layout>
+
+<style>
+.lab-hero{
+  text-align: center;
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+}
+.lab-kicker{
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.8);
+  margin-bottom: 8px;
+}
+.lab-title{
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+.lab-subtitle{
+  margin: 0 auto;
+  color: rgba(230,237,243,0.72);
+  max-width: 60ch;
+}
+.lab-actions{
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lab-shell{
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+@media (max-width: 980px){
+  .lab-shell{ grid-template-columns: 1fr; }
+}
+
+.lab-panel{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.55);
+  padding: var(--spacing-md);
+  box-shadow: 0 20px 55px rgba(0,0,0,0.28);
+}
+.lab-panel__head{
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.panel-kicker{
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.72);
+  margin: 0 0 6px;
+}
+.panel-title{
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.field-label{
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.lab-input,
+.lab-file{
+  width: 100%;
+  background: rgba(13,17,23,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: rgba(230,237,243,0.9);
+}
+.field-row{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.field-row .lab-input{ flex: 1 1 220px; }
+.field-actions{ margin-top: 10px; }
+.field-hint{
+  margin-top: 8px;
+  color: rgba(230,237,243,0.55);
+  font-size: 0.85rem;
+}
+
+.lab-status{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-top: var(--spacing-md);
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(88,166,255,0.16);
+  background: rgba(13,17,23,0.35);
+  font-size: 0.85rem;
+}
+.status-label{
+  display: block;
+  color: rgba(88,166,255,0.72);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.status-pill{
+  align-self: center;
+  justify-self: end;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(13,17,23,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+}
+
+.lab-alert,
+.lab-warning{
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 90, 90, 0.3);
+  background: rgba(120, 20, 20, 0.2);
+  color: rgba(255, 200, 200, 0.9);
+  font-size: 0.9rem;
+}
+.lab-warning{
+  border-color: rgba(246, 217, 110, 0.4);
+  background: rgba(60, 50, 18, 0.35);
+  color: rgba(246, 217, 110, 0.92);
+}
+
+.layer-list{
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(88,166,255,0.2);
+  background: rgba(13,17,23,0.4);
+}
+.list-title{
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(88,166,255,0.8);
+}
+.list-items{
+  display: grid;
+  gap: 8px;
+  max-height: 320px;
+  overflow: auto;
+}
+.layer-item{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.9rem;
+  color: rgba(230,237,243,0.85);
+  border-radius: 10px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.25);
+}
+.layer-item input{ accent-color: rgba(88,166,255,0.95); }
+
+.map-panel{
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(13,17,23,0.5);
+  min-height: 520px;
+}
+.map{
+  width: 100%;
+  height: 520px;
+}
+.info-panel{
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  max-width: 320px;
+  background: rgba(13,17,23,0.82);
+  border: 1px solid rgba(88,166,255,0.2);
+  border-radius: 14px;
+  padding: 12px;
+  color: rgba(230,237,243,0.85);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.info-title{
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(88,166,255,0.8);
+}
+.info-content{
+  margin: 0;
+  max-height: 240px;
+  overflow: auto;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+</style>

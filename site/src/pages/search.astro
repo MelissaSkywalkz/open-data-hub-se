@@ -83,7 +83,7 @@ const fallbackItems = await buildSearchIndex();
       value
         .toLowerCase()
         .normalize('NFD')
-        .replace(/\\p{Diacritic}/gu, '');
+        .replace(/[\\u0300-\\u036f]/g, '');
 
     const isSubsequence = (needle, haystack) => {
       let i = 0;

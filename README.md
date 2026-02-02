@@ -71,6 +71,12 @@ Labs är inte färdiga produkter. De är till för att utforska, prova och lära
 
 ---
 
+### 🔎 Sök
+
+Sökindexet byggs vid build genom att samla guider (content collection), resurser (kuraterade listor) och labs till ett lokalt JSON-index (`/search.json`). Sidan `/search` lazy‑loadar indexet client‑side och har en enkel fallback‑lista utan JavaScript.
+
+---
+
 ### 🪐 Community  
 https://github.com/MelissaSkywalkz/open-data-orbit/discussions  
 

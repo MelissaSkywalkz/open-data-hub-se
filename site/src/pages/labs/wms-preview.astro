@@ -81,263 +81,316 @@ const base = import.meta.env.BASE_URL;
   </section>
 
   <script is:inline>
-  const start = async () => {
-    // Load OpenLayers (JS + CSS)
-    const load = (src) =>
-      new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = src;
-        s.onload = res;
-        s.onerror = rej;
-        document.head.appendChild(s);
+    const MAPLIBRE_SRC = 'https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js';
+
+    const loadScriptOnce = (src) =>
+      new Promise((resolve, reject) => {
+        if (window.maplibregl) return resolve(window.maplibregl);
+
+        const existing = document.querySelector('script[data-maplibre="true"]');
+        if (existing) {
+          existing.addEventListener('load', () => resolve(window.maplibregl));
+          existing.addEventListener('error', reject);
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.defer = true;
+        script.dataset.maplibre = 'true';
+        script.onload = () => resolve(window.maplibregl);
+        script.onerror = () => reject(new Error('Failed to load MapLibre script.'));
+        document.head.appendChild(script);
       });
 
-    const loadCss = (href) => {
-      const l = document.createElement('link');
-      l.rel = 'stylesheet';
-      l.href = href;
-      document.head.appendChild(l);
-    };
+    const start = (maplibregl) => {
+      if (!maplibregl) throw new Error('MapLibre not available after load.');
 
-    loadCss('https://cdn.jsdelivr.net/npm/ol@9.2.4/ol.css');
-    await load('https://cdn.jsdelivr.net/npm/ol@9.2.4/dist/ol.js');
-
-    const {
-      Map,
-      View,
-      layer: { Tile },
-      source: { OSM, TileWMS },
-      proj: { fromLonLat },
-    } = ol;
-
-    const map = new Map({
-      target: 'map',
-      layers: [
-        new Tile({
-          source: new OSM({
-            url: 'https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-            attributions: '© OpenStreetMap · © CARTO',
-          }),
-        }),
-      ],
-      view: new View({
-        center: fromLonLat([15, 62]),
+      const map = new maplibregl.Map({
+        container: 'map',
+        style: {
+          version: 8,
+          sources: {
+            dark: {
+              type: 'raster',
+              tiles: ['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'],
+              tileSize: 256,
+              attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            },
+          },
+          layers: [{ id: 'dark', type: 'raster', source: 'dark' }],
+        },
+        center: [15.0, 62.0],
         zoom: 4,
-      }),
-    });
+        maxZoom: 18,
+      });
 
-    const wmsUrlInput = document.getElementById('wmsUrl');
-    const loadBtn = document.getElementById('loadWmsBtn');
-    const layerItems = document.getElementById('layerItems');
-    const layerList = document.getElementById('layerList');
-    const statusLayers = document.getElementById('statusLayers');
-    const statusSelected = document.getElementById('statusSelected');
-    const statusMessage = document.getElementById('statusMessage');
-    const alertBox = document.getElementById('alert');
-    const warningBox = document.getElementById('warning');
-    const layerInfo = document.getElementById('layerInfo');
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }));
 
-    let wmsLayer = null;
-    let layers = [];
-    let effectiveWmsUrl = '';
+      const wmsUrlInput = document.getElementById('wmsUrl');
+      const loadWmsBtn = document.getElementById('loadWmsBtn');
+      const statusLayers = document.getElementById('statusLayers');
+      const statusSelected = document.getElementById('statusSelected');
+      const statusMessage = document.getElementById('statusMessage');
+      const alertBox = document.getElementById('alert');
+      const warningBox = document.getElementById('warning');
+      const layerList = document.getElementById('layerList');
+      const layerItems = document.getElementById('layerItems');
+      const layerInfo = document.getElementById('layerInfo');
 
-    const setStatus = (t) => (statusMessage.textContent = t);
-    
-    const showAlert = (t) => {
-      alertBox.hidden = false;
-      alertBox.textContent = t;
-      warningBox.hidden = true;
-    };
+      let currentLayers = [];
+      let currentBaseUrl = '';
+      const params = new URLSearchParams(window.location.search);
 
-    const showWarning = (t) => {
-      warningBox.hidden = false;
-      warningBox.textContent = t;
-      alertBox.hidden = true;
-    };
+      const setStatus = (message) => {
+        statusMessage.textContent = message;
+      };
 
-    const hideMessages = () => {
-      alertBox.hidden = true;
-      warningBox.hidden = true;
-    };
+      const showAlert = (message) => {
+        alertBox.hidden = false;
+        alertBox.textContent = message;
+      };
 
-    const clear = () => {
-      layerItems.innerHTML = '';
-      layerList.hidden = true;
-      statusLayers.textContent = '0';
-      statusSelected.textContent = '-';
-      layerInfo.textContent = 'Select a layer to render it on the map.';
-      if (wmsLayer) map.removeLayer(wmsLayer);
-      wmsLayer = null;
-      hideMessages();
-    };
+      const showWarning = (message) => {
+        warningBox.hidden = false;
+        warningBox.textContent = message;
+      };
 
-    const parseCapabilities = (xml) => {
-      const doc = new DOMParser().parseFromString(xml, 'text/xml');
-      
-      // Check for ServiceException
-      const exception = doc.querySelector('ServiceException, ServiceExceptionReport');
-      if (exception) {
-        return { error: 'ServiceException', message: exception.textContent?.trim() || 'Service error' };
-      }
+      const clearMessages = () => {
+        alertBox.hidden = true;
+        alertBox.textContent = '';
+        warningBox.hidden = true;
+        warningBox.textContent = '';
+      };
 
-      const layerNodes = [...doc.querySelectorAll('Layer > Name')]
-        .map((n) => ({
-          name: n.textContent,
-          title: n.parentElement.querySelector('Title')?.textContent || n.textContent,
-        }))
-        .filter((l) => l.name);
+      const clearLayerList = () => {
+        layerItems.innerHTML = '';
+        layerList.hidden = true;
+        currentLayers = [];
+        statusLayers.textContent = '0';
+        statusSelected.textContent = '-';
+        layerInfo.textContent = 'Select a layer to render it on the map.';
+      };
 
-      return { layers: layerNodes };
-    };
-
-    const fetchCapabilities = async () => {
-      clear();
-      setStatus('Fetching');
-
-      let baseUrl;
-      let originalUrl = wmsUrlInput.value.trim();
-      
-      try {
-        baseUrl = new URL(originalUrl);
-      } catch {
-        showAlert('Invalid URL. Please enter a valid WMS service URL.');
-        setStatus('Error');
-        return;
-      }
-
-      // Auto-fix HTTP → HTTPS
-      let wasAutoFixed = false;
-      if (baseUrl.protocol === 'http:') {
-        setStatus('Auto-fixing URL');
-        wasAutoFixed = true;
-        baseUrl.protocol = 'https:';
-        
-        // Test if HTTPS works
-        const testUrl = new URL(baseUrl.toString());
-        testUrl.searchParams.set('service', 'WMS');
-        testUrl.searchParams.set('request', 'GetCapabilities');
-        
-        try {
-          const testRes = await fetch(testUrl.toString(), { method: 'HEAD' });
-          if (!testRes.ok) throw new Error('HTTPS not available');
-        } catch (httpsError) {
-          // HTTPS doesn't work - show clear error
-          showAlert(
-            '⚠️ This WMS service only supports insecure HTTP connections. ' +
-            'Because this site runs on HTTPS, browsers block HTTP map services for security reasons (Mixed Content policy). ' +
-            'Unfortunately, this layer cannot be displayed here. Try contacting the service provider to request HTTPS support.'
-          );
-          setStatus('Blocked');
-          return;
+      const setParam = (key, value) => {
+        if (!value) {
+          params.delete(key);
+        } else {
+          params.set(key, value);
         }
-        
-        // HTTPS works! Update the input field
-        wmsUrlInput.value = baseUrl.toString();
-        effectiveWmsUrl = baseUrl.toString();
-      } else {
-        effectiveWmsUrl = baseUrl.toString();
-      }
+        const query = params.toString();
+        const nextUrl = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+        window.history.replaceState(null, '', nextUrl);
+      };
 
-      baseUrl.searchParams.set('service', 'WMS');
-      baseUrl.searchParams.set('request', 'GetCapabilities');
+      const restoreMapView = () => {
+        const centerParam = params.get('center');
+        const zoomParam = params.get('zoom');
+        if (!centerParam || !zoomParam) return;
+        const [lng, lat] = centerParam.split(',').map((value) => Number(value));
+        const zoom = Number(zoomParam);
+        if (!Number.isFinite(lng) || !Number.isFinite(lat) || !Number.isFinite(zoom)) return;
+        map.jumpTo({ center: [lng, lat], zoom });
+      };
 
-      try {
-        const res = await fetch(baseUrl.toString());
-        const text = await res.text();
-        
-        const result = parseCapabilities(text);
-        
-        if (result.error) {
-          showAlert(
-            `The WMS service returned an error: ${result.message}. ` +
-            'This could mean the service is unavailable or misconfigured.'
-          );
-          setStatus('Error');
-          return;
+      const buildCapabilitiesUrl = (rawUrl) => {
+        const url = new URL(rawUrl);
+        url.searchParams.set('service', 'WMS');
+        url.searchParams.set('request', 'GetCapabilities');
+        return url.toString();
+      };
+
+      const parseCapabilities = (xmlText) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xmlText, 'text/xml');
+        const error = doc.querySelector('parsererror');
+        if (error) {
+          throw new Error('Unable to parse GetCapabilities response.');
         }
+        const layers = Array.from(doc.querySelectorAll('Layer > Name')).map((nameNode) => {
+          const layerNode = nameNode.parentElement;
+          const titleNode = layerNode?.querySelector('Title');
+          return {
+            name: nameNode.textContent?.trim() || '',
+            title: titleNode?.textContent?.trim() || '',
+          };
+        }).filter((layer) => layer.name);
+        return layers;
+      };
 
-        layers = result.layers;
+      const buildWmsTiles = (baseUrl, layerName) => {
+        const url = new URL(baseUrl);
+        url.searchParams.set('service', 'WMS');
+        url.searchParams.set('request', 'GetMap');
+        url.searchParams.set('layers', layerName);
+        url.searchParams.set('styles', '');
+        url.searchParams.set('format', 'image/png');
+        url.searchParams.set('transparent', 'true');
+        url.searchParams.set('version', '1.3.0');
+        url.searchParams.set('crs', 'EPSG:3857');
+        url.searchParams.set('width', '256');
+        url.searchParams.set('height', '256');
+        url.searchParams.set('bbox', '{bbox-epsg-3857}');
+        return url.toString();
+      };
 
+      const renderLayer = (layer) => {
+        if (map.getLayer('wms-layer')) map.removeLayer('wms-layer');
+        if (map.getSource('wms-source')) map.removeSource('wms-source');
+
+        const tileUrl = buildWmsTiles(currentBaseUrl, layer.name);
+        map.addSource('wms-source', {
+          type: 'raster',
+          tiles: [tileUrl],
+          tileSize: 256,
+        });
+
+        map.addLayer({
+          id: 'wms-layer',
+          type: 'raster',
+          source: 'wms-source',
+        });
+
+        statusSelected.textContent = layer.title || layer.name;
+        layerInfo.textContent = layer.title
+          ? `${layer.title}\n(${layer.name})`
+          : layer.name;
+        setParam('layer', layer.name);
+      };
+
+      const populateLayers = (layers) => {
+        clearLayerList();
+        currentLayers = layers;
+        statusLayers.textContent = layers.length.toString();
         if (!layers.length) {
-          showAlert('No named layers found in the GetCapabilities document. The service may not support layer queries.');
+          showAlert('No named layers were found in the GetCapabilities response.');
           setStatus('Idle');
           return;
         }
 
-        statusLayers.textContent = layers.length.toString();
+        layerItems.innerHTML = layers
+          .map((layer, index) => {
+            const title = layer.title || layer.name;
+            return `
+              <label class="layer-item">
+                <input type="radio" name="wms-layer" value="${layer.name}" data-index="${index}" />
+                <span>${title}</span>
+              </label>
+            `;
+          })
+          .join('');
         layerList.hidden = false;
 
-        layerItems.innerHTML = layers
-          .map(
-            (l, i) => `
-          <label class="layer-item">
-            <input type="radio" name="layer" data-i="${i}">
-            <span>${l.title}</span>
-          </label>`
-          )
-          .join('');
-
-        setStatus('Ready');
-        
-        if (wasAutoFixed) {
-          showWarning('✓ HTTP URL was automatically upgraded to HTTPS and is working correctly.');
+        const savedLayer = params.get('layer');
+        if (savedLayer) {
+          const selectedIndex = layers.findIndex((layer) => layer.name === savedLayer);
+          if (selectedIndex >= 0) {
+            const input = layerItems.querySelector(`input[data-index=\"${selectedIndex}\"]`);
+            if (input instanceof HTMLInputElement) {
+              input.checked = true;
+              renderLayer(layers[selectedIndex]);
+            }
+          }
         }
-      } catch (e) {
-        showAlert(
-          'Unable to load GetCapabilities. This could be due to CORS restrictions (cross-origin policy), ' +
-          'network issues, or the service being unavailable. ' +
-          'Try opening the URL directly in your browser to verify access.'
-        );
-        setStatus('Error');
+      };
+
+      const fetchCapabilities = async () => {
+        const rawUrl = wmsUrlInput.value.trim();
+        if (!rawUrl) {
+          showAlert('Please enter a WMS URL.');
+          setStatus('Idle');
+          return;
+        }
+        clearMessages();
+        clearLayerList();
+        setStatus('Fetching');
+
+        let capabilitiesUrl = rawUrl;
+        try {
+          capabilitiesUrl = buildCapabilitiesUrl(rawUrl);
+          currentBaseUrl = rawUrl;
+          setParam('wms', rawUrl);
+        } catch (error) {
+          showAlert('Invalid URL. Please provide a valid WMS endpoint.');
+          setStatus('Error');
+          return;
+        }
+
+        try {
+          const response = await fetch(capabilitiesUrl, { mode: 'cors' });
+          if (!response.ok) {
+            showAlert(`Fetch failed with status ${response.status} ${response.statusText}.`);
+            setStatus('Error');
+            return;
+          }
+          const text = await response.text();
+          const layers = parseCapabilities(text);
+          populateLayers(layers);
+          setStatus('Ready');
+        } catch (error) {
+          const message =
+            error instanceof TypeError
+              ? 'CORS blocked the request. Ensure the WMS server allows cross-origin access.'
+              : error.message || 'Unable to fetch GetCapabilities.';
+          showAlert(message);
+          showWarning('Tip: try opening the GetCapabilities URL in a new tab to verify access.');
+          setStatus('Error');
+        }
+      };
+
+      layerItems.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement)) return;
+        const index = Number(target.dataset.index);
+        const layer = currentLayers[index];
+        if (!layer) return;
+        renderLayer(layer);
+      });
+
+      loadWmsBtn.addEventListener('click', fetchCapabilities);
+      wmsUrlInput.addEventListener('change', () => {
+        setParam('wms', wmsUrlInput.value.trim());
+      });
+
+      map.on('moveend', () => {
+        const center = map.getCenter();
+        setParam('center', `${center.lng.toFixed(5)},${center.lat.toFixed(5)}`);
+        setParam('zoom', map.getZoom().toFixed(2));
+      });
+
+      map.on('load', () => {
+        restoreMapView();
+        setStatus('Idle');
+      });
+
+      const savedWms = params.get('wms');
+      if (savedWms) {
+        wmsUrlInput.value = savedWms;
       }
     };
 
-    layerItems.addEventListener('change', (e) => {
-      const input = e.target;
-      if (!(input instanceof HTMLInputElement)) return;
+    const boot = async () => {
+      try {
+        const maplibregl = await loadScriptOnce(MAPLIBRE_SRC);
+        start(maplibregl);
+      } catch (error) {
+        console.error(error);
+        const alertBox = document.getElementById('alert');
+        if (alertBox) {
+          alertBox.hidden = false;
+          alertBox.textContent = 'Failed to initialize MapLibre. Check console for details.';
+        }
+      }
+    };
 
-      const layer = layers[Number(input.dataset.i)];
-      if (!layer) return;
-
-      if (wmsLayer) map.removeLayer(wmsLayer);
-
-      // Create WMS layer with error handling
-      const tileSource = new TileWMS({
-        url: effectiveWmsUrl,
-        params: {
-          LAYERS: layer.name,
-          FORMAT: 'image/png',
-          TRANSPARENT: true,
-        },
-        serverType: 'geoserver',
-      });
-
-      // Listen for tile load errors
-      tileSource.on('tileloaderror', (event) => {
-        showWarning(
-          '⚠️ Some tiles failed to load. This could be due to: unsupported coordinate system (CRS), ' +
-          'service limits, or network issues. Try zooming or panning to a different area.'
-        );
-      });
-
-      wmsLayer = new Tile({
-        source: tileSource,
-      });
-
-      map.addLayer(wmsLayer);
-      statusSelected.textContent = layer.title;
-      layerInfo.textContent = `${layer.title}\n(${layer.name})`;
-      hideMessages(); // Clear previous warnings when switching layers
-    });
-
-    loadBtn.addEventListener('click', fetchCapabilities);
-    setStatus('Idle');
-  };
-
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', start)
-    : start();
-</script>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  </script>
 </Layout>
 
 <style>

@@ -8,6 +8,7 @@ export interface Props {
 const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
+const isSearchPage = currentPath.startsWith(`${base}search`);
 
 const navItems = [
   { href: base, label: 'Start' },
@@ -25,7 +26,7 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="header">
+<header class={isSearchPage ? 'header header--search' : 'header'}>
   <nav class="nav" aria-label="Primary">
     <a href={base} class="brand-link" aria-label="Open Data Orbit">
       <Brand />
@@ -46,7 +47,7 @@ const isActive = (href: string) => {
       ))}
     </ul>
 
-    <form class="nav-search" action={`${base}search/`} method="get" role="search">
+    <form class="nav-search" action={`${base}search/`} method="get" role="search" aria-hidden={isSearchPage ? 'true' : undefined}>
       <label class="sr-only" for="nav-search-input">Sök</label>
       <input
         id="nav-search-input"
@@ -54,6 +55,7 @@ const isActive = (href: string) => {
         class="nav-search__input"
         type="search"
         placeholder="Sök..."
+        data-nav-search-input
       />
     </form>
 
@@ -78,7 +80,7 @@ const isActive = (href: string) => {
         <button class="close" type="button" aria-label="Close menu" data-nav-close>✕</button>
       </div>
 
-      <form class="nav-search mobile" action={`${base}search/`} method="get" role="search">
+      <form class="nav-search mobile" action={`${base}search/`} method="get" role="search" aria-hidden={isSearchPage ? 'true' : undefined}>
         <label class="sr-only" for="nav-search-input-mobile">Sök</label>
         <input
           id="nav-search-input-mobile"
@@ -86,6 +88,7 @@ const isActive = (href: string) => {
           class="nav-search__input"
           type="search"
           placeholder="Sök..."
+          data-nav-search-input-mobile
         />
       </form>
 
@@ -109,10 +112,14 @@ const isActive = (href: string) => {
 
 <script is:inline>
   window.addEventListener('DOMContentLoaded', () => {
+    const basePath = "${base}";
     const toggle = document.querySelector('[data-nav-toggle]');
     const overlay = document.querySelector('[data-overlay]');
     const closeBtn = document.querySelector('[data-nav-close]');
     const links = document.querySelectorAll('[data-nav-link]');
+    const navSearchInput = document.querySelector('[data-nav-search-input]');
+    const navSearchInputMobile = document.querySelector('[data-nav-search-input-mobile]');
+    const isSearch = window.location.pathname.startsWith(`${base}`) && window.location.pathname.includes('/search');
 
     if (!toggle || !overlay) return;
 
@@ -140,6 +147,22 @@ const isActive = (href: string) => {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) setOpen(false);
     });
+
+    if (!isSearch) {
+      const goToSearch = () => {
+        window.location.href = `${basePath}search/?focus=1`;
+      };
+      navSearchInput?.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        goToSearch();
+      });
+      navSearchInput?.addEventListener('focus', () => goToSearch());
+      navSearchInputMobile?.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        goToSearch();
+      });
+      navSearchInputMobile?.addEventListener('focus', () => goToSearch());
+    }
   });
 </script>
 
@@ -229,8 +252,18 @@ const isActive = (href: string) => {
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(13,17,23,0.35);
-  color: rgba(230,237,243,0.85);
+  color: rgba(230,237,243,0.9);
   font-size: 0.85rem;
+  caret-color: rgba(230,237,243,0.9);
+}
+.nav-search__input:-webkit-autofill,
+.nav-search__input:-webkit-autofill:hover,
+.nav-search__input:-webkit-autofill:focus,
+.nav-search__input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 1000px rgba(13,17,23,0.9) inset;
+  -webkit-text-fill-color: rgba(230,237,243,0.9);
+  caret-color: rgba(230,237,243,0.9);
+  transition: background-color 9999s ease-in-out 0s;
 }
 .nav-search__input::placeholder{
   color: rgba(230,237,243,0.45);
@@ -238,6 +271,11 @@ const isActive = (href: string) => {
 .nav-search.mobile{
   display:flex;
   padding: 10px;
+}
+
+.header--search .nav-search,
+.header--search .nav-search.mobile{
+  display: none !important;
 }
 
 .link{

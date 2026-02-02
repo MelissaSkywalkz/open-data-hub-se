@@ -11,11 +11,11 @@ const fallbackItems = await buildSearchIndex();
     <p class="search-kicker mono">SEARCH / CONSOLE</p>
     <h1 class="search-title">Sök i Open Data Orbit</h1>
     <p class="search-subtitle">
-      Lokalt index för guider, resurser och Labs.
+      Lokalt index för guider, resurser och labs.
     </p>
   </header>
 
-  <section class="search-panel" aria-label="Sökverktyg">
+  <section class="search-panel" aria-label="Sökverktyg" data-base={base}>
     <div class="control-block">
       <form class="search-form" action={`${base}search/`} method="get">
         <label class="field-label" for="query">Sök</label>
@@ -30,6 +30,7 @@ const fallbackItems = await buildSearchIndex();
           />
           <button class="btn secondary search-btn" type="submit">Sök</button>
         </div>
+        <p class="search-hint">Sök i guider, resurser och labs. Filtren styr vad som visas.</p>
       </form>
 
       <div class="filter-row" role="group" aria-label="Filtrera">
@@ -74,11 +75,14 @@ const fallbackItems = await buildSearchIndex();
   </section>
 
   <script is:inline>
-    const basePath = {JSON.stringify(base)};
+    const basePath = document.querySelector('[data-base]')?.dataset.base || '/';
     const searchInput = document.getElementById('query');
     const resultsGrid = document.getElementById('resultsGrid');
     const resultsMeta = document.getElementById('resultsMeta');
     const filterInputs = Array.from(document.querySelectorAll('.filter-chip input'));
+    const typeLabels = { guide: 'Guide', resource: 'Resurs', lab: 'Lab' };
+
+    const getTypeLabel = (type) => typeLabels[type] || type;
 
     const normalizeText = (value) =>
       value
@@ -109,8 +113,7 @@ const fallbackItems = await buildSearchIndex();
           (item) => `
             <article class="result-card">
               <div class="result-head">
-                <span class="result-badge">${item.badge}</span>
-                <span class="result-type">${item.type}</span>
+                <span class="result-badge">${getTypeLabel(item.type)}</span>
               </div>
               <h3 class="result-title"><a href="${item.url}">${item.title}</a></h3>
               <p class="result-desc">${item.description}</p>
@@ -136,18 +139,27 @@ const fallbackItems = await buildSearchIndex();
         .filter((item) => (query ? item.score > 0 : true))
         .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
 
-      const typeCounts = filtered.reduce((acc, item) => {
-        acc[item.type] = (acc[item.type] || 0) + 1;
-        return acc;
-      }, {});
-      const breakdown = [
-        typeCounts.guide ? `${typeCounts.guide} guider` : null,
-        typeCounts.resource ? `${typeCounts.resource} resurser` : null,
-        typeCounts.lab ? `${typeCounts.lab} labs` : null,
-      ].filter(Boolean).join(' · ');
-      resultsMeta.textContent = query
+      const metaText = query
         ? `${filtered.length} träffar för “${searchInput.value.trim()}”`
-        : `Visar ${filtered.length} poster${breakdown ? ` · ${breakdown}` : ''}`;
+        : `Visar ${filtered.length} poster`;
+
+      resultsMeta.innerHTML = '';
+      const textNode = document.createElement('span');
+      textNode.className = 'results-meta__text';
+      textNode.textContent = metaText;
+      resultsMeta.appendChild(textNode);
+
+      if (activeFilters.length) {
+        const filterWrap = document.createElement('span');
+        filterWrap.className = 'results-meta__filters';
+        activeFilters.forEach((filter) => {
+          const badge = document.createElement('span');
+          badge.className = 'status-badge';
+          badge.textContent = getTypeLabel(filter);
+          filterWrap.appendChild(badge);
+        });
+        resultsMeta.appendChild(filterWrap);
+      }
       renderResults(filtered);
     };
 
@@ -157,6 +169,10 @@ const fallbackItems = await buildSearchIndex();
         const data = await response.json();
         const urlQuery = new URLSearchParams(window.location.search).get('q') || '';
         if (urlQuery) searchInput.value = urlQuery;
+        if (new URLSearchParams(window.location.search).get('focus') === '1') {
+          searchInput?.focus();
+          searchInput?.select();
+        }
         runSearch(data.items || []);
         searchInput.addEventListener('input', () => runSearch(data.items || []));
         filterInputs.forEach((input) => input.addEventListener('change', () => runSearch(data.items || [])));
@@ -172,7 +188,7 @@ const fallbackItems = await buildSearchIndex();
 <style>
 .search-hero{
   text-align: center;
-  padding: calc(var(--spacing-xs) * 0.85) 0 calc(var(--spacing-sm) * 0.85);
+  padding: calc(var(--spacing-xs) * 0.45) 0 calc(var(--spacing-sm) * 0.5);
 }
 .search-kicker{
   font-family: var(--font-mono);
@@ -183,32 +199,39 @@ const fallbackItems = await buildSearchIndex();
   margin-bottom: 4px;
 }
 .search-title{
-  margin: 0 0 2px;
+  margin: 0 0 1px;
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .search-subtitle{
   margin: 0 auto;
-  color: rgba(230,237,243,0.72);
-  max-width: 60ch;
-  font-size: 0.88rem;
+  color: rgba(230,237,243,0.62);
+  max-width: 52ch;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
 }
 .search-panel{
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(13,17,23,0.55);
-  padding: calc(var(--spacing-md) * 0.9);
+  padding: calc(var(--spacing-md) * 0.8);
   box-shadow: 0 20px 55px rgba(0,0,0,0.28);
 }
 .control-block{
   border-radius: 16px;
   border: 1px solid rgba(88,166,255,0.16);
   background: rgba(13,17,23,0.45);
-  padding: 14px;
-  margin-bottom: calc(var(--spacing-sm) * 0.85);
+  padding: 12px;
+  margin-bottom: calc(var(--spacing-sm) * 0.75);
+  display: grid;
+  gap: 10px;
+  justify-items: center;
 }
 .search-form{
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  width: min(720px, 100%);
 }
 .search-field{
   position: relative;
@@ -217,62 +240,123 @@ const fallbackItems = await buildSearchIndex();
 .search-indicator{
   position: absolute;
   left: 14px;
-  color: rgba(88,166,255,0.85);
+  color: rgba(88,166,255,0.7);
   font-size: 0.9rem;
   pointer-events: none;
 }
 .search-input{
   padding-left: 32px;
-  font-size: 1.05rem;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border: 1px solid rgba(255,255,255,0.16);
-  background: rgba(13,17,23,0.6);
+  font-size: 1.1rem;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border: 1px solid rgba(88,166,255,0.28);
+  background: rgba(9,12,18,0.85);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+  color: rgba(230,237,243,0.9);
+  caret-color: rgba(230,237,243,0.9);
+}
+.search-input::placeholder{
+  color: rgba(230,237,243,0.45);
+}
+.search-input:-webkit-autofill,
+.search-input:-webkit-autofill:hover,
+.search-input:-webkit-autofill:focus,
+.search-input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 1000px rgba(9,12,18,0.95) inset;
+  -webkit-text-fill-color: rgba(230,237,243,0.9);
+  caret-color: rgba(230,237,243,0.9);
+  transition: background-color 9999s ease-in-out 0s;
 }
 .search-btn{
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  opacity: 0.7;
+}
+.search-btn:hover{
+  opacity: 0.9;
 }
 .search-input:focus{
   outline: none;
-  border-color: rgba(88,166,255,0.6);
-  box-shadow: 0 0 0 2px rgba(88,166,255,0.28);
+  border-color: rgba(88,166,255,0.7);
+  box-shadow: 0 0 0 2px rgba(88,166,255,0.22);
+}
+.search-field:has(.search-input:not(:placeholder-shown)) .search-indicator{
+  color: rgba(88,166,255,0.95);
+}
+.search-field:has(.search-input:not(:placeholder-shown)) .search-input{
+  border-color: rgba(88,166,255,0.5);
+}
+.search-hint{
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: rgba(230,237,243,0.55);
+  letter-spacing: 0.04em;
+}
+.search-field:focus-within .search-indicator{
+  color: rgba(88,166,255,1);
 }
 .filter-row{
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 0;
+  justify-content: center;
+  width: min(720px, 100%);
 }
 .filter-chip{
   display: inline-flex;
   gap: 6px;
   align-items: center;
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(13,17,23,0.3);
   font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  transition: border-color 140ms ease, box-shadow 140ms ease, color 140ms ease, background 140ms ease;
 }
 .filter-chip input{ accent-color: rgba(88,166,255,0.9); }
 .filter-chip:has(input:checked){
-  border-color: rgba(88,166,255,0.4);
-  color: rgba(88,166,255,0.9);
-  background: rgba(13,17,23,0.5);
-  box-shadow: inset 0 0 0 1px rgba(88,166,255,0.2);
+  border-color: rgba(88,166,255,0.5);
+  color: rgba(88,166,255,0.95);
+  background: rgba(13,17,23,0.55);
+  box-shadow: inset 0 0 0 1px rgba(88,166,255,0.24), 0 0 0 1px rgba(88,166,255,0.08);
 }
 .results-meta{
-  font-size: 0.85rem;
-  color: rgba(230,237,243,0.6);
-  margin-bottom: 6px;
+  font-size: 0.78rem;
+  color: rgba(230,237,243,0.5);
+  margin-bottom: 8px;
+  letter-spacing: 0.08em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.results-meta__filters{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-badge{
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(88,166,255,0.2);
+  background: rgba(13,17,23,0.45);
+  color: rgba(88,166,255,0.9);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 .results-zone{
   border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 10px;
+  padding-top: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(9,12,18,0.45);
+  padding: 12px;
 }
 .results-grid{
   display: grid;
@@ -302,10 +386,29 @@ const fallbackItems = await buildSearchIndex();
   font-size: 0.9rem;
 }
 .result-card{
-  padding: 14px;
+  padding: 12px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(13,17,23,0.4);
+  display: grid;
+  gap: 6px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.result-card:hover,
+.result-card:focus-within{
+  border-color: rgba(88,166,255,0.35);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .result-card{
+    transition: none;
+  }
+  .result-card:hover,
+  .result-card:focus-within{
+    transform: none;
+  }
 }
 .result-head{
   display: flex;
@@ -331,6 +434,7 @@ const fallbackItems = await buildSearchIndex();
 }
 .result-title{
   margin: 0 0 6px;
+  font-size: 1rem;
 }
 .result-title a{
   color: rgba(230,237,243,0.95);
@@ -343,6 +447,11 @@ const fallbackItems = await buildSearchIndex();
   margin: 0;
   color: rgba(230,237,243,0.7);
   font-size: 0.9rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .fallback{
   margin-top: var(--spacing-md);

@@ -37,6 +37,15 @@ const latestContent = [
   .sort((a, b) => b.sortDate - a.sortDate)
   .slice(0, 3);
 
+const decodeHtmlEntities = (text: string) => {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+};
+
 const fetchDiscussions = async () => {
   const url = 'https://github.com/MelissaSkywalkz/open-data-orbit/discussions.atom';
   try {
@@ -48,15 +57,17 @@ const fetchDiscussions = async () => {
       return [];
     }
     const text = await response.text();
-    const entries = Array.from(text.matchAll(/<entry>([\\s\\S]*?)<\\/entry>/g)).slice(0, 3);
+    const entries = Array.from(text.matchAll(/<entry>([\s\S]*?)<\/entry>/g)).slice(0, 3);
     return entries.map((match) => {
       const entry = match[1];
-      const title = (entry.match(/<title>([\\s\\S]*?)<\\/title>/)?.[1] || '')
-        .replace(/<!\\[CDATA\\[|\\]\\]>/g, '')
-        .trim();
-      const link = entry.match(/<link[^>]*href=\"([^\"]+)\"/i)?.[1] || url;
-      const updated = entry.match(/<updated>([^<]+)<\\/updated>/)?.[1];
-      const published = entry.match(/<published>([^<]+)<\\/published>/)?.[1];
+      const title = decodeHtmlEntities(
+        (entry.match(/<title>([\s\S]*?)<\/title>/)?.[1] || '')
+          .replace(/<!\[CDATA\[|\]\]>/g, '')
+          .trim()
+      );
+      const link = entry.match(/<link[^>]*href="([^"]+)"/i)?.[1] || url;
+      const updated = entry.match(/<updated>([^<]+)<\/updated>/)?.[1];
+      const published = entry.match(/<published>([^<]+)<\/published>/)?.[1];
       const date = new Date(updated || published || Date.now());
       return {
         type: 'CREW',
@@ -237,7 +248,7 @@ const MISSION_LOG = [...latestContent, ...discussionLog].sort((a, b) => b.sortDa
 
       <div class="card-head">
         <div class="card-icon"><Icon name="chat" size={26} /></div>
-        <h3 class="card-title">Fråga &amp; Dela</h3>
+        <h3 class="card-title">Fråga & Dela</h3>
       </div>
 
       <p class="card-description">
